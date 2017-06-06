@@ -19,7 +19,7 @@ environments {
     development {
         dataSource {
             dbCreate = "update" // use "create", "create-drop","update"!
-               url = "jdbc:mysql://localhost:3307/statusportal"
+               url = "jdbc:mysql://localhost:3306/statusportal"
 			   username = "root"
 			   password = "root"
 			   }
@@ -27,7 +27,7 @@ environments {
     test {
         dataSource {
             dbCreate = "update" // use "create", "create-drop","update"!
-               url = "jdbc:mysql://localhost:3307/statusportal"
+               url = "jdbc:mysql://localhost:3306/statusportal"
 			   username = "root"
 			   password = "root"
         }
@@ -35,7 +35,7 @@ environments {
     production {
         dataSource {
             dbCreate = "update" // use "create", "create-drop","update"!
-               url = "jdbc:mysql://localhost:3307/statusportal"
+               url = "jdbc:mysql://localhost:3306/statusportal"
 			   username = "root"
 			   password = "root"
             properties {

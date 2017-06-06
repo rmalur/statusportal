@@ -123,10 +123,11 @@ body {
 		<g:layoutBody />
 	</div>
 
-	<div>
-		<footer>
-			<div>
-				<img src="/StatusPortal/images/cybage-logo.jpg">
+	<div class="wrapper" >
+		<footer class="footer">
+		
+			<div id="content">
+				 <img align="middle"  src="/StatusPortal/images/cybage-logo.png">
 			</div>
 
 		</footer>
