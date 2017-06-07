@@ -23,7 +23,7 @@
                     <form action="${postUrl}" method="POST" class="form-horizontal" id="loginForm" role="form" autocomplete="on">
                         <div id="loginFields" ng-hide="showPasswordView">
                             <div class="form-group">
-                                <label for="email" class="control-label col-sm-2">E-Mail (Username):</label>
+                                <label for="email" class="control-label col-sm-2">Username:</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" name="j_username" id="email" value="${session.getAttribute(SpringSecurityUtils.SPRING_SECURITY_LAST_USERNAME_KEY)}" autocapitalize="off"/>
                                 </div>
@@ -33,24 +33,29 @@
                                 <label for="password" class="control-label col-sm-2">Password:</label>
                                 <div class="col-sm-8">
                                     <input type="password" class='form-control' name="j_password" id="password"/>
+                                    	<label for="remember_me">
+                                        	<input type="checkbox" class="chk" name="${rememberMeParameter}" id="remember_me" <g:if test='${hasCookie}'>checked="checked"</g:if>/>
+                                        	<g:message code="springSecurity.login.remember.me.label"/>
+                                    	</label>
                                     <div class="help-text">
-                                        <a href="" ng-click="showPasswordView = !showPasswordView">Forgot password?</a>
+                                    	<a href="" ng-click="showPasswordView = !showPasswordView">Forgot password?</a>
                                     </div>
                                 </div>
                             </div>
 
                             <div  class="form-group" id="remember_me_holder">
                                 <div class="col-sm-offset-2">
-                                    <label for="remember_me">
-                                        <input type="checkbox" class="chk" name="${rememberMeParameter}" id="remember_me" <g:if test='${hasCookie}'>checked="checked"</g:if>/>
-                                        <g:message code="springSecurity.login.remember.me.label"/>
-                                    </label>
+                                    
                                 </div>
                             </div>
 
                             <div class="col-sm-offset-2">
                                 <button type="submit" class="btn btn-primary">Login</button>
+                                <g:link  controller="test"	action="createUser">
+										<input type="button" class="btn btn-primary" value="New User" >
+								</g:link>
                             </div>
+                             
                         </div>
                         <div id="forgotPassword" ng-show="showPasswordView">
                             <div ng-hide="requestSucceeded">
@@ -72,8 +77,8 @@
                             <div ng-show="requestSucceeded">
                                 <p>
                                     <span >
-                                        We have sent you instructions on how to get a new password.<br/>
-                                        Please check your email account and proceed to <a href="/StatusPortal/login/auth">Sign in</a>
+                                        We have sent you a new password.<br/>
+                                        Please check your email account and login again with new password <a href="/StatusPortal/login/auth">Sign in</a>
                                     </span>
                                     
                                 </p>
@@ -83,9 +88,8 @@
 
                     </form>
             </div>
-            <div class="panel-footer">
- 
-            </div>
+           
+
         </div>
     </div>
 </div>

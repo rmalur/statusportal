@@ -1,4 +1,4 @@
-		var app = angular.module('myApp', []);
+		var app = angular.module('myApp', ['ui.bootstrap']);
 		app.factory('Excel',function($window) {
 					var uri = 'data:application/vnd.ms-excel;base64,', template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>', base64 = function(s) {
 						return $window.btoa(unescape(encodeURIComponent(s)));
@@ -19,6 +19,8 @@
 					};
 				});
 		
+		
+		
 		app.directive('jqdatepicker', function () {
 		    return {
 		        restrict: 'A',
@@ -38,7 +40,7 @@
 		        }
 		    };
 		});
-		app.controller('myController',function(Excel,$scope, $http, $timeout,$window) {
+		app.controller('myController',function(Excel,$scope, $http, $timeout,$window,$uibModal) {
 							$scope.assigneeList=[];
 							$scope.alltickets=undefined;
 							$scope.ticketData={}
@@ -223,23 +225,22 @@
 							
 							//for changing the password
 							$scope.changePassword=function(){
-								console.log("ChangePasswordController")
-								/*var modalInstance=$uibModal.open({
-									animation:true,
-									template:'changePassword.html'
-									controller:ChangePasswordController,
-									size:'lg'
-									
-								})*/
 								
+								var modalInstance=$uibModal.open({
+									animation:true,
+									templateUrl:'changePassword.html',
+									controller:'changePasswordController',
+									size:'lg'
+								})
 								
 							};
 						
 							
+
 							//for exporting the table in excel sheet
 							$scope.exportToExcel = function(tableId) { // ex: '#my-table'
-								console.log("exportToExcel");
-								console.log(tableId)
+								/*console.log("exportToExcel");
+								console.log(tableId)*/
 								var exportHref = Excel.tableToExcel(tableId,
 										'TicketHistory');
 								$timeout(function() {
@@ -250,16 +251,4 @@
 							
 						});
 		
-		/*app.controller('ChangePasswordController',function($scope, $uibModalInstance){
-			
-			 $scope.ok = function() {
-		            
-				 console.log("ok function")
-				 //$uibModalInstance.close($scope.theThingIWantToSave);
-		        };
-
-		        $scope.cancel = function() {
-		        	console.log("cancel function")
-		        	$uibModalInstance.dismiss('cancel');
-		        };
-		})*/
+		

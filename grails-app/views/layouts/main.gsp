@@ -192,11 +192,7 @@ body {
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse"
 				id="bs-example-navbar-collapse-1">
-				<ul class="nav navbar-nav">
-					<li><a href="#"></a></li>
-					<li><a href="#"></a></li>
-					<li><g:link controller="test" action="createUser" >New User</g:link> </li>
-				</ul>
+			
 			</div>
 			<!-- /.navbar-collapse -->
 		</div>
@@ -205,17 +201,20 @@ body {
 
 
 
-	<%--<div>
-		<br>
-	</div>
 	<div>
-		<br />
+		<g:layoutBody />
+	
+	
 	</div>
+	<div class="wrapper">
+		<footer class="footer">
 
-	--%><div>
-	<g:layoutBody />
-	
-	
+			<div id="content">
+				<img align="middle" src="/StatusPortal/images/cybage-logo.png">
+			</div>
+
+		</footer>
+
 	</div>
 
 
