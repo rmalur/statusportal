@@ -11,7 +11,7 @@
     <div class="row">
         <div ng-controller="LoginController" ng-init="init()" class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Status Portal Login</h3>
+               <b> <h3 class="panel-title">Status Portal Login</h3></b>
             </div>
             <div class="panel-body">
                     <g:if test='${flash.message}'>
@@ -135,5 +135,7 @@
 
     });
 </script>
+
 </body>
+
 </html>

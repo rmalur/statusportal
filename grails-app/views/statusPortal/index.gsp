@@ -134,20 +134,6 @@ body {
 			</table>
 	</div>
 
-
-
-
-
-	<footer>
-
-		<p>
-			Contact information: <a href="mailto:rishabht@cybage.com">rishabht@cybage.com</a>
-		</p>
-		<p align="center">
-			<a href="#">Status Update Portal</a>
-		</p>
-	</footer>
-
 </body>
 
 </html>

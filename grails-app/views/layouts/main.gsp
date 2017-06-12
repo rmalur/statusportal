@@ -9,7 +9,7 @@
 <meta name="description" content="">
 <meta name="author" content="">
 
-<title>Status Update Portal</title>
+<title>Status Portal</title>
 <style type='text/css' media='screen'>
 #login {
 	margin: 15px 0px;
@@ -187,7 +187,7 @@ body {
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#"><h2>Status Update Portal</h2></a>
+				<a class="navbar-brand" href="#"><h2>Status Portal</h2></a>
 			</div>
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse"
@@ -206,17 +206,20 @@ body {
 	
 	
 	</div>
-	<div class="wrapper">
+	<%--<div class="wrapper" style="margin-top: 700px;">
+	
+		--%>
+		
 		<footer class="footer">
 
-			<div id="content">
-				<img align="middle" src="/StatusPortal/images/cybage-logo.png">
-			</div>
+			
+				<%--<img align="middle" src="/StatusPortal/images/cybage-logo.png">
+			--%>
 
 		</footer>
-
+</div>
 	</div>
-
+	
 
 </body>
 

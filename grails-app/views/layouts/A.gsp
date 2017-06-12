@@ -9,7 +9,7 @@
 <meta name="description" content="">
 <meta name="author" content="">
 
-<title>Status Update Portal</title>
+<title>Status Portal</title>
 
 <!-- Bootstrap Core CSS -->
 <link	href="${request.contextPath}/startbootstrap-bare-gh-pages/css/bootstrap.min.css"	rel="stylesheet">
@@ -44,6 +44,63 @@ body {
 </head>
 
 <body ng-app="myApp" ng-controller="myController">
+
+
+<div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+  <div class="container">
+   <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse"
+     data-target="#b-menu-1">
+     <span class="sr-only">Toggle navigation</span> <span
+      class="icon-bar"></span> <span class="icon-bar"></span> <span
+      class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="#">Status Update</a>
+   </div>
+   <div class="collapse navbar-collapse" id="b-menu-1">
+    <ul class="nav navbar-nav navbar-left">
+     <li><g:link controller="StatusPortal" action="todaysTickets">Status Update</g:link></li>
+     <li><g:link controller="StatusPortal" action="getAllTicketsOfUser">Status History</g:link></li>
+     <li><g:link controller="StatusPortal" action="getAllTicketHistory">Status Download</g:link></li>
+     
+      <li class="dropdown"><a data-toggle="dropdown" href="#">
+        <sec:ifLoggedIn>
+         <sec:username />
+        </sec:ifLoggedIn> <span class="caret"></span>
+      </a>
+       <ul class="dropdown-menu" ng-controller="myController">
+        <sec:ifAnyGranted roles="ROLE_LEAD">
+         <li><g:link controller="Test" action="createProject">
+           <i class="fa fa-picture-o"></i>Create Project</g:link></li>
+        </sec:ifAnyGranted>
+        <sec:ifAnyGranted roles="ROLE_LEAD,ROLE_MANAGER">
+         <li><g:link controller="Test" action="addEmployee">
+           <i class="fa fa-picture-o"></i>Add Resource</g:link></li>
+        </sec:ifAnyGranted>
+        <li><a href="#" ng-click="changePassword()">Change
+          password</a></li>
+        <li><g:link controller="logout">Logout</g:link></li>
+       </ul></li>
+     
+    </ul>
+   </div>
+   <!-- /.nav-collapse -->
+  </div>
+  <!-- /.container -->
+ </div>
+ <!-- /.navbar -->
+
+
+
+
+
+
+
+
+
+
+
+<%--
 	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle" data-toggle="collapse"
@@ -54,14 +111,14 @@ body {
 			</button>
 	</nav>
 	<!-- Navigation -->
-	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	<nav class="navbar navbar-left navbar-inverse navbar-fixed-top" role="navigation">
 		<div class="container">
 			<g:link class="navbar-brand" controller="StatusPortal" action="index">
-				<h2>Status Update Portal</h2>
+				<h2 style="margin-right:700px;">Status Portal</h2>
 			</g:link>
 		</div>
 		<!-- Collect the nav links, forms, and other content for toggling -->
-		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="padding-top: 15px">
+		<div  style="padding-top: 15px">
 			<ul class="nav navbar-nav">
 				<li><g:link controller="StatusPortal" action="todaysTickets">Today</g:link></li>
 				<li><g:link controller="StatusPortal" action="getAllTicketsOfUser">Previous</g:link></li>
@@ -91,7 +148,7 @@ body {
 		</div>
 		<!-- /.container -->
 	</nav>
-	<div>
+	--%><div>
 		<br>
 	</div>
 	<div>
@@ -104,16 +161,7 @@ body {
 		<g:layoutBody />
 	</div>
 
-	<div class="wrapper" >
-		<footer class="footer">
-		
-			<div id="content">
-				 <img align="middle"  src="/StatusPortal/images/cybage-logo.png">
-			</div>
-
-		</footer>
-
-	</div>
+	
 
 	<script type="text/ng-template" id="changePassword.html">
 
@@ -171,7 +219,17 @@ body {
   
       </div>
     </script>
+    
+<%--<div class="wrapper" >
+		--%><footer class="footer">
+		
+			
+				 <%--<img align="middle"  src="/StatusPortal/images/cybage-logo.png">
+			--%>
 
+		</footer>
+
+	</div>
 
 </body>
 
