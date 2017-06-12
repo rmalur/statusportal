@@ -109,7 +109,7 @@ html {
 
 #content {
 	overflow: auto;
-	background-color: #333;
+	background-color: #ddd;
 }
 
 #footer {
@@ -206,20 +206,18 @@ body {
 	
 	
 	</div>
-	<%--<div class="wrapper" style="margin-top: 700px;">
+	<div class="wrapper" style="margin-top: 700px;">
 	
-		--%>
+		
 		
 		<footer class="footer">
 
-			
-				<%--<img align="middle" src="/StatusPortal/images/cybage-logo.png">
-			--%>
-
+			<div id="content">
+				 <img align="middle"  src="/StatusPortal/images/cybage-logo.png">
+		</div>
 		</footer>
 </div>
-	</div>
-	
+		
 
 </body>
 

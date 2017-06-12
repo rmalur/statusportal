@@ -220,12 +220,12 @@ body {
       </div>
     </script>
     
-<%--<div class="wrapper" >
-		--%><footer class="footer">
+<div class="wrapper" >
+		<footer class="footer">
 		
-			
-				 <%--<img align="middle"  src="/StatusPortal/images/cybage-logo.png">
-			--%>
+			<div id="content">
+				 <img align="middle"  src="/StatusPortal/images/cybage-logo.png">
+		</div>
 
 		</footer>
 
