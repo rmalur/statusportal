@@ -89,79 +89,14 @@ body {
   <!-- /.container -->
  </div>
  <!-- /.navbar -->
-
-
-
-
-
-
-
-
-
-
-
-<%--
-	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-		<div class="navbar-header">
-			<button type="button" class="navbar-toggle" data-toggle="collapse"
-				data-target="#bs-example-navbar-collapse-1">
-				<span class="sr-only">Toggle navigation</span> <span
-					class="icon-bar"></span> <span class="icon-bar"></span> <span
-					class="icon-bar"></span>
-			</button>
-	</nav>
-	<!-- Navigation -->
-	<nav class="navbar navbar-left navbar-inverse navbar-fixed-top" role="navigation">
-		<div class="container">
-			<g:link class="navbar-brand" controller="StatusPortal" action="index">
-				<h2 style="margin-right:700px;">Status Portal</h2>
-			</g:link>
-		</div>
-		<!-- Collect the nav links, forms, and other content for toggling -->
-		<div  style="padding-top: 15px">
-			<ul class="nav navbar-nav">
-				<li><g:link controller="StatusPortal" action="todaysTickets">Today</g:link></li>
-				<li><g:link controller="StatusPortal" action="getAllTicketsOfUser">Previous</g:link></li>
-				<li><g:link controller="StatusPortal" action="getAllTicketHistory">Download</g:link></li>
-			</ul>
-			
-			<ul class="nav navbar-nav navbar-right">
-				<li class="dropdown">
-					<a data-toggle="dropdown" href="#">
-						<sec:ifLoggedIn><sec:username /></sec:ifLoggedIn>
-						 <span class="caret"></span>
-					</a>
-        			<ul class="dropdown-menu" ng-controller="myController">
-        				 <sec:ifAnyGranted roles="ROLE_LEAD">
-                              <li><g:link controller="Test" action="createProject"><i class="fa fa-picture-o"></i>Create Project</g:link></li>
-                          </sec:ifAnyGranted>
-        				<sec:ifAnyGranted roles="ROLE_LEAD,ROLE_MANAGER">
-                              <li><g:link controller="Test" action="addEmployee"><i class="fa fa-picture-o"></i>Add Resource</g:link></li>
-                          </sec:ifAnyGranted>	
-                          	<li><a href="#"  ng-click="changePassword()" >Change password</a> </li>
-          					<li><g:link controller="logout">Logout</g:link></li>	
-        			</ul>
-     			 </li>
-			</ul>
-		</div>
-		<!-- /.navbar-collapse -->
-		</div>
-		<!-- /.container -->
-	</nav>
-	--%><div>
+	<div>
 		<br>
 	</div>
-	<div>
-		<br />
-	</div>
+	
 	<div class="form-group" >
-
-		
-
 		<g:layoutBody />
 	</div>
 
-	
 
 	<script type="text/ng-template" id="changePassword.html">
 

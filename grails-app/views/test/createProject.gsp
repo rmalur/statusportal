@@ -24,43 +24,35 @@ body {
 			</div>
 			</g:if>
 	<div ng-controller="testController" ng-init="init()">
-		<table>
-				<tr>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+
+					<form>
+						<div class="col-lg-5">
+							<label for="project_id">Project ID</label> <input type="text"
+								class="form-control" id="project_id"
+								ng-model="project.project_id" name="project_id" required="">
+						
+							<label for="projectName">Project Name</label> <input type="text"
+								class="form-control" id="projectName"
+								ng-model="project.projectName" name="projectName" required="">
 					
-					<td><label for="project_id">Project ID</label></td>
-					<td><input  id="project_id" ng-model="project.project_id" name="project_id" required=""></td>
+							<label for="projectManager">Project Manager Name</label> <select
+								class="form-control" ng-model='project.managerName'
+								ng-options='manager for manager in managerList'></select>
 					
-				</tr>
-				<tr>
+							<label for="projectStartDate">Project Start Date</label> <input
+								type="text" class="form-control" ng-model="creationDate"
+								jqdatepicker />
 					
-					<td><label for="projectName">Project Name</label></td>
-					<td><input  id="projectName" ng-model="project.projectName" name="projectName" required=""></td>
-					
-				</tr>
-				<tr>
-					
-					<td><label for="projectManager">Project Manager Name</label></td>		
-					<td><select ng-model='project.managerName'  ng-options='manager for manager in managerList'></select></td>
-					
-				</tr>
-				<tr>
-					
-					<td><label for="projectStartDate">Project Start Date</label></td>
-					<td><input type="text" ng-model="creationDate" jqdatepicker />	</td>
-					
-				</tr>
-				<tr>
-					<td></td>
-					<td><button ng-click="saveProject(startDate)">Save</button> </td>
-				</tr>
-		</table>
+							<button class="btn btn-primary" style="margin-top: 10px" ng-click="saveProject(startDate)">Save</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
 	</div>
-
-	
-	<footer>
-
-		
-	</footer>
 
 </body>
 

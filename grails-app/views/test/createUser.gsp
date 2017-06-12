@@ -23,52 +23,44 @@ body {
 
 			</div>
 			</g:if>
-	<div ng-controller="testController" ng-init="init()">
-		<table>
-				<tr>
-					
-					<td><label for="employeeId">Employee ID</label></td>
-					<td><input  id="employeeId" ng-model="employee.employeeId" name="project_id" required=""></td>
-					
-				</tr>
-				<tr>
-					
-					<td><label for="employeeName">Name</label></td>
-					<td><input  id="employeeName" ng-model="employee.employeeName" name="employeeName" required=""></td>
-					
-				</tr>
-				<tr>
-					
-					<td><label for="employeeManager">Manager Name</label></td>		
-					<td><select ng-model='managerName' ng-change="loadProjectList()"  ng-options='manager for manager in managerList'></select></td>
-					
-				</tr>
-				<tr>
-					<td><label for="projectName">Project Name </label></td></td>
-					<td><select ng-model='projectName'  ng-options='project.projectName for project in projectList'></select></td>	
-				</tr>	
-				<tr>
-					<td><label for="employeeEmailId"> email Id </label></td></td>
-					<td><input  id="employeeEmailId" ng-model="employee.employeeEmailId" name="employeeEmailId" required=""></td>
-					
-				</tr>
-				<tr>
-					<td><label for="employeePassword">Password</label></td></td>
-					<td><input type="password" id="password" ng-model="employee.password" name="password" required=""></td>
-				</tr>
-				<tr>
-					<td></td>
-					<td><button ng-click="saveUser()">Save</button> </td>
-				</tr>
-		</table>
-	</div>
-
 	
-	<footer>
+	<div ng-controller="testController" ng-init="init()">
+	<div class="container">
+			<div class="row">
+				<div class="col-md-10">
 
-		
-	</footer>
+					<form>
 
+					
+							<div class="col-lg-5">
+								<label for="employeeId">Employee ID</label>
+								<input type="text" class= "form-control" id="employeeId" ng-model="employee.employeeId" name="project_id" required="">
+							
+								<label for="employeeName">Name</label>
+								<input type="text" class= "form-control" id="employeeId" ng-model="employee.employeeId" name="project_id" required="">
+							
+							
+								<label for="employeeManager">Manager Name</label>		
+								<select ng-model='managerName' class= "form-control" ng-change="loadProjectList()"  ng-options='manager for manager in managerList'></select>
+							
+								<label for="projectName">Project Name </label>
+								<select ng-model='projectName' class= "form-control" ng-options='project.projectName for project in projectList'></select>
+							
+									<label for="employeeEmailId"> email Id </label>
+									<input type="email" id="employeeEmailId" class= "form-control" ng-model="employee.employeeEmailId" name="employeeEmailId" required="">
+	
+																<label for="employeePassword">Password</label>
+									<input type="password" class= "form-control"id="password" ng-model="employee.password" name="password" required="">
+							
+								<button class="btn btn-primary" style="margin-top:10px" ng-click="saveUser()">Save</button> 
+							</div>
+					</form>
+
+				</div>
+
+			</div>
+	</div>
+	
 </body>
 
 </html>
