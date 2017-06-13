@@ -87,7 +87,7 @@ body {
 								<div style="float: left">
 									<label for="totalWorkHrs">Total Work Hrs:</label></br> <input
 										type="text"  class="form-control" id="totalWorkHrs"
-										name="totalWorkHrs" ng-model="ticketData.totalWorkHrs">
+										name="totalWorkHrs" ng-model="totalWorkHrs">
 								</div>
 							</div>
 

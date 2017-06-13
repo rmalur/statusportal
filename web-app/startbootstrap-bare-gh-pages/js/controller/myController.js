@@ -87,11 +87,13 @@
 								console.log(ticket_ID);
 								$http.get("/StatusPortal/StatusPortal/getTicketInfo/"+ ticket_ID).then(
 										function(response) {
-											$scope.ticketData = response.data;
-											 //console.log($scope.ticketData);
+											
+											console.log("response="+response.data[0])
+											$scope.ticketData = response.data[0];
 											$scope.creationDate=$scope.ticketData.creationDate;
 											$scope.assignee=$scope.ticketData.assignee;
-											console.log();
+											$scope.totalWorkHrs=response.data[1];
+											
 										});
 								
 										

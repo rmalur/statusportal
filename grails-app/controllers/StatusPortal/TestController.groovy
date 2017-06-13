@@ -73,33 +73,39 @@ class TestController {
 	def saveUser(){
 		def normalUser = new Role(authority: 'ROLE_NORMAL').save(flush: true)
 		def data=JSON.parse(request)
-		println data
+	//	println data
+		def multipleroject= data.project
 		def flag=false
 		def flagList=[]
 		try{
 			def newUser=new User()
-			newUser.username=data.employeeename
+			newUser.username=data.employeeName
 			newUser.password=data.password
 			newUser.employeeId=data.employeeId
 			newUser.employeeEmailId=data.employeeEmailId
 			if(newUser.save(flush:true,failOnError:true))
 				{
-				def userProjectMap=new UserProjectMapping()
-				userProjectMap.user_id=data.employeeId
-				userProjectMap.project_id=data.project.project_id
-				userProjectMap.save(flush:true,failOnError:true)
+					
+					for (project in multipleroject) {
+						println "project="+project.project_id
+			
+						def userProjectMap=new UserProjectMapping()
+						userProjectMap.user_id=data.employeeId
+						userProjectMap.project_id=project.project_id
+						userProjectMap.save(flush:true,failOnError:true)
+				}
 			}
 				
 			flag=true
 			flagList.add(flag)
 			flagList as JSON
+			return flagList as JSON
 		}catch(Exception e){
-			e.printStackTrace()
+
 			flag=false
 			flagList.add(flag)
 			render flagList as JSON
 		}
-
 	}
 
 

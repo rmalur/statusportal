@@ -70,9 +70,19 @@ class StatusPortalController {
 	def getTicketInfo(){
 		println "getTicketInfo"
 		def user=User.get(springSecurityService.principal.id)
+		def result=[]
 		def ticketInfo=TicketSummary.findWhere(ticket_id:params.id,user:user)
-		render ticketInfo as JSON
-
+		
+		
+		def ticketAllInfo=StatusUpdate.findAllWhere(ticket:ticketInfo,user:user)
+		def totalWorkHrs=0;
+		for (var in ticketAllInfo) {
+			totalWorkHrs=totalWorkHrs+var.todaysWorkHrs
+		}
+		result.add(ticketInfo)
+		result.add(totalWorkHrs)
+		
+		render result as JSON
 	}
 
 	//for updating the status of ticket on the basis of ticket id if ticket is new then save it as it is
