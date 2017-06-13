@@ -37,14 +37,14 @@ body {
 								<input type="text" class= "form-control" id="employeeId" ng-model="employee.employeeId" name="project_id" required="">
 							
 								<label for="employeeName">Name</label>
-								<input type="text" class= "form-control" id="employeeId" ng-model="employee.employeeId" name="project_id" required="">
+								<input type="text" class= "form-control" id="employeeId" ng-model="employee.employeeename" name="project_id" required="">
 							
 							
 								<label for="employeeManager">Manager Name</label>		
 								<select ng-model='managerName' class= "form-control" ng-change="loadProjectList()"  ng-options='manager for manager in managerList'></select>
 							
 								<label for="projectName">Project Name </label>
-								<select ng-model='projectName' class= "form-control" ng-options='project.projectName for project in projectList'></select>
+								<select ng-model='projectName' class= "form-control" ng-options='project.projectName for project in projectList' multiple="multiple"></select>
 							
 									<label for="employeeEmailId"> email Id </label>
 									<input type="email" id="employeeEmailId" class= "form-control" ng-model="employee.employeeEmailId" name="employeeEmailId" required="">

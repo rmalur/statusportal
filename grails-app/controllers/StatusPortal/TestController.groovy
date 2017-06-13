@@ -78,7 +78,7 @@ class TestController {
 		def flagList=[]
 		try{
 			def newUser=new User()
-			newUser.username=data.employeeName
+			newUser.username=data.employeeename
 			newUser.password=data.password
 			newUser.employeeId=data.employeeId
 			newUser.employeeEmailId=data.employeeEmailId
@@ -94,7 +94,7 @@ class TestController {
 			flagList.add(flag)
 			flagList as JSON
 		}catch(Exception e){
-
+			e.printStackTrace()
 			flag=false
 			flagList.add(flag)
 			render flagList as JSON

@@ -8,6 +8,7 @@ class StatusUpdate {
 	//float prvsWorkHrs
 	float todaysWorkHrs
 	String workDoneForToday
+	String workdoneBy
 	String updateDate
 	String updatedStatus
 	

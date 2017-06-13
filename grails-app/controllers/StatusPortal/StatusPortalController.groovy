@@ -28,8 +28,24 @@ class StatusPortalController {
 						property('username') }
 				}
 				
-				println assigneeList
+			
 			render	assigneeList as JSON
+				
+		
+	}
+	
+	@Secured('IS_AUTHENTICATED_FULLY')
+	def workdoneByList(){
+		
+		
+				def w = User.createCriteria()
+				def workdoneByList = w.list  {
+					projections {                  
+						property('username') }
+				}
+				
+				println "workdonelist= "+workdoneByList
+			render	workdoneByList as JSON
 				
 		
 	}
@@ -164,6 +180,7 @@ println "todaysTickets"
 					newTicketSummary.ticket_id=data.ticketData.ticket_id
 					newTicketSummary.summary=data.ticketData.summary
 					newTicketSummary.assignee=data.ticketData.assignee
+					
 					newTicketSummary.status=data.ticketData.status
 					newTicketSummary.creationDate=data.ticketData.creationDate
 					newTicketSummary.project=ProjectInfo.findWhere(project_id:"TST")
@@ -173,10 +190,11 @@ println "todaysTickets"
 				}
 						
 					newTicketStatus.user=currentUser
+					newTicketStatus.WorkdoneBy=data.ticketData.WorkdoneBy
 					newTicketStatus.todaysWorkHrs=Float.valueOf(data.ticketData.todaysWorkHrs)
 					newTicketStatus.updatedStatus=data.ticketData.status
 					newTicketStatus.updateDate=data.ticketData.creationDate
-					newTicketStatus.workDoneForToday=data.ticketData.workDone
+					newTicketStatus.workDoneForToday=data.ticketData.todayswork
 					newTicketStatus.impediments=data.ticketData.impediments
 
 					newTicketStatus.save(flush:true,failOnerror:true)

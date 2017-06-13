@@ -66,6 +66,14 @@
 										console.log("assigneeList="+$scope.assigneeList)
 									})
 									
+									
+									// function for getting the workdoneByList	
+								$http.get("/StatusPortal/StatusPortal/workdoneByList")
+									.then(function(response) {
+										
+										$scope.workdoneByList=response.data
+										console.log("workdoneByList="+$scope.workdoneByList)
+									})
 										//load project list of user
 										$http.get("/StatusPortal/test/getProjectListOfUser").then(
 												function(response) {
@@ -99,7 +107,7 @@
 								$scope.showTicket_id=false
 								$scope.showSummary=false
 								$scope.showAssignee=false
-								$scope.showWorkDone=false
+								$scope.showworkdoneBy=false
 								$scope.showTodaysWrkHrs=false
 								$scope.showImpediments=false
 								$scope.showCreationDate=false
@@ -124,9 +132,9 @@
 									$scope.showAssignee=true
 									$scope.showData=false
 								}
-								if($scope.ticketData.workDone==null){
-									console.log("workDone is null")
-									$scope.showWorkDone=true
+								if($scope.ticketData.workdoneBy==null){
+									console.log("workDoneBy is null")
+									$scope.showworkdoneBy=true
 									$scope.showData=false
 								}
 								if($scope.ticketData.todaysWorkHrs==null){
@@ -157,7 +165,7 @@
 								
 								$scope.ticketData.creationDate=$scope.creationDate;
 								$scope.ticketData.assignee=$scope.assignee;
-								
+								$scope.ticketData.workdoneBy=$scope.workdoneBy
 								
 								
 								$scope.ticketData.projectName=$scope.projectName

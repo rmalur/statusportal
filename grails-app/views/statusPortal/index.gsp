@@ -61,37 +61,40 @@ body {
 										title="Assignee"></select>
 								</div>
 								<div style="float: left;">
-									<label for="workdone" class="controle-label">Work done
-										by:</label> <input type="text" class="form-control " id="workdone"
-										name="workdone" ng-model="ticketData.workDone">
+									<label for="workdoneBy" class="controle-label">Work done
+										by:</label> <select
+										ng-model='WorkdoneBy' class="form-control"
+										style="width: 195px; height: 35px;"
+										ng-options='workdoneBy for workdoneBy in workdoneByList'
+										title="workdoneBy"></select>
 								</div>
 							</div>
 			
 							<div class="col-lg-12">
-								<label for="assignee">Today's Work :</label></br>
-								<textarea class="form-control textarea" rows="3" cols="45" id="workdone"
-									name="workdone" ng-model="ticketData.workDone"></textarea>
+								<label for="todayswork">Today's Work :</label></br>
+								<textarea class="form-control textarea" rows="3" cols="45" id="todayswork"
+									name="todayswork" ng-model="ticketData.todayswork"></textarea>
 							</div>
 
 							<div class="col-sm-12">
 								<div class="col-lg-6">
 
-									<label for="assignee">Todays Work Hrs:</label></br> <input
+									<label for="todaysWorkHrs">Todays Work Hrs:</label></br> <input
 										type="text" style="width: 87%" class="form-control "
 										id="todaysWorkHrs" name="todaysWorkHrs"
 										ng-model="ticketData.todaysWorkHrs">
 								</div>
 								<div style="float: left">
-									<label for="workdone">Total Work Hrs:</label></br> <input
+									<label for="totalWorkHrs">Total Work Hrs:</label></br> <input
 										type="text"  class="form-control" id="totalWorkHrs"
 										name="totalWorkHrs" ng-model="ticketData.totalWorkHrs">
 								</div>
 							</div>
 
 							<div class="col-lg-12">
-								<label for="assignee">Impediments :</label></br>
-								<textarea class=" form-control" rows="3" cols="45" id="workdone"
-									name="workdone" ng-model="ticketData.workDone"></textarea>
+								<label for="impediments">Impediments :</label></br>
+								<textarea class=" form-control" rows="3" cols="45" id="impediments"
+									name="impediments" ng-model="ticketData.impediments"></textarea>
 							</div>
 
 							<div class="col-sm-12">
