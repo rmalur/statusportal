@@ -14,17 +14,26 @@ body {
 
 </head>
 <body >
+
+			
+	<div ng-controller="testController">
 	
-		<g:if test="${flash.message}">
-			<div class="alert alert-info alert-dismissable">
-				<a href="" class="close" data-dismiss="alert" aria-label="close">×</a>
-				<strong>Info!</strong>
-				${flash.message}
+		<div ng-show="success">
+			<div class="alert alert-info">
+				<a href="#" class="close" ng-click="reload()" data-dismiss="alert" aria-label="close">&times;</a>
+				<label>Info:</label>New project Is created successfully!
 
 			</div>
-			</g:if>
-	<div ng-controller="testController" ng-init="init()">
-		<div class="container">
+		</div>
+		<div ng-show="failure">
+			<div class="alert alert-danger">
+				<a href="#" class="close" ng-click="reload()" data-dismiss="alert" aria-label="close">&times;</a>
+				<label>Info:</label>Unable To create new project
+			</div>
+		</div>
+				
+	
+		<div class="container" ng-init="init()">
 			<div class="row">
 				<div class="col-md-12">
 

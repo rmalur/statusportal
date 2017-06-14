@@ -14,18 +14,24 @@ body {
 
 </head>
 <body >
-	
-		<g:if test="${flash.message}">
-			<div class="alert alert-info alert-dismissable">
-				<a href="" class="close" data-dismiss="alert" aria-label="close">×</a>
-				<strong>Info!</strong>
-				${flash.message}
+
+	<div ng-controller="testController" >
+		<div ng-show="success">
+			<div class="alert alert-info">
+				<a href="#" class="close" ng-click="reload()" data-dismiss="alert" aria-label="close">&times;</a>
+				<label>Info:</label>New user Is created successfully!
 
 			</div>
-			</g:if>
+		</div>
+		<div ng-show="failure">
+			<div class="alert alert-danger">
+				<a href="#" class="close" ng-click="reload()" data-dismiss="alert" aria-label="close">&times;</a>
+				<label>Info:</label>Unable To create new user
+			</div>
+		</div>
+				
 	
-	<div ng-controller="testController" ng-init="init()">
-	<div class="container">
+	<div class="container" ng-init="init()">
 			<div class="row">
 				<div class="col-md-10">
 
@@ -37,7 +43,7 @@ body {
 								<input type="text" class= "form-control" id="employeeId" ng-model="employee.employeeId" name="project_id" required="">
 							
 								<label for="employeeName">Name</label>
-								<input type="text" class= "form-control" id="employeeId" ng-model="employee.employeeename" name="project_id" required="">
+								<input type="text" class= "form-control" id="employeeId" ng-model="employee.employeeName" name="project_id" required="">
 							
 							
 								<label for="employeeManager">Manager Name</label>		

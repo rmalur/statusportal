@@ -9,10 +9,10 @@
 		
 			<div class="small-6 text-right columns">
 				<g:link class="navbar-brand" controller="StatusPortal"	action="index">
-					<input type="button" value="Add" class="btn btn-info btn-lg">
+					<input type="button" value="Add" class="btn btn-primary">
 				</g:link>
 			</div>
-
+			</br>	
 		<table id="tblMain" border="0" class="table table-hover">
 			<tr class="bg-info">
 				<th>Id</th>
@@ -40,10 +40,10 @@
 					<td>
 						${res.status}
 					</td>
-					<td><button type="button" id="Button" class="use-address"
-							name="Button">
-							<g:link id="${res.ticket_id}" controller="StatusPortal"
-								action="updateTicketStatus">Expand</g:link>
+					<td>
+							<g:link id="${res.ticket_id}" controller="StatusPortal"	action="updateTicketStatus"  >
+								<input type="button" value="Expand" class="btn btn-primary">
+							</g:link>
 								
 						</button></td>
 					

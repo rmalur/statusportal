@@ -40,7 +40,7 @@ class TestController {
 	def addProjectInfo(){
 
 		println "addProjectInfo method"
-
+		def flag=[]
 		def data=JSON.parse(request)
 		println data
 		try{
@@ -51,15 +51,18 @@ class TestController {
 			project.projectName=data.projectName
 			project.projectStartDate=data.projectStartDate
 			project.save(flush:true,failOnError:true)
-			flash.message="project successfully saved!"
-			render controller:'test', action:'createProject'
+			def message=1
+			flag.add(message)
+
+			
 		}catch(Exception e){
 
 			e.printStackTrace()
-			flash.message="project not saved!"
-			render controller:'test', action:'createProject'
+			def message=0
+			flag.add(message)
 
 		}
+		render flag as JSON
 	}
 
 	
@@ -73,9 +76,8 @@ class TestController {
 	def saveUser(){
 		def normalUser = new Role(authority: 'ROLE_NORMAL').save(flush: true)
 		def data=JSON.parse(request)
-	//	println data
+		println data
 		def multipleroject= data.project
-		def flag=false
 		def flagList=[]
 		try{
 			def newUser=new User()
@@ -96,13 +98,12 @@ class TestController {
 				}
 			}
 				
-			flag=true
+			def flag=1
 			flagList.add(flag)
-			flagList as JSON
-			return flagList as JSON
+			render flagList as JSON
 		}catch(Exception e){
 
-			flag=false
+			def flag=0
 			flagList.add(flag)
 			render flagList as JSON
 		}

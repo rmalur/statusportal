@@ -134,7 +134,7 @@
 									$scope.showAssignee=true
 									$scope.showData=false
 								}
-								if($scope.ticketData.workdoneBy==null){
+								if($scope.workDoneBy==null){
 									console.log("workDoneBy is null")
 									$scope.showworkdoneBy=true
 									$scope.showData=false
@@ -144,12 +144,7 @@
 									$scope.showTodaysWrkHrs=true
 									$scope.showData=false
 								}
-								if($scope.ticketData.impediments==null){
-									console.log("impedimentss is null")
-									$scope.showImpediments=true
-									$scope.showData=false
-									
-								}
+								
 								if($scope.creationDate==null){
 									console.log("creationDate is null")
 									$scope.showCreationDate=true
@@ -167,7 +162,7 @@
 								
 								$scope.ticketData.creationDate=$scope.creationDate;
 								$scope.ticketData.assignee=$scope.assignee;
-								$scope.ticketData.workdoneBy=$scope.workdoneBy
+								$scope.ticketData.workDoneBy=$scope.workDoneBy
 								
 								
 								$scope.ticketData.projectName=$scope.projectName
@@ -258,6 +253,12 @@
 								}, 100); // trigger download
 							};
 
+							
+							
+							//reloading the page
+							$scope.reload=function(){
+								location.reload();
+							}
 							
 						});
 		

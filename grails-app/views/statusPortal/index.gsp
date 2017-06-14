@@ -41,20 +41,20 @@ body {
 					
 							<div class="col-lg-5">
 
-								<label for="ticket_ID" class="control-label">TicketID:</label></br>
+								<label for="ticket_ID" class="control-label">TicketID<span style="color:red">*</span>:</label></br>
 								<input type="text" class="form-control" id="tickets" name="ticket_id" ng-model="ticketData.ticket_id" required=""
 									placeholder="TickketId">
 							</div>
 							<div class="col-lg-12">	
-								<label for="summary">Summary:</label></br>
+								<label for="summary">Summary<span style="color:red">*</span>:</label></br>
 								<input type="text" class="form-control" id="summary" 
 									name="summary" ng-model="ticketData.summary"
-									placeholder="Summary">
+									placeholder="Summary" >
 							</div>
 
 							<div class="col-sm-12">
 								<div class="col-lg-6">
-									<label for="assignee">Assignee:</label> <select
+									<label for="assignee">Assignee<span style="color:red">*</span>:</label> <select
 										ng-model='assignee' class="form-control"
 										style="width: 195px; height: 35px;"
 										ng-options='assignee for assignee in assigneeList'
@@ -63,7 +63,7 @@ body {
 								<div style="float: left;">
 									<label for="workdoneBy" class="controle-label">Work done
 										by:</label> <select
-										ng-model='WorkdoneBy' class="form-control"
+										ng-model='workDoneBy' class="form-control"
 										style="width: 195px; height: 35px;"
 										ng-options='workdoneBy for workdoneBy in workdoneByList'
 										title="workdoneBy"></select>
@@ -71,7 +71,7 @@ body {
 							</div>
 			
 							<div class="col-lg-12">
-								<label for="todayswork">Today's Work :</label></br>
+								<label for="todayswork">Today's Work <span style="color:red">*</span>:</label></br>
 								<textarea class="form-control textarea" rows="3" cols="45" id="todayswork"
 									name="todayswork" ng-model="ticketData.todayswork"></textarea>
 							</div>
@@ -79,15 +79,15 @@ body {
 							<div class="col-sm-12">
 								<div class="col-lg-6">
 
-									<label for="todaysWorkHrs">Todays Work Hrs:</label></br> <input
+									<label for="todaysWorkHrs">Todays Work Hrs<span style="color:red">*</span>:</label></br> <input
 										type="text" style="width: 87%" class="form-control "
 										id="todaysWorkHrs" name="todaysWorkHrs"
 										ng-model="ticketData.todaysWorkHrs">
 								</div>
 								<div style="float: left">
-									<label for="totalWorkHrs">Total Work Hrs:</label></br> <input
+									<label for="totalWorkHrs">Total Work Hrs<span style="color:red">*</span>:</label></br> <input
 										type="text"  class="form-control" id="totalWorkHrs"
-										name="totalWorkHrs" ng-model="totalWorkHrs">
+										name="totalWorkHrs" ng-model="totalWorkHrs" readonly="">
 								</div>
 							</div>
 
@@ -103,7 +103,7 @@ body {
 									 <input	type="text" style="width: 87%" class="form-control" ng-model="creationDate" jqdatepicker />
 								</div>
 								<div style="float: left">
-									<label for="status">Status</label></br> <select id="status"
+									<label for="status">Status:</label></br> <select id="status"
 										class="form-control" style="width: 195px; height: 34px;"
 										name="status" ng-model="ticketData.status">
 										<option>Open</option>

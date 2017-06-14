@@ -10,56 +10,59 @@
 <title>Status Update Portal</title>
 </head>
 <body>
-	<g:form controller="StatusPortal" action="updateTodaysTicket">
-		<table>
-			<tr>
-				<td><label for="ticket_ID">TicketID</label></td>
-				<td><input type="text" class="Text1" id="ticket_id"
-					name="ticket_id" value="${ticketInfo.ticket_id}" readonly=""></td>
-			</tr>
-			
-			<tr>
-				<td><label for="summary">Summary</label></td>
-				<td><input type="text" class="Text1" id="summary"
-					name="summary" value="${ticketInfo.summary}" readonly=""></td>
-			</tr>
 	
-			<tr>
-				<td><label for="assignee">Assignee</label></td>
-				<td><input type="text" class="Text1" id="assignee"
-					name="assignee" value="${ticketInfo.assignee}" readonly=""></td>
-			</tr>
-	
-			<tr>
-				<td><label for="workdone">Work done</label></td>
-				<td><input type="text" id="workdone" name="workdone"
-					></td>
-			</tr>
-
-			<tr>
-				<td><label for="todaysWorkHrs">Todays Work Hrs</label></td>
-				<td><input type="text" id="todaysWorkHrs" name="todaysWorkHrs" value=""></td>
-			</tr>
-
-			<tr>
-				<td><label for="impediments">Impediments</label></td>
-				<td><input type="text" id="impediments" name="impediments"
-					></td>
-			</tr>
 		
-			<tr>
-				<td><label for="updateDate">Updated Date</label></td>
-				<td><input type="text" id="updateDate" name="updateDate"
-					placeholder="MM/dd/YYYY"></td>
-			</tr>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-10">
 
-			<tr>
-				<td></td>
-				<td><g:submitButton name="Save" value="Update" /></td>
-			</tr>
-</table>
-</g:form>
+				
+				<form>
+					
+				<div class="col-lg-5">
+					<g:form controller="StatusPortal" action="updateTodaysTicket">			
+								<label for="ticket_ID">TicketID</label></td>
+								<input type="text" class="form-control" id="ticket_id"	name="ticket_id" value="${ticketInfo.ticket_id}" readonly="">
+							
+							
+								<label for="summary">Summary</label>
+								<input type="text" class="form-control" id="summary"name="summary" value="${ticketInfo.summary}" readonly="">
+							
+							
+								<label for="assignee">Assignee</label>
+								<input type="text" class="form-control" id="assignee"name="assignee" value="${ticketInfo.assignee}" readonly="">
+							
+								<label for="workdone">Work done</label>
+								<input type="text" class="form-control" id="workdone" name="workdone">
+								
+								<label for="todaysWorkHrs">Todays Work Hrs</label>
+								<input type="text"  class="form-control" id="todaysWorkHrs" name="todaysWorkHrs" value="">
+				
+							
+								<label for="impediments">Impediments</label>
+								<input type="text" class="form-control" id="impediments" name="impediments">
+							
+								<label for="updateDate">Updated Date</label></td>
+								<input type="text" class="form-control" id="updateDate" name="updateDate"placeholder="MM/dd/YYYY" jqdatepicker >
+								
+								
+								<g:submitButton name="Save" value="Update" class="btn btn-primary" style="margin-top:10px" />
+							
+								
+						</g:form>
 			
+							
+					</form>
+							
+							
+							
+							
+					
+
+				</div>
+
+			</div>
+		</div>			
 
 </body>
 </html>

@@ -193,14 +193,17 @@ println "todaysTickets"
 					
 					newTicketSummary.status=data.ticketData.status
 					newTicketSummary.creationDate=data.ticketData.creationDate
-					newTicketSummary.project=ProjectInfo.findWhere(project_id:"TST")
+					
+					def userProjectMap=UserProjectMapping.findWhere(user_id:currentUser.employeeId)
+					
+					newTicketSummary.project=ProjectInfo.findWhere(project_id:userProjectMap.project_id)
 					
 					newTicketSummary.save(flush:true,failOnError:true)
 					newTicketStatus.ticket=TicketSummary.findByTicket_id(newTicketSummary.ticket_id)
 				}
 						
 					newTicketStatus.user=currentUser
-					newTicketStatus.WorkdoneBy=data.ticketData.WorkdoneBy
+					newTicketStatus.workdoneBy =data.ticketData.workDoneBy
 					newTicketStatus.todaysWorkHrs=Float.valueOf(data.ticketData.todaysWorkHrs)
 					newTicketStatus.updatedStatus=data.ticketData.status
 					newTicketStatus.updateDate=data.ticketData.creationDate
@@ -211,7 +214,7 @@ println "todaysTickets"
 					
 
 					flag=true
-					render flag
+					render flag 
 			}
 
 		}catch(Exception e){
