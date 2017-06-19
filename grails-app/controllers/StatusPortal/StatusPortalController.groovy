@@ -118,7 +118,7 @@ println "todaysTickets"
 	def updateTicketStatus(){
 
 
-		//println "updateTicketStatus for="+springSecurityService.principal.id
+		println "updateTicketStatus for="+springSecurityService.principal.id
 		try{
 
 			def userLogedIn=User.get(springSecurityService.principal.id)
@@ -144,6 +144,7 @@ println "todaysTickets"
 	def updateTodaysTicket(){
 
 		def flag=false
+		def ticketSummaryObject=null
 		try{
 
 			println "updateStatusTicket method"
@@ -157,11 +158,16 @@ println "todaysTickets"
 			println "currentUser="+currentUser
 
 			//def presentTicket=StatusUpdate.findAllWhere(user:currentUser,updateDate:todaysDate,ticket_id:data.ticketData.ticket_id)
-			def ticketSummaryObject=TicketSummary.findByTicket_id(data.ticketData.ticket_id)
+			if(params.ticket_id){
+				ticketSummaryObject=TicketSummary.findByTicket_id(params.ticket_id)
+			}else{
+			ticketSummaryObject=TicketSummary.findByTicket_id(data.ticketData.ticket_id)
+			}
+			
 			def presentTicket=StatusUpdate.findWhere(user:currentUser,updateDate:todaysDate,ticket:ticketSummaryObject)
 
 			if(presentTicket){
-
+				
 				if(Float.valueOf(data.ticketData.todaysWorkHrs)==0){
 					flash.message="todays work hrs should not be enmpty"
 					presentTicket.todaysWorkHrs=presentTicket.todaysWorkHrs
@@ -172,6 +178,8 @@ println "todaysTickets"
 				//presentTicket.workDoneForToday=data.ticketData.workDone
 
 				presentTicket.save(flush:true,failOnError:true)
+				
+				
 			}else{
 
 
@@ -193,10 +201,18 @@ println "todaysTickets"
 					
 					newTicketSummary.status=data.ticketData.status
 					newTicketSummary.creationDate=data.ticketData.creationDate
+					def userProjectMap
+					if(data.ticketData.project==null){
+						println data.ticketData.project
+						userProjectMap=UserProjectMapping.findWhere(user_id:currentUser.employeeId)
+						newTicketSummary.project=ProjectInfo.findWhere(project_id:userProjectMap.project_id)
+						}else{
+						newTicketSummary.project=ProjectInfo.findWhere(project_id:data.ticketData.project.project_id)
+						}
 					
-					def userProjectMap=UserProjectMapping.findWhere(user_id:currentUser.employeeId)
 					
-					newTicketSummary.project=ProjectInfo.findWhere(project_id:userProjectMap.project_id)
+					
+					
 					
 					newTicketSummary.save(flush:true,failOnError:true)
 					newTicketStatus.ticket=TicketSummary.findByTicket_id(newTicketSummary.ticket_id)

@@ -21,7 +21,6 @@ app.controller('testController',function($scope,$http){
 		//load project list of user
 		$http.get("/StatusPortal/test/getProjectListOfUser/").then(
 				function(response) {
-					console.log(response)
 					$scope.projectListOfUser=response.data
 				});
 		

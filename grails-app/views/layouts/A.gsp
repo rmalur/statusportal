@@ -13,9 +13,7 @@
 
 <!-- Bootstrap Core CSS -->
 <link	href="${request.contextPath}/startbootstrap-bare-gh-pages/css/bootstrap.min.css"	rel="stylesheet">
-<link	href="${request.contextPath}/startbootstrap-bare-gh-pages/css/datepicker.css"
-	rel="stylesheet">
-
+<link	href="${request.contextPath}/startbootstrap-bare-gh-pages/css/datepicker.css" rel="stylesheet">
 <!-- Script loaded form controller.js file -->
 
 
@@ -25,6 +23,7 @@
 <script type="text/javascript"	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/controller/testController.js"></script>
 <script type="text/javascript"	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/controller/changePasswordController.js"></script>
 <script type="text/javascript"	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/controller/changePasswordResultController.js"></script>
+<script type="text/javascript"	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/controller/ticketController.js"></script>
 <script	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/jquery-1.11.2.min.js"></script>
 <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 <script	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/bootstrap-datepicker.js"></script>
@@ -43,7 +42,7 @@ body {
 
 </head>
 
-<body ng-app="myApp" ng-controller="myController">
+<body ng-app="myApp" >
 
 
 <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
@@ -68,9 +67,9 @@ body {
          <sec:username />
         </sec:ifLoggedIn> <span class="caret"></span>
       </a>
-       <ul class="dropdown-menu" ng-controller="myController">
+       <ul class="dropdown-menu" ng-controller="myController" >
         <sec:ifAnyGranted roles="ROLE_LEAD">
-         <li><g:link controller="Test" action="createProject">
+        	<li><g:link controller="Test" action="createProject">
            <i class="fa fa-picture-o"></i>Create Project</g:link></li>
         </sec:ifAnyGranted>
         <sec:ifAnyGranted roles="ROLE_LEAD,ROLE_MANAGER">

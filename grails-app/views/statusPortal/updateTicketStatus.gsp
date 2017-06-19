@@ -17,7 +17,7 @@
 				<div class="col-md-10">
 
 				
-				<form>
+				
 					
 				<div class="col-lg-5">
 					<g:form controller="StatusPortal" action="updateTodaysTicket">			
@@ -51,14 +51,6 @@
 								
 						</g:form>
 			
-							
-					</form>
-							
-							
-							
-							
-					
-
 				</div>
 
 			</div>

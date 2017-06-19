@@ -35,7 +35,7 @@ class TestController {
 
 	}
 
-
+//adding new project
 	@Secured('IS_AUTHENTICATED_FULLY')
 	def addProjectInfo(){
 
@@ -65,13 +65,13 @@ class TestController {
 		render flag as JSON
 	}
 
-	
+	//for creating new user
 	@Secured('permitAll')
 	def createUser(){
 
 	}
 
-	
+	//for saving new user
 @Secured('permitAll')
 	def saveUser(){
 		def normalUser = new Role(authority: 'ROLE_NORMAL').save(flush: true)
@@ -109,32 +109,34 @@ class TestController {
 		}
 	}
 
-
+//for loading the projectList of manager
 	@Secured('permitAll')
 	def getProjectList(){
 		println params
 		def manager=User.findWhere(username:params.id)
 		def projectList=ProjectInfo.findAllWhere(user:manager)
-
+		
 		render  projectList as JSON
 	}
-
+//for loading the project related to user
 	@Secured('IS_AUTHENTICATED_FULLY')
 	def getProjectListOfUser(){
 		
 		println "getProjectListOfUser"
+		def projectListOfUser=[]
 		try{
-		def user=User.get(springSecurityService.principal.id)
-		def projects=UserProjectMapping.findAllByUser_id(user.employeeId)
-		def projectListOfUser=[];
-		for (project in projects) {
-			def projectInfo=ProjectInfo.findWhere(project_id:project.project_id)
-			projectListOfUser.add(projectInfo)
-		}
-		println "project List="+projectListOfUser
+			def user=User.get(springSecurityService.principal.id)
+					def projects=UserProjectMapping.findAllByUser_id(user.employeeId)
+		
+					for (project in projects) {
+						def projectInfo=ProjectInfo.findWhere(project_id:project.project_id)
+								projectListOfUser.add(projectInfo)
+					}
 		render projectListOfUser as JSON
+		
 		}catch(Exception e){
 			e.printStackTrace()
 		}
 	}
+	
 }

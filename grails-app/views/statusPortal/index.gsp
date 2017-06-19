@@ -17,18 +17,18 @@ body {
 </head>
 <body >
 	
-	<div ng-controller="myController" >
+	<div ng-controller="myController">
 		<div class="alert alert-info alert-dismissable" ng-show="success">
-			<a href="" class="close" data-dismiss="alert" aria-label="close">X</a>
+			<a href="" class="close" data-dismiss="alert" ng-click="reload()" aria-label="close">X</a>
 			<strong>Info!</strong>Data is saved successFully!
 		</div>
 		<div class="alert alert-error alert-dismissable" ng-show="failure">
-			<a href="" class="close" data-dismiss="alert" aria-label="close">X</a>
+			<a href="" class="close" data-dismiss="alert" ng-click="reload()" aria-label="close">X</a>
 			<strong>Info!</strong>Data is not saved successFully!
 		</div>
 		
 		<div class="alert alert-error alert-dismissable" ng-show="showError">
-			<a href="" class="close" data-dismiss="alert" aria-label="close">X</a>
+			<a href="" class="close" data-dismiss="alert" ng-click="reload()" aria-label="close">X</a>
 			<strong>Info!</strong>please fill the mandatory fileds
 		</div>
 	
@@ -37,7 +37,17 @@ body {
 				<div class="col-md-10">
 
 					<form>
-
+							<div class="col-lg-5">
+								<label class="control-label" >  Select Project:</label>
+								<select
+										ng-model='project' class="form-control"
+										style="width: 195px; height: 35px;"
+										ng-disabled="projectListHidden"
+										ng-options='project.projectName for project in projectListOfUser'
+										title="projectName"></select>
+										
+									
+							</div>						
 					
 							<div class="col-lg-5">
 

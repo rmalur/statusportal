@@ -45,6 +45,18 @@
 							$scope.alltickets=undefined;
 							$scope.ticketData={}
 							$scope.projectName=undefined
+							$scope.projectListHidden=true
+							
+							
+							$http.get("/StatusPortal/test/getProjectListOfUser/").then(
+									function(response) {										
+										console.log("response length="+response.data.length)
+										if(response.data.length>1){
+											$scope.projectListHidden=false
+										}
+										$scope.projectListOfUser=response.data
+										
+									});
 							// function for getting the ticktIds
 							$http.get("/StatusPortal/StatusPortal/ticketIds.json")
 									.then(function(response) {
@@ -74,12 +86,6 @@
 										$scope.workdoneByList=response.data
 										console.log("workdoneByList="+$scope.workdoneByList)
 									})
-										//load project list of user
-										$http.get("/StatusPortal/test/getProjectListOfUser").then(
-												function(response) {
-												console.log(response)
-												$scope.projectListOfUser=response.data
-												});
 									
 									
 							// for loading the table entries
@@ -165,7 +171,7 @@
 								$scope.ticketData.workDoneBy=$scope.workDoneBy
 								
 								
-								$scope.ticketData.projectName=$scope.projectName
+								$scope.ticketData.project=$scope.project
 								var ticketData=$scope.ticketData;
 								console.log("ticketdata="+ticketData);
 								$http({
