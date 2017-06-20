@@ -49,13 +49,17 @@ body {
 								<label for="employeeManager">Manager Name</label>		
 								<select ng-model='managerName' class= "form-control" ng-change="loadProjectList()"  ng-options='manager for manager in managerList'></select>
 							
+								<label for="employeelead">Lead Name</label>
+								<select ng-model='leadName' class= "form-control"   ng-options='lead for lead in leadList'></select>
+							
+							
 								<label for="projectName">Project Name </label>
 								<select ng-model='projectName' class= "form-control" ng-options='project.projectName for project in projectList' multiple="multiple"></select>
 							
 									<label for="employeeEmailId"> email Id </label>
 									<input type="email" id="employeeEmailId" class= "form-control" ng-model="employee.employeeEmailId" name="employeeEmailId" required="">
 	
-																<label for="employeePassword">Password</label>
+									<label for="employeePassword">Password</label>
 									<input type="password" class= "form-control"id="password" ng-model="employee.password" name="password" required="">
 							
 								<button class="btn btn-primary" style="margin-top:10px" ng-click="saveUser()">Save</button> 

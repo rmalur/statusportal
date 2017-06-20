@@ -8,6 +8,7 @@ app.controller('testController',function($scope,$http){
 		
 		console.log("testController");
 		$scope.managerList=[]
+		$scope.leadList=[]
 		$scope.projectList=[]
 		$scope.projectListOfUser=[]
 		$scope.projectName=undefined
@@ -15,9 +16,17 @@ app.controller('testController',function($scope,$http){
 		//loading managers List
 		$http.get("/StatusPortal/test/getManagerList")
 		.then(function(response) {
-			console.log(response.data)
+			console.log("manager List="+response.data)
 			$scope.managerList=response.data
-		})
+		});
+		
+		//load lead list of
+			$http.get("/StatusPortal/test/getLeadList")
+		.then(function(response) {
+			console.log("lead list="+response.data)
+			$scope.leadList=response.data
+		});
+		
 		//load project list of user
 		$http.get("/StatusPortal/test/getProjectListOfUser/").then(
 				function(response) {
@@ -75,8 +84,10 @@ app.controller('testController',function($scope,$http){
 	
 	//function for saving new user
 	$scope.saveUser=function(){
+		
 		$scope.employee.managerName=$scope.managerName
 		$scope.employee.project=$scope.projectName
+		$scope.employee.lead=$scope.leadName
 		$http({
 			method: "POST",
 		    url: "/StatusPortal/test/saveUser",

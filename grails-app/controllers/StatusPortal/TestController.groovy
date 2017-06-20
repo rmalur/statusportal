@@ -74,7 +74,7 @@ class TestController {
 	//for saving new user
 @Secured('permitAll')
 	def saveUser(){
-		def normalUser = new Role(authority: 'ROLE_NORMAL').save(flush: true)
+		def normalUser = Role.findWhere(authority:'ROLE_NORMAL')
 		def data=JSON.parse(request)
 		println data
 		def multipleroject= data.project
@@ -87,7 +87,7 @@ class TestController {
 			newUser.employeeEmailId=data.employeeEmailId
 			if(newUser.save(flush:true,failOnError:true))
 				{
-					
+					UserRole.create newUser,normalUser,true
 					for (project in multipleroject) {
 						println "project="+project.project_id
 			
@@ -95,14 +95,28 @@ class TestController {
 						userProjectMap.user_id=data.employeeId
 						userProjectMap.project_id=project.project_id
 						userProjectMap.save(flush:true,failOnError:true)
+					}
+						def userManagerMapping=new UserManager()
+						def manager=User.findWhere(username:data.managerName)
+						userManagerMapping.manager_id=manager.employeeId
+						userManagerMapping.employee_id=data.employeeId
+					
+						if(data.lead!=null){
+							def lead_id=User.findWhere(username:data.lead)
+								userManagerMapping.lead_id=lead_id.employeeId
+							}else{
+							userManagerMapping.lead_id="NA"
+							}
+							
+							//userManagerMapping.save(flush:true,failOnError:true)
 				}
-			}
+			
 				
 			def flag=1
 			flagList.add(flag)
 			render flagList as JSON
 		}catch(Exception e){
-
+			e.printStackTrace()
 			def flag=0
 			flagList.add(flag)
 			render flagList as JSON
@@ -139,4 +153,20 @@ class TestController {
 		}
 	}
 	
+	//for loading the project related to user
+	@Secured('permitAll')
+	def getLeadList(){
+		def roleId=Role.findWhere(authority:"ROLE_LEAD")
+		def leadUser=UserRole.findAllWhere(role:roleId)
+		def leadList=[]
+
+		for (var in leadUser) {
+
+			def user=User.get(var.user.id)
+			leadList.add(user.username)
+		}
+
+		render leadList as JSON
+		
+	}
 }
