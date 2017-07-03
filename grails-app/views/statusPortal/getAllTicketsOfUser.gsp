@@ -6,64 +6,55 @@
 
 </head>
 <body>
-	
-	
-	<g:if test="${flash.message}">
-		<div class="alert alert-info alert-dismissable fade in">
-			<a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-			<strong>Info!</strong>
-			${flash.message}
-
-		</div>
-	</g:if>
-		<table id="tblMain" border="0" class= "table table-hover table-responsive" >
-			<tr class="bg-info">
-				<th>Id</th>
-				<th>Ticket-id</th>
-				<th>Summary</th>
-				<th>Assignee</th>
-				<th>Work_done</th>
-				<th>Impediments</th>
-				<th>Work Hours for day</th>
-				<th>Updated_Date</th>
-				<th>Status</th>
-			</tr>
-			<g:each in="${hist}" var="res" status="i">
-					<tr >
-						<td>
-							${i+1}.
-						</td>
-						<td>
-							${res.ticket.ticket_id}
-						</td>
-						<td>
-							${res.ticket.summary}
-						</td>
-						<td>
-							${res.ticket.assignee}
-						</td>
-						<td>
-							${res.workDoneForToday}
-						</td>
-						<td>
-							${res.impediments}
-						</td>
-					
-						<td>
-							${res.todaysWorkHrs}
-						</td>
+<div class="container">
+			<div ng-controller="ticketController" ng-init="allTicketsOfUser()">
 						
-						<td>
-							${res.updateDate}
-						</td>
-						<td>
-							${res.updatedStatus}
-						</td>
 					
-					</tr>
-			</tbody>
-			</g:each>
-			</table>
-
+				<div class="col-sm-6">
+					<div class="col-lg-10">
+						<div class="col-sm-6" style="padding-left: 20px">
+			 				<select ng-model='projectName' ng-disabled="projectListHidden"  ng-change="loadTicketsOfProject()"  class= "form-control" ng-options='project.projectName for project in projectList' ></select>
+						</div>
+						
+       					 <sec:ifAnyGranted roles="ROLE_LEAD,ROLE_MANAGER">
+						<div class="col-sm-6" style="padding-left: 20px;">
+			 				<select ng-model='resourceName'  ng-change="filterOnBasisOfResource()" class= "form-control" ng-options='resource for resource in resourceList' ></select>
+						</div>
+						</sec:ifAnyGranted>
+					</div>	
+					<form>
+	
+						<table id="tblMain"  class= "table table-striped table-condensed" >
+							<tr class="bg-info">
+								<th>Id</th>
+								<th>Ticket-id</th>
+								<th>Summary</th>
+								<th>Assignee</th>
+								<th>Work_done by</th>
+								<th>Impediments</th>
+								<th>Work Hours for day</th>
+								<th>Updated_Date</th>
+								<th>Status</th>
+							</tr>
+			
+							<tr ng-repeat="ticket in ticketList">
+								<td>{{$index+1}}</td>
+								<td>{{ticket.ticket_id}}</td>
+								<td>{{ticket.summary}}</td>
+								<td>{{ticket.assignee}}</td>
+								<td>{{ticket.workDoneBy}}</td>	
+								<td>{{ticket.impediments}}</td>
+								<td>{{ticket.todaysWorkHrs}}</td>
+								<td>{{ticket.updateDate}}</td>
+								<td>{{ticket.updatedStatus}}</td>
+					
+							</tr>
+						</table>
+					</form>
+					</div>	
+				
+			</div>	
+		
+	</div>	
 </body>
 </html>

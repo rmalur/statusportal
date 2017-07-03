@@ -24,6 +24,7 @@
 <script type="text/javascript"	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/controller/changePasswordController.js"></script>
 <script type="text/javascript"	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/controller/changePasswordResultController.js"></script>
 <script type="text/javascript"	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/controller/ticketController.js"></script>
+
 <script	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/jquery-1.11.2.min.js"></script>
 <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 <script	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/bootstrap-datepicker.js"></script>
@@ -33,7 +34,10 @@
 <script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
  
 <link rel="stylesheet"	href="https://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css" />
-<style>
+<%--<script type="text/javascript"	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/datatables.js"></script>
+<script type="text/javascript"	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/datatables.min.js"></script>
+
+--%><style>
 body {
 	padding-top: 70px;
 	/* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
@@ -54,7 +58,7 @@ body {
       class="icon-bar"></span> <span class="icon-bar"></span> <span
       class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" href="#">Status Update</a>
+    	<a class="navbar-brand"  href="${createLink(controller:'logout')}">Status Update</a>
    </div>
    <div class="collapse navbar-collapse" id="b-menu-1">
     <ul class="nav navbar-nav navbar-left">
