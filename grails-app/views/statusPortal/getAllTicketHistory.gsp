@@ -68,7 +68,7 @@
 			</table>
 
 	
-		<button class="btn btn-info btn-lg"  ng-click="exportToExcel('#tblMain')">Export Record In Excel Format</button>
+		
 	</div>
 </body>
 </html>

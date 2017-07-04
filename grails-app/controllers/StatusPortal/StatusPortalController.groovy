@@ -219,7 +219,7 @@ println "todaysTickets"
 				}
 						
 					newTicketStatus.user=currentUser
-					newTicketStatus.workdoneBy =data.ticketData.workDoneBy
+					newTicketStatus.workdoneBy =data.ticketData.workdoneBy
 					newTicketStatus.todaysWorkHrs=Float.valueOf(data.ticketData.todaysWorkHrs)
 					newTicketStatus.updatedStatus=data.ticketData.status
 					newTicketStatus.updateDate=data.ticketData.creationDate
@@ -245,19 +245,50 @@ println "todaysTickets"
 
 	}
 	
-	//for all tickets history irespective of the user 
+	//for all tickets history irespective of the user
 	@Secured('IS_AUTHENTICATED_FULLY')
 	def getAllTicketsOfUser(){
-		
+
+		String selectedDate= params.id
+		println "selected dAte=" +params.id
+		def ticketList=[]
 		def currentUser=User.get(springSecurityService.principal.id)
-		def allTicketsOfUser=StatusUpdate.findAllWhere(user:currentUser)
-		if(allTicketsOfUser){
-		 [hist:allTicketsOfUser]
-		 }else{
-		  flash.message="No records found"
-		 
-		 }
+			
+		
+		
+		def allTicketsOfUser=StatusUpdate.findAllWhere(user:currentUser, updateDate:selectedDate)
+		/*def allTicketsOfUser=StatusUpdate.findByUpdateDateBetween('05/05/2017','13/06/2017')*/
+		
+		println allTicketsOfUser
+		for (var in allTicketsOfUser) {
+			
+			println var.workdoneBy
+			def ticket= [:]
+			
+			ticket.put("ticket_id", var.ticket.ticket_id)
+			ticket.put("summary", var.ticket.summary)
+			ticket.put("assignee", var.ticket.assignee)
+			ticket.put("workdoneBy", var.workdoneBy)
+			ticket.put("impediments", var.impediments)
+			ticket.put("todaysWorkHrs", var.todaysWorkHrs)
+			ticket.put("updateDate", var.updateDate)
+			ticket.put("updatedStatus", var.updatedStatus)
+		  
+		ticketList.add(ticket)
+			
+		}
+		println ticketList
+			
+		if(ticketList){
+		
+		 render ticketList as JSON
+		 }/*else{
+		 // flash.message="No records found"
+		render ticketList as JSON
+		 }*/
+		
 	}
+
 
 	
 	@Secured('IS_AUTHENTICATED_FULLY')

@@ -5,13 +5,13 @@ import SecureApp.User
 class StatusUpdate {
 
 	String impediments
-	//float prvsWorkHrs
+	
 	float todaysWorkHrs
 	String workDoneForToday
 	String workdoneBy
 	String updateDate
 	String updatedStatus
-	
+	String workDoneBy
 	
 	
 	static belongsTo =[ticket:TicketSummary,user:User]

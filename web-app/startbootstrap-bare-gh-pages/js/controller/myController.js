@@ -1,5 +1,9 @@
-		var app = angular.module('myApp', ['ui.bootstrap']);
-		app.factory('Excel',function($window) {
+	var app = angular.module('myApp', ['ngAnimate', 'ngSanitize','ui.bootstrap']);
+	app.config(['$qProvider', function ($qProvider) {
+	    $qProvider.errorOnUnhandledRejections(false);
+	}]);
+	
+	app.factory('Excel',function($window) {
 					var uri = 'data:application/vnd.ms-excel;base64,', template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>', base64 = function(s) {
 						return $window.btoa(unescape(encodeURIComponent(s)));
 					}, format = function(s, c) {
@@ -22,18 +26,20 @@
 		
 		
 		app.directive('jqdatepicker', function () {
+			
 		    return {
 		        restrict: 'A',
 		        require: '^?ng-model',
 		         link: function (scope, element, attrs, ngModelCtrl) {
 		            $(element).datepicker({
+		            	defaultDate:new Date(),
 		            	changeYear:true,
 		                changeMonth:true,
 		                dateFormat: 'dd/mm/yy',
 		                maxDate: new Date(),
 		                onSelect: function (creationDate) {
 		                    scope.creationDate = creationDate;
-		                    
+		                  
 		                    scope.$apply();
 		                }
 		            });
@@ -48,7 +54,7 @@
 							$scope.projectListHidden=true
 							
 							
-							$http.get("/StatusPortal/test/getProjectListOfUser/").then(
+							$http.get("/StatusPortal/statusPortal/getProjectListOfUser/").then(
 									function(response) {										
 										console.log("response length="+response.data.length)
 										if(response.data.length>1){
@@ -93,10 +99,10 @@
 								console.log(ticket_ID);
 								$http.get("/StatusPortal/StatusPortal/getTicketInfo/"+ ticket_ID).then(
 										function(response) {
-											
+											//$scope.date=new Date();
 											console.log("response="+response.data[0])
 											$scope.ticketData = response.data[0];
-											$scope.creationDate=$scope.ticketData.creationDate;
+										//	$scope.creationDate=date;
 											$scope.assignee=$scope.ticketData.assignee;
 											$scope.totalWorkHrs=response.data[1];
 											
@@ -140,8 +146,8 @@
 									$scope.showAssignee=true
 									$scope.showData=false
 								}
-								if($scope.workDoneBy==null){
-									console.log("workDoneBy is null")
+								if($scope.workdoneBy==null){
+									console.log("workdoneBy is null")
 									$scope.showworkdoneBy=true
 									$scope.showData=false
 								}
@@ -168,7 +174,7 @@
 								
 								$scope.ticketData.creationDate=$scope.creationDate;
 								$scope.ticketData.assignee=$scope.assignee;
-								$scope.ticketData.workDoneBy=$scope.workDoneBy
+								$scope.ticketData.workdoneBy=$scope.workdoneBy
 								
 								
 								$scope.ticketData.project=$scope.project
