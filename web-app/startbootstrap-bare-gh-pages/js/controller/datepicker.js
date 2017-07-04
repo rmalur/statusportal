@@ -55,7 +55,7 @@ app.controller('DatepickerPopupDemoCtrl', function ($scope,$http,$filter) {
 		var today =dd+'/'+mm+'/'+yyyy;
 	  
 	  console.log(today);
-	  $http.get("/StatusPortal/StatusPortal/getAllTicketsOfUser?id="+today).then(
+	  $http.get("/StatusPortal/statusPortal/getAllTicketsOfUser?id="+today).then(
 	  		function(response) {
 	  			console.log(response.data)
 	  			$scope.ticketList=response.data
