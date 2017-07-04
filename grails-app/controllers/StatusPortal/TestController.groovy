@@ -169,4 +169,40 @@ class TestController {
 		render leadList as JSON
 		
 	}
+	
+	@Secured('IS_AUTHENTICATED_FULLY')
+	def getAllTicketsOfUser(){
+
+		String selectedDate= params.id
+		println "selected dAte=" +params.id
+		def ticketList=[]
+		def currentUser=User.get(springSecurityService.principal.id)
+		
+		def allTicketsOfUser=StatusUpdate.findAllWhere(user:currentUser, updateDate:selectedDate)
+		for (var in allTicketsOfUser) {
+			/*def ticket= [:]
+			ticket.put("ticket_id", var.ticket.ticket_id)
+			ticket.put("summary", var.ticket.summary)
+			ticket.put("assignee", var.ticket.assignee)
+			ticket.put("workdoneBy", var.workdoneBy)
+			ticket.put("impediments", var.impediments)
+			ticket.put("todaysWorkHrs", var.todaysWorkHrs)
+			ticket.put("updateDate", var.updateDate)
+			ticket.put("updatedStatus", var.updatedStatus)*/
+		println var.workdoneBy
+			//	ticketList.add(ticket)
+			
+		}
+		
+			
+		if(ticketList){
+		
+		// render ticketList as JSON
+		 }else{
+		  flash.message="No records found"
+		 
+		 }
+		
+	}
+
 }

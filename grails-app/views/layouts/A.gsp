@@ -11,22 +11,33 @@
 
 <title>Status Portal</title>
 
+
+
+
 <!-- Bootstrap Core CSS -->
 <link	href="${request.contextPath}/startbootstrap-bare-gh-pages/css/bootstrap.min.css"	rel="stylesheet">
-<link	href="${request.contextPath}/startbootstrap-bare-gh-pages/css/datepicker.css" rel="stylesheet">
+
 <!-- Script loaded form controller.js file -->
 
 
-<script	src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-<script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.3.3.js"></script>
+ <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-sanitize.js"></script>
+    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
+   
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    
+    
+    
 <script type="text/javascript"	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/controller/myController.js"></script>
+
 <script type="text/javascript"	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/controller/testController.js"></script>
 <script type="text/javascript"	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/controller/changePasswordController.js"></script>
 <script type="text/javascript"	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/controller/changePasswordResultController.js"></script>
-<script type="text/javascript"	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/controller/ticketController.js"></script>
+<script type="text/javascript"	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/controller/datepicker.js"></script>
 <script	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/jquery-1.11.2.min.js"></script>
 <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
-<script	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/bootstrap-datepicker.js"></script>
+
 <script	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/moment.min.js"></script>
 <link rel="stylesheet"	href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css" />
 <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
@@ -42,7 +53,7 @@ body {
 
 </head>
 
-<body ng-app="myApp" >
+<body ng-app="myApp" ng-controller="myController">
 
 
 <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
@@ -67,9 +78,9 @@ body {
          <sec:username />
         </sec:ifLoggedIn> <span class="caret"></span>
       </a>
-       <ul class="dropdown-menu" ng-controller="myController" >
-        <sec:ifAnyGranted roles="ROLE_LEAD">
-        	<li><g:link controller="Test" action="createProject">
+       <ul class="dropdown-menu" ng-controller="myController">
+        <sec:ifAnyGranted roles="ROLE_LEAD,ROLE_MANAGER">
+         <li><g:link controller="Test" action="createProject">
            <i class="fa fa-picture-o"></i>Create Project</g:link></li>
         </sec:ifAnyGranted>
         <sec:ifAnyGranted roles="ROLE_LEAD,ROLE_MANAGER">
