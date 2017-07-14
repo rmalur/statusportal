@@ -45,7 +45,7 @@
 								<td>{{ticket.workDoneBy}}</td>	
 								<td>{{ticket.impediments}}</td>
 								<td>{{ticket.todaysWorkHrs}}</td>
-								<td>{{ticket.updateDate}}</td>
+								<td>{{ticket.updateDate|date:'dd/MM/yyyy' }}</td>
 								<td>{{ticket.updatedStatus}}</td>
 					
 							</tr>

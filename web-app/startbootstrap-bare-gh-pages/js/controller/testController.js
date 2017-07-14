@@ -4,9 +4,8 @@ app.controller('testController',function($scope,$http){
 	$scope.managerName
 	$scope.success=false
 	$scope.failure=false
+	
 	$scope.init=function(){
-		
-		console.log("testController");
 		$scope.managerList=[]
 		$scope.leadList=[]
 		$scope.projectList=[]
@@ -16,14 +15,12 @@ app.controller('testController',function($scope,$http){
 		//loading managers List
 		$http.get("/StatusPortal/test/getManagerList")
 		.then(function(response) {
-			console.log("manager List="+response.data)
 			$scope.managerList=response.data
 		});
 		
 		//load lead list of
 			$http.get("/StatusPortal/test/getLeadList")
 		.then(function(response) {
-			console.log("lead list="+response.data)
 			$scope.leadList=response.data
 		});
 		
@@ -38,31 +35,18 @@ app.controller('testController',function($scope,$http){
 	
 	//function for saving new project
 	$scope.saveProject=function(){
-	
 		$scope.project.projectStartDate=$scope.creationDate
 		$http({
 			method: "POST",
 		    url: "/StatusPortal/test/addProjectInfo",
 		    data: $scope.project
 		}).then(function (response) {
-			console.log("response data="+response.data)
-			
 	        if(response.data==1){
 	        	$scope.success = true
-	        	console.log("success="+$scope.success)
-	        	
-	        	
-	        	
 	        }else{
 	        	$scope.failure = true
-	        	
-	        	console.log("failure="+$scope.failure)
-	        	
 	        }
-	        
-			
 	      // window.location.reload()
-	    
 	    });
 		
 	}
@@ -70,11 +54,9 @@ app.controller('testController',function($scope,$http){
 	
 	//loading the projectList for manager
 	$scope.loadProjectList=function(managerName){
-		console.log($scope.managerName)
 		var managerName=$scope.managerName
 		$http.get("/StatusPortal/test/getProjectList/"+managerName).then(
 				function(response) {
-					console.log(response)
 					$scope.projectList=response.data
 				});
 		
@@ -95,10 +77,8 @@ app.controller('testController',function($scope,$http){
 		}).then(function (response) {	        
 	        if(response.data==1){
 	        	$scope.success = true
-	        	console.log("success="+$scope.success)
 	        }else{
 	        	$scope.failure = true
-	        	console.log("failure="+$scope.failure)
 	        }
 	       
 	    });

@@ -20,29 +20,21 @@ class TestController {
 	//@Secured('IS_AUTHENTICATED_FULLY')
 	@Secured('permitAll')
 	def getManagerList(){
-
 		def roleId=Role.findWhere(authority:"ROLE_MANAGER")
 		def managerUser=UserRole.findAllWhere(role:roleId)
 		def managerNameList=[]
-
 		for (var in managerUser) {
-
 			def user=User.get(var.user.id)
 			managerNameList.add(user.username)
 		}
-
 		render managerNameList as JSON
-
 	}
 
   //adding new project
 	@Secured('IS_AUTHENTICATED_FULLY')
 	def addProjectInfo(){
-
-		println "addProjectInfo method"
 		def flag=[]
 		def data=JSON.parse(request)
-		println data
 		try{
 			def manager=User.findWhere(username:data.managerName)
 			def project=new ProjectInfo()
@@ -54,7 +46,6 @@ class TestController {
 			def message=1
 			flag.add(message)
 
-			
 		}catch(Exception e){
 
 			e.printStackTrace()
@@ -76,7 +67,6 @@ class TestController {
 	def saveUser(){
 		def normalUser = Role.findWhere(authority:'ROLE_NORMAL')
 		def data=JSON.parse(request)
-		println data
 		def multipleroject= data.project
 		def flagList=[]
 		try{
@@ -89,8 +79,6 @@ class TestController {
 				{
 					UserRole.create newUser,normalUser,true
 					for (project in multipleroject) {
-						println "project="+project.project_id
-			
 						def userProjectMap=new UserProjectMapping()
 						userProjectMap.user_id=data.employeeId
 						userProjectMap.project_id=project.project_id
@@ -108,7 +96,7 @@ class TestController {
 							userManagerMapping.lead_id="NA"
 							}
 							
-							//userManagerMapping.save(flush:true,failOnError:true)
+						userManagerMapping.save(flush:true,failOnError:true)
 				}
 			
 				
@@ -127,11 +115,8 @@ class TestController {
 	//for loading tickets of user initiallly
 	@Secured('permitAll')
 	def loadAllTicketsOfuser(){
-		println "loadallTicketsOfUser"
 		def currentUser=User.get(springSecurityService.principal.id)
 		String role=springSecurityService.principal.authorities
-		println "role="+role
-		//def allTicketsOfUser
 		List<StatusUpdate>allTicketsOfUser=new ArrayList<StatusUpdate>()
 		if(role.contains('ROLE_MANAGER')){
 			 def projects=ProjectInfo.findAllWhere(user:currentUser)
@@ -168,23 +153,18 @@ class TestController {
   //for loading the projectList of manager
 	@Secured('permitAll')
 	def getProjectList(){
-		println params
 		def manager=User.findWhere(username:params.id)
 		def projectList=ProjectInfo.findAllWhere(user:manager)
-		
 		render  projectList as JSON
 	}
    //for loading the project related to user
 	@Secured('IS_AUTHENTICATED_FULLY')
 	def getProjectListOfUser(){
 		
-		println "getProjectListOfUser"
 		def projectListOfUser=[]
 		try{
 			def user=User.get(springSecurityService.principal.id)
 			def role=springSecurityService.principal.authorities
-			println "role="+role
-			println	role.toString().contains("ROLE_MANAGER")
 			def projects	
 			if(role.toString().contains("ROLE_MANAGER")){
 				projects=ProjectInfo.findAllWhere(user:user)
@@ -260,10 +240,6 @@ class TestController {
 	def getResourcesList(){
 		println "getResourcesList project id="+ params.id
 		def project=ProjectInfo.findWhere(projectName:params.id)
-		
-		
-		
-		
 		def currentUser=User.get(springSecurityService.principal.id)
 		String role=springSecurityService.principal.authorities
 		def resourceList=[]
@@ -299,10 +275,7 @@ class TestController {
 	def getTicktetsOnBasisOfResources(){
 		
 		def data=JSON.parse(request)
-		println data
-		
 		//def project=ProjectInfo.findWhere(projectName:data.projectName)
-		
 		//def ticketSummaryList=TicketSummary.findAllWhere(project:project)
 		def ticketList=[]
 		//for (var in ticketSummaryList) {
@@ -322,7 +295,6 @@ class TestController {
 				ticketList.add(ticket)
 			}
 		//}
-		println "ticketList="+ticketList
 			render ticketList as JSON
 	}
 }

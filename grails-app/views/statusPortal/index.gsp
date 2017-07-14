@@ -37,12 +37,13 @@ body {
 				<div class="col-md-10">
 
 					<form>
-							<div class="col-lg-5">
+							<div class="col-lg-6">
 								<label class="control-label" >  Select Project:</label>
 								<select
 										ng-model='project' class="form-control"
 										style="width: 195px; height: 35px;"
 										ng-disabled="projectListHidden"
+										ng-change="loadAllData()"
 										ng-options='project.projectName for project in projectListOfUser'
 										title="projectName"></select>
 										
@@ -53,13 +54,13 @@ body {
 
 								<label for="ticket_ID" class="control-label">TicketID<span style="color:red">*</span>:</label></br>
 								<input type="text" class="form-control" id="tickets" name="ticket_id" ng-model="ticketData.ticket_id" required=""
-									placeholder="TickketId">
+									placeholder="TicketId">
 							</div>
 							<div class="col-lg-12">	
 								<label for="summary">Summary<span style="color:red">*</span>:</label></br>
 								<input type="text" class="form-control" id="summary" 
-									name="summary" ng-model="ticketData.summary"
-									placeholder="Summary" >
+									name="summary" ng-model="ticketData.summary" ng-disabled="SummaryDisabled"
+									placeholder="Summary"  >
 							</div>
 
 							<div class="col-sm-12">
@@ -75,7 +76,7 @@ body {
 										by:</label> <select
 										ng-model='workDoneBy' class="form-control"
 										style="width: 195px; height: 35px;"
-										ng-options='workdoneBy for workdoneBy in workdoneByList'
+									    ng-options='assignee for assignee in assigneeList'
 										title="workdoneBy"></select>
 								</div>
 							</div>
@@ -89,13 +90,49 @@ body {
 							<div class="col-sm-12">
 								<div class="col-lg-6">
 
-									<label for="todaysWorkHrs">Todays Work Hrs<span style="color:red">*</span>:</label></br> <input
-										type="text" style="width: 87%" class="form-control "
+									<label for="todaysWorkHrs">Todays Work Hrs<span style="color:red">*</span>:</label></br> 
+										
+										<%--<input
+										type="time" style="width: 87%" class="form-control "
 										id="todaysWorkHrs" name="todaysWorkHrs"
-										ng-model="ticketData.todaysWorkHrs">
+										ng-model="ticketData.todaysWorkHrs">--%>
+										<div class="col-lg-6 ">
+											<select  class="form-control" ng-model="ticketData.workingHrs">
+												<option value="" disabled selected style="display: none;">Hrs</option>
+													<option>0</option>
+													<option>1</option>
+													<option>2</option>
+													<option>3</option>
+													<option>4</option>
+													<option>5</option>
+													<option>6</option>
+													<option>7</option>
+													<option>8</option>
+													<option>9</option>
+													<option>10</option>
+													<option>11</option>
+													<option>12</option>
+											</select>
+											</div>
+											<div class="col-lg-6 ">
+											<select class="col-lg-3 form-control" ng-model="ticketData.workingMinutes">
+													<option value="" disabled selected style="display: none;">Mnts</option>
+													<option>00</option>
+													<option>10</option>
+													<option>20</option>
+													<option>30</option>
+													<option>40</option>
+													<option>50</option>
+													<option>60</option>
+											</select>
+											</div>
+									
 								</div>
 								<div style="float: left">
-									<label for="totalWorkHrs">Total Work Hrs<span style="color:red">*</span>:</label></br> <input
+									<label for="totalWorkHrs">Total Work Hrs<span style="color:red">*</span>:</label></br>
+									
+									
+									 <input
 										type="text"  class="form-control" id="totalWorkHrs"
 										name="totalWorkHrs" ng-model="totalWorkHrs" readonly="">
 								</div>
@@ -126,6 +163,7 @@ body {
 							<div class="col-lg-5">
 								<button name="updateTicket" ng-click="updateTicketInfo()" style="margin-top:10px"
 									class="btn btn-primary">Update</button>
+									
 							</div>
 							
 					</form>

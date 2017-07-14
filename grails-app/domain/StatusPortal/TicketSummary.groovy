@@ -7,7 +7,7 @@ class TicketSummary {
 	String summary
 	String assignee
 	String status
-	String creationDate
+	Date creationDate
 	String ticket_id
 	
     static belongsTo =[user:User,project:ProjectInfo]
@@ -17,7 +17,7 @@ class TicketSummary {
 		summary blank:false,nullable:false
 		assignee blank:false,nullable:false
 		status inList:['Closed','In progress','Open']
-		creationDate blank:false,nullable:false
+		creationDate  blank:false,nullable:false
 		ticket_id unique: true,nullable:false,blank:false
 	}
 	
