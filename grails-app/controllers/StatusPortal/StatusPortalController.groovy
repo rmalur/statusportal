@@ -2,13 +2,12 @@ package StatusPortal
 
 import grails.converters.JSON
 import grails.plugin.springsecurity.annotation.Secured
-import groovy.json.JsonBuilder;
 
-import java.text.DateFormat;
+import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.Calendar;
+import java.util.regex.Pattern
 
-import SecureApp.User;
+import SecureApp.User
 
 class StatusPortalController {
 
@@ -17,71 +16,132 @@ class StatusPortalController {
 	def index() {
 
 	}
-	
+	//loading all user list as assignee
 	@Secured('IS_AUTHENTICATED_FULLY')
 	def assigneeList(){
+		def data=JSON.parse(request)
+		println "data projectId="+data.projectId
 		
+		def assigneeList=[]
+		def q
+		if(data.projectId){
+		 q=UserProjectMapping.findAllWhere(project_id:data.projectId)
+		}else{
 		
-				def c = User.createCriteria()
-				def assigneeList = c.list  {
-					projections {                    //projection does the trick
-						property('username') }
-				}
-				
+			def user=User.get(springSecurityService.principal.id )
+			def project=UserProjectMapping.findWhere(user_id:user.employeeId)
+			q=UserProjectMapping.findAllWhere(project_id:project.project_id )
 			
-			render	assigneeList as JSON
-				
+		}
+		for(employee in q){
+			def user=User.findWhere(employeeId:employee.user_id )
+				assigneeList.add(user.username)
+			
+			}
 		
+		render assigneeList as JSON
 	}
 	
-	@Secured('IS_AUTHENTICATED_FULLY')
-	def workdoneByList(){
-		
-		
-				def w = User.createCriteria()
-				def workdoneByList = w.list  {
-					projections {                  
-						property('username') }
-				}
-				
-				println "workdonelist= "+workdoneByList
-			render	workdoneByList as JSON
-				
-		
-	}
-
-
-	//for getting the all the ticketIds irrespective to user id
+		//for getting the all the ticketIds respective to user id
 	@Secured('IS_AUTHENTICATED_FULLY')
 	def ticketIds(){
+		def project
+		def ticket
+		def data=JSON.parse(request)
 		def user=User.get(springSecurityService.principal.id)
-		def ticketIds = TicketSummary.createCriteria ()
-		def ticketList = ticketIds.list  {
-			eq("user",user)
-			projections {                     property('ticket_id') }
+		def ticketIds=[]
+		if(data.projectId){
+			project=ProjectInfo.findWhere(project_id:data.projectId)
 		}
 
-		println ("ticketIds"+ticketList)
-		render ticketList as JSON
+		
+		/*def results = StatusUpdate.withCriteria {
+			eq("user",user)
+			projections { distinct("ticket") }
+		}
+		*/
+		def results = StatusUpdate.withCriteria {
+		
+			ne("updatedStatus","Closed")
+			projections { distinct("ticket") }
+		}
+		
+		
+		
+		
+		for (var in results) {
+
+			if(project){
+				ticket=TicketSummary.findWhere(ticket_id:var.ticket_id,project:project)
+			}else {
+				ticket=TicketSummary.findWhere(ticket_id:var.ticket_id)
+			}
+
+			if(ticket){
+				def ticketInfo=StatusUpdate.findWhere(ticket:ticket,updatedStatus:"Closed")
+				if(ticketInfo){
+
+					println ticketInfo.ticket.ticket_id
+					continue
+				}else{
+
+					ticketIds.add(var.ticket_id)
+				}
+			}else{
+				continue
+			}
+		}
+		println "ticketIds="+ticketIds
+		render ticketIds as JSON
 	}
 
-	//for getting tickets info
+	//for getting ticket info respective with ticketId
 	@Secured('IS_AUTHENTICATED_FULLY')
 	def getTicketInfo(){
-		println "getTicketInfo"
+		
 		def user=User.get(springSecurityService.principal.id)
 		def result=[]
-		def ticketInfo=TicketSummary.findWhere(ticket_id:params.id,user:user)
+		def ticketInfo=TicketSummary.findWhere(ticket_id:params.id) //(,user:user)fetching the data on basis of ticket id and user from ticketSummary table
+		def ticketAllInfo=StatusUpdate.findAllWhere(ticket:ticketInfo)  //(,,user:user)fetching the data on basis of ticket id and user from StatusUpdate table
+		def c = StatusUpdate.createCriteria()
+		def results = c.list {
+			
+				eq("ticket", ticketInfo)
+				/*and {
+					eq("user",user)
+				}*/
+			
+			order("updateDate", "desc")
+		}	
 		
-		
-		def ticketAllInfo=StatusUpdate.findAllWhere(ticket:ticketInfo,user:user)
-		def totalWorkHrs=0;
+		def totalWorkHrs=0
+		def totalWorkMinutes=0;
+		//for calculating the totalWorkHrs
 		for (var in ticketAllInfo) {
-			totalWorkHrs=totalWorkHrs+var.todaysWorkHrs
+			
+			String todaysWorkHrs=var.todaysWorkHrs.toString()
+			def workingHrs=todaysWorkHrs.split(Pattern.quote("."))
+			def workhrs=workingHrs[0]
+			def workingMinutes=workingHrs[1]
+			
+			totalWorkHrs=totalWorkHrs+Integer.parseInt(workhrs)    //Double.valueOf(workhrs)
+			totalWorkMinutes=totalWorkMinutes+Integer.parseInt(workingMinutes) //Double.valueOf(workingMinutes)
+			def minutesConversionToHrs
+			def remainingMinutes
+			if(totalWorkMinutes>=60){
+				
+				minutesConversionToHrs=(int)totalWorkMinutes/60
+				remainingMinutes=totalWorkMinutes%60
+				totalWorkHrs=totalWorkHrs+minutesConversionToHrs
+				totalWorkMinutes=remainingMinutes
+			}
+			
 		}
-		result.add(ticketInfo)
-		result.add(totalWorkHrs)
 		
+		def totalHrs=totalWorkHrs.toString()+"."+totalWorkMinutes.toString()
+		result.add(ticketInfo)
+		result.add(results[0].updatedStatus)
+		result.add(totalHrs)
 		render result as JSON
 	}
 
@@ -93,13 +153,13 @@ class StatusPortalController {
 	def todaysTickets(){
 
 		try{
-println "todaysTickets"
+       println "todaysTickets"
 			def userLogedIn=User.get(springSecurityService.principal.id)
+			def df = new SimpleDateFormat("yyyy-MM-dd");
 			Date myDate = new Date();
-			def res=new SimpleDateFormat("dd/MM/YYYY").format(myDate);
-			
-			def results=TicketSummary.findAllWhere(creationDate:res,user:userLogedIn)
-			
+			def todaysDate=df.format(myDate);
+			Date todaysdate=df.parse(todaysDate)
+			def results=TicketSummary.findAllWhere(creationDate:todaysdate,user:userLogedIn)
 			if(results){
 				[results:results]
 			}else{
@@ -116,9 +176,6 @@ println "todaysTickets"
 	//for update the ticket which is updated by assignee
 @Secured('IS_AUTHENTICATED_FULLY')
 	def updateTicketStatus(){
-
-
-		println "updateTicketStatus for="+springSecurityService.principal.id
 		try{
 
 			def userLogedIn=User.get(springSecurityService.principal.id)
@@ -146,44 +203,35 @@ println "todaysTickets"
 		def flag=false
 		def ticketSummaryObject=null
 		try{
-
-			println "updateStatusTicket method"
 			def data=JSON.parse(request)
-			println data
-			
-
-			Date myDate = new Date();
-			def todaysDate=new SimpleDateFormat("dd/MM/YYYY").format(myDate);
+			def df = new SimpleDateFormat("dd/MM/yyyy");
+			/*Date myDate = new Date();
+			def todaysDate=df.format(myDate);*/
 			def currentUser=User.get(springSecurityService.principal.id)
-			println "currentUser="+currentUser
-
-			//def presentTicket=StatusUpdate.findAllWhere(user:currentUser,updateDate:todaysDate,ticket_id:data.ticketData.ticket_id)
 			if(params.ticket_id){
-				ticketSummaryObject=TicketSummary.findByTicket_id(params.ticket_id)
+				ticketSummaryObject=TicketSummary.findByTicket_id(params.ticket_id) 
 			}else{
 			ticketSummaryObject=TicketSummary.findByTicket_id(data.ticketData.ticket_id)
 			}
+			def presentTicket
+			if(data.ticketData.creationDate){
+				Date creationDate=df.parse(data.ticketData.creationDate)
+				def formatedDate=df.format(creationDate)
+				Date creationDate1=df.parse(formatedDate)
+				presentTicket=StatusUpdate.findWhere(user:currentUser,updateDate:creationDate1,ticket:ticketSummaryObject)
+			}
 			
-			def presentTicket=StatusUpdate.findWhere(user:currentUser,updateDate:todaysDate,ticket:ticketSummaryObject)
-
 			if(presentTicket){
-				
-				if(Float.valueOf(data.ticketData.todaysWorkHrs)==0){
-					flash.message="todays work hrs should not be enmpty"
-					presentTicket.todaysWorkHrs=presentTicket.todaysWorkHrs
-					flag=true
-
-				}
-				presentTicket.todaysWorkHrs=Float.valueOf(data.ticketData.todaysWorkHrs)
-				//presentTicket.workDoneForToday=data.ticketData.workDone
-
+				presentTicket.workDoneForToday=data.ticketData.todayswork
+				presentTicket.workdoneBy=data.ticketData.workDoneBy
+					def hrs=data.ticketData.workingHrs
+					def minutes=data.ticketData.workingMinutes
+					def todaysWorkingHrs=hrs+"."+minutes
+				presentTicket.todaysWorkHrs=todaysWorkingHrs
+				presentTicket.impediments=data.ticketData.impediments
 				presentTicket.save(flush:true,failOnError:true)
 				
-				
 			}else{
-
-
-
 				StatusUpdate newTicketStatus = new StatusUpdate()
 
 				if(ticketSummaryObject){
@@ -198,9 +246,14 @@ println "todaysTickets"
 					newTicketSummary.ticket_id=data.ticketData.ticket_id
 					newTicketSummary.summary=data.ticketData.summary
 					newTicketSummary.assignee=data.ticketData.assignee
-					
 					newTicketSummary.status=data.ticketData.status
-					newTicketSummary.creationDate=data.ticketData.creationDate
+					//changing the String into date format
+					
+					Date creationDate=df.parse(data.ticketData.creationDate)
+					def formatedDate=df.format(creationDate)
+					Date creationDate1=df.parse(formatedDate)
+					newTicketSummary.creationDate=creationDate1
+					
 					def userProjectMap
 					if(data.ticketData.project==null){
 						println data.ticketData.project
@@ -209,40 +262,38 @@ println "todaysTickets"
 						}else{
 						newTicketSummary.project=ProjectInfo.findWhere(project_id:data.ticketData.project.project_id)
 						}
-					
-					
-					
-					
-					
 					newTicketSummary.save(flush:true,failOnError:true)
 					newTicketStatus.ticket=TicketSummary.findByTicket_id(newTicketSummary.ticket_id)
 				}
 						
 					newTicketStatus.user=currentUser
 					newTicketStatus.workdoneBy =data.ticketData.workDoneBy
-					newTicketStatus.todaysWorkHrs=Float.valueOf(data.ticketData.todaysWorkHrs)
+					
+					//for calculating the todays work hrs
+					def hrs=data.ticketData.workingHrs
+					def minutes=data.ticketData.workingMinutes
+					def todaysWorkingHrs=hrs+"."+minutes
+					newTicketStatus.todaysWorkHrs=todaysWorkingHrs 
+					
 					newTicketStatus.updatedStatus=data.ticketData.status
-					newTicketStatus.updateDate=data.ticketData.creationDate
+					
+					//Converting String date into date format 
+					Date updateStatusDate=df.parse(data.ticketData.creationDate)
+					newTicketStatus.updateDate=updateStatusDate
+					
 					newTicketStatus.workDoneForToday=data.ticketData.todayswork
 					newTicketStatus.impediments=data.ticketData.impediments
 
 					newTicketStatus.save(flush:true,failOnerror:true)
-					
-
-					flag=true
-					render flag 
-			}
-
+	}
+			flag=true
+			render flag
 		}catch(Exception e){
 			log.error(e.message)
 			flag=false
 			 flash.message="Something went wrong"
 			render flag
-
 		}
-
-
-
 	}
 	
 	//for all tickets history irespective of the user 
@@ -255,40 +306,25 @@ println "todaysTickets"
 		 [hist:allTicketsOfUser]
 		 }else{
 		  flash.message="No records found"
-		 
 		 }
 	}
-
-	
+//all tickets present in db
 	@Secured('IS_AUTHENTICATED_FULLY')
 	def getAllTicketHistory(){
-		
-/*		def data=JSON.parse(request)
-		
-		def startDate=data.startDate
-		def endDate=data.endDate
-		
-		def allTicketList=StatusUpdate.createCriteria()
-		def results=allTicketList.list {
-			between('updateDate',startDate,endDate)
-			
-		}
-		results.each {
-			println results.ticket.ticket_id
-			
-		}	
-	 
-*/
-		
-			def allTickets=StatusUpdate.findAll();
-			
-			println allTickets
+		def allTickets=StatusUpdate.findAll();
 			[allTickets:allTickets]
-		
-		
-		
 	}
 
-
+	@Secured('IS_AUTHENTICATED_FULLY')
+	def getAllTicketsOfUser1(){
+		
+		def currentUser=User.get(springSecurityService.principal.id)
+		def allTicketsOfUser=StatusUpdate.findAllWhere(user:currentUser)
+		if(allTicketsOfUser){
+		 [hist:allTicketsOfUser]
+		 }else{
+		  flash.message="No records found"
+		 }
+	}
 	
 }

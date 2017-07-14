@@ -15,11 +15,7 @@ class ForgetPasswordController {
 	@Secured('permitAll')
 	def forgetPassword(){
 		def data=JSON.parse(request)
-		println data.emailId
 		def user=User.findWhere(employeeEmailId:data.emailId)
-
-
-
 		def flag=[]
 		def flag1=false
 		try{
@@ -27,12 +23,9 @@ class ForgetPasswordController {
 			String charset = (('A'..'Z') + ('0'..'9')).join()
 			Integer length = 9
 			String randomString = RandomStringUtils.random(length, charset.toCharArray())
-			println randomString
-
 			if(user!=null) {
 				user.password=randomString
 				user.save(flush:true,failOnError:true)
-				
 				mailService.sendMail {
 					from "statusportal@evolvingsols.com"
 					to  user.employeeEmailId
@@ -56,27 +49,24 @@ class ForgetPasswordController {
 		def flag=[]
 		def saveFlag=false;
 		def data=JSON.parse(request)
-		println data.password
-			def user=User.get(springSecurityService.principal.id)
-					user.password=data.password.newPassword
-					if(user.save(flush:true,failOnError:true)){
-						mailService.sendMail {
-							from "statusportal@evolvingsols.com"
-							to  user.employeeEmailId
-							subject "Password  Change"
-							body 'Your New password is '+data.password.newPassword
-						}
-					
-					saveFlag=1;
-					flag.add(saveFlag)
-					
-				}else{
-					saveFlag=2;
-					flag.add(saveFlag)
-					
-				}	
-				render flag as JSON
-		
+		def user=User.get(springSecurityService.principal.id)
+		user.password=data.password.newPassword
+		if(user.save(flush:true,failOnError:true)){
+			mailService.sendMail {
+				from "statusportal@evolvingsols.com"
+				to  user.employeeEmailId
+				subject "Password  Change"
+				body 'Your New password is '+data.password.newPassword
+			}
+
+			saveFlag=1;
+			flag.add(saveFlag)
+		}else{
+			saveFlag=2;
+			flag.add(saveFlag)
+		}
+		render flag as JSON
+
 	}
 	
 	

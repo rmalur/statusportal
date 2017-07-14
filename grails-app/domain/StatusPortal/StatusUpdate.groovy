@@ -6,10 +6,10 @@ class StatusUpdate {
 
 	String impediments
 	//float prvsWorkHrs
-	float todaysWorkHrs
+	String todaysWorkHrs
 	String workDoneForToday
 	String workdoneBy
-	String updateDate
+	Date updateDate
 	String updatedStatus
 	
 	
@@ -17,6 +17,7 @@ class StatusUpdate {
 	static belongsTo =[ticket:TicketSummary,user:User]
 	
     static constraints = {
+		
     }
 	
 	static mapping = {
