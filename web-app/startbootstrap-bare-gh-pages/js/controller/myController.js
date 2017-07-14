@@ -124,7 +124,7 @@
 								$scope.showCreationDate=false
 								$scope.showStatus=false
 								$scope.showError=false;
-								console.log($scope.ticketData)
+								
 								
 								if($scope.ticketData.ticket_id==null){
 									$scope.showTicket_id=true
@@ -250,7 +250,7 @@
 
 							//for exporting the table in excel sheet
 							$scope.exportToExcel = function(tableId) { // ex: '#my-table'
-								//console.log("exportToExcel");
+								
 								var exportHref = Excel.tableToExcel(tableId,
 										'TicketHistory');
 								$timeout(function() {
