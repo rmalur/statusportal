@@ -11,10 +11,22 @@
 
 <title>Status Portal</title>
 
+
 <!-- Bootstrap Core CSS -->
 <link	href="${request.contextPath}/startbootstrap-bare-gh-pages/css/bootstrap.min.css"	rel="stylesheet">
 <link	href="${request.contextPath}/startbootstrap-bare-gh-pages/css/datepicker.css" rel="stylesheet">
+
+
+
 <!-- Script loaded form controller.js file -->
+
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-sanitize.js"></script>
+    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
+  
+     <link	href="${request.contextPath}/startbootstrap-bare-gh-pages/css/bootstrap1.min.css"	rel="stylesheet">
+
 
 
 <script	src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>

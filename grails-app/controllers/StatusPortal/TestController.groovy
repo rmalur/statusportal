@@ -2,6 +2,9 @@ package StatusPortal
 
 import grails.converters.JSON
 import grails.plugin.springsecurity.annotation.Secured
+
+import java.text.SimpleDateFormat
+
 import SecureApp.Role
 import SecureApp.User
 import SecureApp.UserRole
@@ -296,5 +299,102 @@ class TestController {
 			}
 		//}
 			render ticketList as JSON
+	}
+	
+	//for all tickets history irrespective of date and user
+	@Secured('IS_AUTHENTICATED_FULLY')
+	def getAllTicketsOfDate(){
+		
+		def data=JSON.parse(request)
+		def df = new SimpleDateFormat("dd/MM/yyyy");
+		
+		println "selected date=" +data.todaysDate
+		def user=User.get(springSecurityService.principal.id)
+		def role=springSecurityService.principal.authorities
+		println "role="+role
+		def ticketList=[]
+		
+		
+		
+		
+		if(data.todaysDate){
+			Date creationDate=df.parse(data.todaysDate)
+			def formatedDate=df.format(creationDate)
+			Date creationDate1=df.parse(formatedDate)
+			//presentTicket=StatusUpdate.findWhere(user:currentUser,updateDate:creationDate1,ticket:ticketSummaryObject)
+		
+		
+		
+		
+		
+		
+		if(role.toString().contains("ROLE_LEAD")){
+			def project=ProjectInfo.findWhere(projectName:data.projectName.projectName)
+			println("project="+project)
+			def ticketSummaryList=TicketSummary.findAllWhere(user:user,project:project)
+		println "ticketSummary List="+ticketSummaryList
+			
+			for (var in ticketSummaryList) {
+			
+				def ticketSummary=TicketSummary.findWhere(ticket_id:var.ticket_id)
+				println "ticketSummary="+ticketSummary
+				def allTicketsOfUser=StatusUpdate.findWhere(ticket:ticketSummary,updateDate:creationDate1)
+			
+			
+				
+					if(allTicketsOfUser){
+						def ticket=[:]
+						ticket.put("ticket_id",allTicketsOfUser.ticket.ticket_id)
+						ticket.put("summary", allTicketsOfUser.ticket.summary)
+						ticket.put("assignee", allTicketsOfUser.ticket.assignee)
+						ticket.put("workdoneBy",allTicketsOfUser.workdoneBy)
+						ticket.put("impediments", allTicketsOfUser.impediments)
+						ticket.put("todaysWorkHrs", allTicketsOfUser.todaysWorkHrs)
+						ticket.put("updateDate", allTicketsOfUser.updateDate)
+						ticket.put("updatedStatus", allTicketsOfUser.updatedStatus)
+					  
+					ticketList.add(ticket)
+					}else{
+					continue
+					}
+				
+				
+			
+			}
+		}
+		else{
+		def allTicketsOfUser=StatusUpdate.findAllWhere(user:user, updateDate:creationDate1)
+		println allTicketsOfUser
+		for (var in allTicketsOfUser) {
+			def ticket=[:]
+			println var.workdoneBy
+			ticket.put("ticket_id", var.ticket.ticket_id)
+			ticket.put("summary", var.ticket.summary)
+			ticket.put("assignee", var.ticket.assignee)
+			ticket.put("workdoneBy", var.workdoneBy)
+			ticket.put("impediments", var.impediments)
+			ticket.put("todaysWorkHrs", var.todaysWorkHrs)
+			ticket.put("updateDate", var.updateDate)
+			ticket.put("updatedStatus", var.updatedStatus)
+		  
+		ticketList.add(ticket)
+	println("ticket==============================="+ticketList)
+			
+	
+		}
+		}
+	
+	}
+	
+		
+	if(ticketList){
+	
+	 render ticketList as JSON
+	 }else{
+	 // flash.message="No records found"
+	render ticketList as JSON
+	 }
+	
+	
 	}
 }
