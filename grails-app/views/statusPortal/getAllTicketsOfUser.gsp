@@ -2,18 +2,12 @@
 <html>
 <head>
 <meta name="layout" content="A" />
-<title>History</title>
 
+<title>History</title>
+	
 </head>
 <body>
-	
-
-<%--<button class="btn btn-info"  ng-click="exportToExcel('#tblMain')">Export Record In Excel Format</button>
-
-
-
-
-			--%>
+			
 	<div ng-controller="ticketController" ng-init="allTicketsOfUser()">
 		<div class="col-lg-11">
 			<div class="col-lg-11">
@@ -49,9 +43,21 @@
 							</select>
 					</div>
 				</sec:ifAnyGranted>
-			</div>
-			
+				
+					<div class="col-md-2" style="padding-left:20px ">
+					<div class="dropdown" style="margin-left: 200px" >
+						<button class="btn btn-primary dropdown-toggle" type="button"data-toggle="dropdown">
+							Export Data <span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu">
+							<li><g:link controller="statusPortal" action="exportData"  params="[extension:'PDF']" >PDF </g:link> </li>
+							<li><g:link controller="statusPortal" action="exportData" params="[extension:'xls']">XSL </g:link> </li> 
+							<li><g:link controller="statusPortal" action="exportData" params="[extension:'CSV']">CSV </g:link> </li>
+						</ul>
+					</div>
 
+				</div>
+			</div>
 			<form>
 
 				<table id="tblMain" class="table table-striped table-condensed">
@@ -67,7 +73,7 @@
 						<th>Status</th>
 					</tr>
 
-					<tr ng-repeat="ticket in ticketList">
+					<tr ng-repeat="ticket in ticketList|  filter:q | startFrom:currentPage*pageSize | limitTo:pageSize">
 						<td>{{$index+1}}</td>
 						<td>{{ticket.ticket_id}}</td>
 						<td>{{ticket.summary}}</td>
@@ -80,6 +86,10 @@
 
 					</tr>
 				</table>
+				<button class="btn btn-primary" ng-disabled="currentPage == 0"	ng-click="currentPage=currentPage-1">Previous</button>
+				{{currentPage+1}}/{{numberOfPages()}}
+				<button class="btn btn-primary" ng-disabled="currentPage >= getData().length/pageSize - 1"
+					ng-click="currentPage=currentPage+1">Next</button>
 			</form>
 		</div>
 	</div>

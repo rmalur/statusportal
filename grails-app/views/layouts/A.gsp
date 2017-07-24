@@ -55,7 +55,8 @@ body {
 	/* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
 }
 </style>
-
+<r:require module="export"/>
+<export:resource/>
 </head>
 
 <body ng-app="myApp" >
