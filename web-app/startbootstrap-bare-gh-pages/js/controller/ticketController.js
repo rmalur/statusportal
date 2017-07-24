@@ -3,6 +3,13 @@ app.controller('ticketController',function($scope,$http,$filter){
 		    $qProvider.errorOnUnhandledRejections(false);
 		}]);
 		
+		$scope.projectName
+		$scope.projectNameForOneProject
+		$scope.ticketList=[]
+		$scope.projectList=[]
+		$scope.resourceList=[]
+		$scope.projectListHidden=true
+		
 		 $scope.today = function() {
 			    $scope.dt = new Date();
 			  };
@@ -78,19 +85,7 @@ app.controller('ticketController',function($scope,$http,$filter){
 					});	
 			  }
 			  
-						  
-		
-	
-	
-	
-	
-	
-	$scope.projectName
-	$scope.projectNameForOneProject
-	$scope.ticketList=[]
-	$scope.projectList=[]
-	$scope.resourceList=[]
-	$scope.projectListHidden=true
+
 
 		//load all info tickets,projects,resources initially
 		$scope.allTicketsOfUser=function(){
@@ -174,7 +169,56 @@ app.controller('ticketController',function($scope,$http,$filter){
 				//$scope.allTickets=response;
 			});
 		}
+		
+		
+
+		//============================= For pegination======================================
+		$scope.currentPage = 0;
+	    $scope.pageSize = 3;
+	    $scope.q = '';
+	    
+	    $scope.getData = function () {
+	        // needed for the pagination calc
+	        // https://docs.angularjs.org/api/ng/filter/filter
+	        return $filter('filter')($scope.ticketList, $scope.q)
+	       /* 
+	         // manual filter
+	         // if u used this, remove the filter from html, remove above line and replace data with getData()
+	         
+	          var arr = [];
+	          if($scope.q == '') {
+	              arr = $scope.data;
+	          } else {
+	              for(var ea in $scope.data) {
+	                  if($scope.data[ea].indexOf($scope.q) > -1) {
+	                      arr.push( $scope.data[ea] );
+	                  }
+	              }
+	          }
+	          return arr;
+	         */
+	      }
+	      
+	      $scope.numberOfPages=function(){
+	          return Math.ceil($scope.getData().length/$scope.pageSize);                
+	      }
+	      
+	      for (var i=0; i<65; i++) {
+	          $scope.ticketList.push("Item "+i);
+	      }
+		
+		
+		
+		
+		//===================================================================================
+		
 		 
 	
 });
 
+app.filter('startFrom', function() {
+    return function(input, start) {
+        start = +start; //parse to int
+        return input.slice(start);
+    }
+});
