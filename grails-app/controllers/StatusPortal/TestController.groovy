@@ -308,7 +308,7 @@ class TestController {
 		def data=JSON.parse(request)
 		def df = new SimpleDateFormat("dd/MM/yyyy");
 		
-		println "selected date=" +data.todaysDate
+		
 		def user=User.get(springSecurityService.principal.id)
 		def role=springSecurityService.principal.authorities
 		println "role="+role
@@ -320,73 +320,39 @@ class TestController {
 		if(data.todaysDate){
 			Date creationDate=df.parse(data.todaysDate)
 			def formatedDate=df.format(creationDate)
-			Date creationDate1=df.parse(formatedDate)
-			//presentTicket=StatusUpdate.findWhere(user:currentUser,updateDate:creationDate1,ticket:ticketSummaryObject)
-		
-		
-		
-		
+			Date today=df.parse(formatedDate)
+					
+			if(data.endDate){
+				Date endDate=df.parse(data.endDate)
+				def formatDate=df.format(endDate)
+				Date end=df.parse(formatDate)
 		
 		
 		if(role.toString().contains("ROLE_LEAD")){
-			def project=ProjectInfo.findWhere(projectName:data.projectName.projectName)
-			println("project="+project)
-			def ticketSummaryList=TicketSummary.findAllWhere(user:user,project:project)
-		println "ticketSummary List="+ticketSummaryList
 			
-			for (var in ticketSummaryList) {
-			
-				def ticketSummary=TicketSummary.findWhere(ticket_id:var.ticket_id)
-				println "ticketSummary="+ticketSummary
-				def allTicketsOfUser=StatusUpdate.findWhere(ticket:ticketSummary,updateDate:creationDate1)
-			
-			
-				
-					if(allTicketsOfUser){
-						def ticket=[:]
-						ticket.put("ticket_id",allTicketsOfUser.ticket.ticket_id)
-						ticket.put("summary", allTicketsOfUser.ticket.summary)
-						ticket.put("assignee", allTicketsOfUser.ticket.assignee)
-						ticket.put("workdoneBy",allTicketsOfUser.workdoneBy)
-						ticket.put("impediments", allTicketsOfUser.impediments)
-						ticket.put("todaysWorkHrs", allTicketsOfUser.todaysWorkHrs)
-						ticket.put("updateDate", allTicketsOfUser.updateDate)
-						ticket.put("updatedStatus", allTicketsOfUser.updatedStatus)
-					  
-					ticketList.add(ticket)
-					}else{
-					continue
-					}
-				
-				
-			
+			def c= StatusUpdate.createCriteria()
+				def allTicketsOfUser=c.list{
+					between("updateDate",today,end)
+					'in'('user', user)
+				}
+				for (var in allTicketsOfUser) {
+				if(allTicketsOfUser){
+					println"Workdone=" +var.workdoneBy
+					def ticket=[:]
+					ticket.put("ticket_id",var.ticket.ticket_id)
+					ticket.put("summary", var.ticket.summary)
+					ticket.put("assignee", var.ticket.assignee)
+					ticket.put("workDoneBy",var.workdoneBy)
+					ticket.put("impediments", var.impediments)
+					ticket.put("todaysWorkHrs", var.todaysWorkHrs)
+					ticket.put("updateDate", var.updateDate)
+					ticket.put("updatedStatus", var.updatedStatus)
+				  
+				ticketList.add(ticket)
+				}
+				}
 			}
-		}
-		else{
-		def allTicketsOfUser=StatusUpdate.findAllWhere(user:user, updateDate:creationDate1)
-		println allTicketsOfUser
-		for (var in allTicketsOfUser) {
-			def ticket=[:]
-			println var.workdoneBy
-			ticket.put("ticket_id", var.ticket.ticket_id)
-			ticket.put("summary", var.ticket.summary)
-			ticket.put("assignee", var.ticket.assignee)
-			ticket.put("workdoneBy", var.workdoneBy)
-			ticket.put("impediments", var.impediments)
-			ticket.put("todaysWorkHrs", var.todaysWorkHrs)
-			ticket.put("updateDate", var.updateDate)
-			ticket.put("updatedStatus", var.updatedStatus)
-		  
-		ticketList.add(ticket)
-	println("ticket==============================="+ticketList)
 			
-	
-		}
-		}
-	
-	}
-	
-		
 	if(ticketList){
 	
 	 render ticketList as JSON
@@ -394,7 +360,8 @@ class TestController {
 	 // flash.message="No records found"
 	render ticketList as JSON
 	 }
-	
-	
 	}
 }
+	}
+}
+
