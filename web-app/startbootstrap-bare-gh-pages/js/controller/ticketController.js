@@ -10,13 +10,16 @@ app.controller('ticketController',function($scope,$http,$filter){
 		$scope.resourceList=[]
 		$scope.projectListHidden=true
 		
+
 		 $scope.today = function() {
-			    $scope.dt = new Date();
-			  };
+			   /* $scope.dt = new Date();
+			    $scope.end= new Date();
+			  */};
 			  $scope.today();
 
 			  $scope.clear = function() {
 			    $scope.dt = null;
+			    $scope.end = null;
 			  };
 
 			  // Disable weekend selection
@@ -35,6 +38,7 @@ app.controller('ticketController',function($scope,$http,$filter){
 			  $scope.setDate = function(year, month, day) {
 			    $scope.dt = new Date().format('dd/MM/yyyy');
 			    console.log($scope.dt);
+			   
 			  };
 
 			  $scope.formats = ['dd/MM/yyyy'];
@@ -46,16 +50,38 @@ app.controller('ticketController',function($scope,$http,$filter){
 			    opened: false
 			  };
 			  
+			  
+			  $scope.open2 = function() {
+				  
+
+				    $scope.popup2.opened = true;
+				  };
+				  $scope.setDate = function(year, month, day) {
+				    $scope.end = new Date().format('dd/MM/yyyy');
+				    console.log("EnD DAte="+$scope.end)
+				  };
+
+				  $scope.formats = ['dd/MM/yyyy'];
+				  $scope.format = $scope.formats[0];
+				 
+				  /*$scope.altInputFormats = ['M!/d!/yyyy'];*/
+
+				  $scope.popup2 = {
+				    opened: false
+				  };
+			  
 			  $scope.select=function(){
 				  console.log("Datepicker date="+$scope.dt);
 				  var today = new Date($scope.dt);
 				  console.log(" date="+today);
+				  var end= new Date($scope.end);
+				  console.log("End date="+end);
 				
 				  var dd = today.getDate();
 				  var mm = today.getMonth()+1; //January is 0!
 
 				  var yyyy = today.getFullYear();
-				/*  var dateee = dateq.getDate() + '/' + (dateq.getMonth() + 1) + '/' +  dateq.getFullYear();*/
+				
 				  if(dd<10){
 					    dd='0'+dd;
 					} 
@@ -66,6 +92,21 @@ app.controller('ticketController',function($scope,$http,$filter){
 				  
 				  console.log(today);
 				
+				  var dd = end.getDate();
+				  var mm = end.getMonth()+1; //January is 0!
+
+				  var yyyy = end.getFullYear();
+				
+				  if(dd<10){
+					    dd='0'+dd;
+					} 
+					if(mm<10){
+					    mm='0'+mm;
+					} 
+					var end =dd+'/'+mm+'/'+yyyy;
+				  
+				  console.log(end);
+				  
 				  var projectName
 				  if($scope.projectName){
 					  projectName=$scope.projectName  
@@ -73,17 +114,23 @@ app.controller('ticketController',function($scope,$http,$filter){
 				  else{
 					  projectName=null
 				  }
-				  
+				  if(today!=null && end!=null){
 				  $http({
 						method :"POST",
 						url:"/StatusPortal/Test/getAllTicketsOfDate",
-						data:{todaysDate:today,projectName:projectName}
+						data:{todaysDate:today,endDate:end,projectName:projectName}
 						
 					}).then(function(response){
 						//console.log("response="+response);
 						$scope.ticketList=response.data
 					});	
 			  }
+			  }
+						  
+		
+	
+	
+	
 			  
 
 
