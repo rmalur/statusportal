@@ -56,7 +56,7 @@ class ForgetPasswordController {
 				from "statusportal@evolvingsols.com"
 				to  user.employeeEmailId
 				subject "Password  Change"
-				body 'Your New password is '+data.password.newPassword
+				body 'You have changed your password,please use new password for login.'
 			}
 
 			saveFlag=1;

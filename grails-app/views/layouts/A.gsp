@@ -85,7 +85,7 @@ body {
         </sec:ifLoggedIn> <span class="caret"></span>
       </a>
        <ul class="dropdown-menu" ng-controller="myController" >
-        <sec:ifAnyGranted roles="ROLE_LEAD">
+        <sec:ifAnyGranted roles="ROLE_MANAGER">
         	<li><g:link controller="Test" action="createProject">
            <i class="fa fa-picture-o"></i>Create Project</g:link></li>
         </sec:ifAnyGranted>

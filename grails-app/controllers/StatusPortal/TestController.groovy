@@ -15,6 +15,14 @@ class TestController {
 	def testIndex(){
 	}
 
+	//developement methodology list
+	@Secured('IS_AUTHENTICATED_FULLY')
+	def getMethodologyList(){
+		
+		def methodologyList=DevelopementMethodology.findAll()
+		render methodologyList as JSON
+		
+	}
 	@Secured('IS_AUTHENTICATED_FULLY')
 	def createProject(){
 	}
@@ -38,6 +46,7 @@ class TestController {
 	def addProjectInfo(){
 		def flag=[]
 		def data=JSON.parse(request)
+		println data
 		try{
 			def manager=User.findWhere(username:data.managerName)
 			def project=new ProjectInfo()
@@ -45,6 +54,8 @@ class TestController {
 			project.project_id=data.project_id
 			project.projectName=data.projectName
 			project.projectStartDate=data.projectStartDate
+			def methodology=DevelopementMethodology.findWhere(methodology:data.methodology.methodology)
+			project.methodology=methodology
 			project.save(flush:true,failOnError:true)
 			def message=1
 			flag.add(message)

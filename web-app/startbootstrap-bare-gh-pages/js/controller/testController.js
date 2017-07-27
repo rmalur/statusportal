@@ -29,6 +29,11 @@ app.controller('testController',function($scope,$http){
 				function(response) {
 					$scope.projectListOfUser=response.data
 				});
+		//load methodology list for project
+		$http.get("/StatusPortal/test/getMethodologyList/").then(
+				function(response) {
+					$scope.methodologyList=response.data
+				});
 		
 	};
 	

@@ -35,7 +35,7 @@ body {
 	
 		<div class="container" ng-init="init()">
 			<div class="row">
-				<div class="col-md-12">
+				<div class="col-md-6">
 
 					<form>
 						<div class="col-lg-5">
@@ -51,6 +51,10 @@ body {
 								class="form-control" ng-model='project.managerName'
 								ng-options='manager for manager in managerList'></select>
 					
+							<label for="methodology">Project Developement Methodology</label> <select
+								class="form-control" ng-model='project.methodology'
+								ng-options='methodology.methodology for methodology in methodologyList'></select>
+							
 							<label for="projectStartDate">Project Start Date</label> <input
 								type="text" class="form-control" ng-model="creationDate"
 								jqdatepicker />
