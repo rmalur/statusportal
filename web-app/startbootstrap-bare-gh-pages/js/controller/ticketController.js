@@ -136,6 +136,35 @@ app.controller('ticketController',function($scope,$http,$filter){
 
 		//load all info tickets,projects,resources initially
 		$scope.allTicketsOfUser=function(){
+			
+			var projectId
+			if($scope.project){
+			 projectId=$scope.project.project_id
+			 console.log("ProjectID="+$scope.projectId);
+			}
+			// getting the ticktIds related to user and project
+				$http({
+				method: "POST",
+			    url: "/StatusPortal/test/ticketIds",
+			    data: {projectId}
+			}).then(function (response) {
+				if(response.data){										
+					$("#tickets").autocomplete({
+						source : response.data,
+						select:function(event,ui){
+							$scope.showTicketInfo(ui.item.value)
+							}
+						})
+					}else{
+					}
+				//fetching all tickets of related to user
+				$http.get("/StatusPortal/test/getTicketSelector/").then(
+						function(response) {
+							$scope.ticketList=response.data
+							$scope.$apply
+						});	
+				})
+									
 		
 		//fetching all tickets of realted to user
 		$http.get("/StatusPortal/test/loadAllTicketsOfuser/").then(
@@ -165,6 +194,41 @@ app.controller('ticketController',function($scope,$http,$filter){
 				});	
 	
 	}
+		//for loading all data related to selected project
+		$scope.loadAllData=function(){
+			var projectId
+			if($scope.project){
+			 projectId=$scope.project.project_id
+			 console.log("ProjectID="+$scope.projectId);
+			}
+			// getting the ticktIds related to user and project
+				$http({
+				method: "POST",
+			    url: "/StatusPortal/test/ticketIds",
+			    data: {projectId}
+			}).then(function (response) {
+				if(response.data){										
+					$("#tickets").autocomplete({
+						source : response.data,
+						select:function(event,ui){
+							$scope.showTicketInfo(ui.item.value)
+							}
+						})
+					}else{
+					}
+						
+				})
+					}
+		// for loading the table entries
+		$scope.showTicketInfo = function(ticket_ID) {
+			
+			$http.get("/StatusPortal/test/getTicketSelector/"+ ticket_ID).then(
+					function(response) {
+						$scope.ticketList = response.data;
+						$scope.$apply
+						});
+		};
+	
 		
 	//load tickets on basis of user and selected project
 		$scope.loadTicketsOfProject=function(projectNameFromFunction){
@@ -182,6 +246,12 @@ app.controller('ticketController',function($scope,$http,$filter){
 					});
 			
 			$scope.loadResources(projectName)
+			//fetching all tickets of related to user
+			$http.get("/StatusPortal/test/loadAllTicketsOfuser/").then(
+					function(response) {
+						$scope.ticketList=response.data
+						$scope.$apply
+					});
 			
 		}
 	//load the resources realted to project
@@ -193,16 +263,11 @@ app.controller('ticketController',function($scope,$http,$filter){
 				});	
 		
 		}
+	
+
 		//filtering the tickets on basis of resources
 		$scope.filterOnBasisOfResource=function(){
 			var projectName
-			/*if($scope.projectNameForOneProject!=null){
-				console.log("projectNameForOneProject="+$scope.projectNameForOneProject)
-				projectName=$scope.projectNameForOneProject
-			}else{
-				console.log("$scope.projectName.projectName="+$scope.projectName.projectName)
-				projectName=$scope.projectName.projectName
-			}*/
 			
 			$http({
 				method :"POST",
@@ -210,15 +275,14 @@ app.controller('ticketController',function($scope,$http,$filter){
 				data:{resourceName:$scope.resourceName}
 				
 			}).then(function(response){
-				//console.log("response="+response);
+				
 				$scope.ticketList=response.data
 				
-				//$scope.allTickets=response;
 			});
 		}
 		
 		
-
+			
 		//============================= For pegination======================================
 		$scope.currentPage = 0;
 	    $scope.pageSize = 3;
@@ -262,6 +326,7 @@ app.controller('ticketController',function($scope,$http,$filter){
 		 
 	
 });
+
 
 app.filter('startFrom', function() {
     return function(input, start) {
