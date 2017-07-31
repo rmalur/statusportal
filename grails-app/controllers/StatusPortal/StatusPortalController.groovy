@@ -145,6 +145,7 @@ class StatusPortalController {
 		result.add(ticketInfo)
 		result.add(results[0].updatedStatus)
 		result.add(totalHrs)
+		//result.add(results[1].ticketInfo.summary)
 		render result as JSON
 	}
 

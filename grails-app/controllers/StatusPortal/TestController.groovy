@@ -186,6 +186,60 @@ class TestController {
 		}
 	}
 	
+	//for getting the all the ticketIds respective to user id
+	@Secured('IS_AUTHENTICATED_FULLY')
+	def ticketIds(){
+		def project
+		def ticket
+		def data=JSON.parse(request)
+		def user=User.get(springSecurityService.principal.id)
+		def ticketIds=[]
+		if(data.projectId){
+			project=ProjectInfo.findWhere(project_id:data.projectId)
+		}
+
+		
+		/*def results = StatusUpdate.withCriteria {
+			eq("user",user)
+			projections { distinct("ticket") }
+		}
+		*/
+		def results = StatusUpdate.withCriteria {
+		
+			ne("updatedStatus","Closed")
+			projections { distinct("ticket") }
+		}
+		
+		
+		
+		
+		for (var in results) {
+
+			if(project){
+				ticket=TicketSummary.findWhere(ticket_id:var.ticket_id,project:project)
+			}else {
+				ticket=TicketSummary.findWhere(ticket_id:var.ticket_id)
+			}
+
+			if(ticket){
+				def ticketInfo=StatusUpdate.findWhere(ticket:ticket,updatedStatus:"Closed")
+				if(ticketInfo){
+
+					println ticketInfo.ticket.ticket_id
+					continue
+				}else{
+
+					ticketIds.add(var.ticket_id)
+				}
+			}else{
+				continue
+			}
+		}
+		println "ticketIds="+ticketIds
+		render ticketIds as JSON
+	}
+
+	
 	//for loading the lead List
 	@Secured('permitAll')
 	def getLeadList(){
@@ -363,5 +417,47 @@ class TestController {
 	}
 }
 	}
+	
+	
+	//for getting ticket info respective with ticketId
+	@Secured('IS_AUTHENTICATED_FULLY')
+	def getTicketSelector(){
+		
+		def user=User.get(springSecurityService.principal.id)
+		def ticketList=[]
+		def ticketInfo=TicketSummary.findWhere(ticket_id:params.id) //(,user:user)fetching the data on basis of ticket id and user from ticketSummary table
+		def allTicketsOfUser=StatusUpdate.findAllWhere(ticket:ticketInfo)  //(,,user:user)fetching the data on basis of ticket id and user from StatusUpdate table
+		def c = StatusUpdate.createCriteria()
+		def results = c.list {
+			
+				eq("ticket", ticketInfo)
+				and {
+					eq("user",user)
+				}
+			
+			//order("updateDate", "desc")
+		}
+			for (var in allTicketsOfUser) {
+			if(allTicketsOfUser){
+				println"Workdone=" +var.workdoneBy
+				def ticket=[:]
+				ticket.put("ticket_id",var.ticket.ticket_id)
+				ticket.put("summary", var.ticket.summary)
+				ticket.put("assignee", var.ticket.assignee)
+				ticket.put("workDoneBy",var.workdoneBy)
+				ticket.put("impediments", var.impediments)
+				ticket.put("todaysWorkHrs", var.todaysWorkHrs)
+				ticket.put("updateDate", var.updateDate)
+				ticket.put("updatedStatus", var.updatedStatus)
+			  
+			ticketList.add(ticket)
+			
+			}
+		}
+			render ticketList as JSON
+	}
+
+	
+	
 }
 
