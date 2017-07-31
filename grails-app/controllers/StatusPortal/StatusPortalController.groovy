@@ -12,6 +12,9 @@ import SecureApp.User
 class StatusPortalController {
 
 	def springSecurityService
+	def exportService
+	def grailsApplication  //inject GrailsApplication
+	
 	@Secured('IS_AUTHENTICATED_FULLY')
 	def index() {
 
@@ -142,6 +145,7 @@ class StatusPortalController {
 		result.add(ticketInfo)
 		result.add(results[0].updatedStatus)
 		result.add(totalHrs)
+		//result.add(results[1].ticketInfo.summary)
 		render result as JSON
 	}
 
@@ -299,25 +303,6 @@ class StatusPortalController {
 	//for all tickets history irespective of the user 
 	@Secured('IS_AUTHENTICATED_FULLY')
 	def getAllTicketsOfUser(){
-		
-		def currentUser=User.get(springSecurityService.principal.id)
-		def allTicketsOfUser=StatusUpdate.findAllWhere(user:currentUser)
-		if(allTicketsOfUser){
-		 [hist:allTicketsOfUser]
-		 }else{
-		  flash.message="No records found"
-		 }
-	}
-//all tickets present in db
-	@Secured('IS_AUTHENTICATED_FULLY')
-	def getAllTicketHistory(){
-		def allTickets=StatusUpdate.findAll();
-			[allTickets:allTickets]
-	}
-
-	@Secured('IS_AUTHENTICATED_FULLY')
-	def getAllTicketsOfUser1(){
-		
 		def currentUser=User.get(springSecurityService.principal.id)
 		def allTicketsOfUser=StatusUpdate.findAllWhere(user:currentUser)
 		if(allTicketsOfUser){
@@ -327,4 +312,76 @@ class StatusPortalController {
 		 }
 	}
 	
+	//for all tickets history irespective of the user
+	@Secured('IS_AUTHENTICATED_FULLY')
+	def getAllTicketsOfUser1(){
+		def currentUser=User.get(springSecurityService.principal.id)
+		def allTicketsOfUser=StatusUpdate.findAllWhere(user:currentUser)
+		if(allTicketsOfUser){
+		 [hist:allTicketsOfUser]
+		 }else{
+		  flash.message="No records found"
+		 }
+	}
+	
+//all tickets present in db
+	@Secured('IS_AUTHENTICATED_FULLY')
+	def getAllTicketHistory(){
+		def allTickets=StatusUpdate.findAll();
+			[allTickets:allTickets]
+	}
+
+	
+	//for exporting the data in pdf csv and excel format
+	@Secured('IS_AUTHENTICATED_FULLY')
+	def exportData(){
+
+		if (! params . Max )  {
+
+			params . Max  =  10
+		}
+
+		if  ( params . extension!=null)  {
+
+			println ( params .get ( 'zest' ))
+
+			def format = params . extension
+
+			if  ( "xls" . equals ( params . extension ))  {
+
+				format = "excel"
+
+			}
+
+			if ( format && format !=  "Html" ) {
+
+				response.contentType = grailsApplication.config.grails.mime.types[params.format]
+				response.setHeader("Content-disposition", "attachment; filename=statusportal.${params.extension}")
+			
+							List fields =  [ "id" ,"ticket.ticket_id" , "ticket.summary","ticket.assignee","workdoneBy", "workDoneForToday","updateDate","updatedStatus","todaysWorkHrs","impediments"]
+			
+							Map labels =  [ "id" :  "ID" ,  "ticket.ticket_id" :  "Ticket ID" ,  "Ticket Summary":"Ticket Summary","ticket.assignee": "Assignee", "workdoneBy" :"Work Done By",
+											"workDoneForToday":"Work Done Discription","updateDate":"Date of Work Done","updatedStatus":"Ticket Status","todaysWorkHrs":"Work Hrs For Day" ,"impediments" : "Impediments"]
+			
+							
+							def dateFormat = { domain, value ->
+								def df = new SimpleDateFormat("dd/MM/yyyy");
+								 def updateDate=df.format(value);
+								return updateDate
+							}
+							
+							Map formatters =  [updateDate:dateFormat]
+							
+			
+							Map parameters =  new HashMap ()
+						try{			
+							exportService . export (format , response . outputStream , StatusUpdate . list ( params ) ,fields , labels , formatters , parameters )
+						}catch(Exception e){
+							println "exception="+e.message
+						}
+					}	
+			
+				}
+	}
+
 }
