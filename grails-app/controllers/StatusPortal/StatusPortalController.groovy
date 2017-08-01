@@ -23,7 +23,7 @@ class StatusPortalController {
 	@Secured('IS_AUTHENTICATED_FULLY')
 	def assigneeList(){
 		def data=JSON.parse(request)
-		println "data projectId="+data.projectId
+	
 		
 		def assigneeList=[]
 		def q
@@ -94,7 +94,7 @@ class StatusPortalController {
 				continue
 			}
 		}
-		println "ticketIds="+ticketIds
+		
 		render ticketIds as JSON
 	}
 
@@ -157,7 +157,7 @@ class StatusPortalController {
 	def todaysTickets(){
 
 		try{
-       println "todaysTickets"
+      
 			def userLogedIn=User.get(springSecurityService.principal.id)
 			def df = new SimpleDateFormat("yyyy-MM-dd");
 			Date myDate = new Date();
@@ -183,7 +183,7 @@ class StatusPortalController {
 		try{
 
 			def userLogedIn=User.get(springSecurityService.principal.id)
-			println("userName="+userLogedIn.username)
+	
 			def ticketInfo=TicketSummary.findWhere(ticket_id:params.id)
 			if(ticketInfo){
 				[ticketInfo:ticketInfo]
@@ -260,7 +260,7 @@ class StatusPortalController {
 					
 					def userProjectMap
 					if(data.ticketData.project==null){
-						println data.ticketData.project
+				
 						userProjectMap=UserProjectMapping.findWhere(user_id:currentUser.employeeId)
 						newTicketSummary.project=ProjectInfo.findWhere(project_id:userProjectMap.project_id)
 						}else{
@@ -345,8 +345,6 @@ class StatusPortalController {
 
 		if  ( params . extension!=null)  {
 
-			println ( params .get ( 'zest' ))
-
 			def format = params . extension
 
 			if  ( "xls" . equals ( params . extension ))  {
@@ -381,28 +379,14 @@ class StatusPortalController {
 					def df = new SimpleDateFormat("dd/MM/yyyy");
 					def updateDate=df.format(value);
 					return updateDate
-				}
 
-				Map formatters =  [updateDate:dateFormat]
+				
 
-				def result=[]
-				if(params.id!=null){
-					println "params list"
-					def ticketInfo=TicketSummary.findByTicket_id(params.id)
-					result=StatusUpdate.findAllWhere(ticket:ticketInfo)
-				}else{
-				println "statusUpdate list"
-					result=StatusUpdate.list()
-				}	
+				
 
-				Map parameters =  ["column.widths":[0.05,0.15,0.2,0.13,0.13,0.3,0.12,0.12,0.07,0.3]]
-				try{
-					exportService . export (format , response . outputStream , result ,fields , labels , formatters , parameters )
-				}catch(Exception e){
-					println "exception="+e.message
-				}
-			}
-
+  }
+      }
+    }
 		}
 	}
 
