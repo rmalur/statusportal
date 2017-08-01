@@ -29,7 +29,7 @@ body {
 		
 		<div class="alert alert-error alert-dismissable" ng-show="showError">
 			<a href="" class="close" data-dismiss="alert" ng-click="reload()" aria-label="close">X</a>
-			<strong>Info!</strong>please fill the mandatory fileds
+			<strong>Info!</strong>please fill the mandatory fields
 		</div>
 	
 		<div class="container">
@@ -48,9 +48,20 @@ body {
 										title="projectName"></select>
 										
 									
-							</div>						
-					
-							<div class="col-lg-5">
+							</div><%--
+
+						<div class="col-xs-12" id="cash"
+							ng-if="project.methodology == 'SCRUM'">
+							<div class="col-lg-12">
+								<label for="todayswork">Tomorrow's Plan <span
+									style="color: red">*</span>:
+								</label></br>
+								<textarea class="form-control textarea" rows="3" cols="45"
+									id="todayswork" name="todayswork"
+									ng-model="ticketData.todayswork"></textarea>
+							</div>
+						</div>
+						--%><div class="col-lg-5">
 
 								<label for="ticket_ID" class="control-label">TicketID<span style="color:red">*</span>:</label></br>
 								<input type="text" class="form-control" id="tickets" name="ticket_id" ng-model="ticketData.ticket_id" required=""
@@ -87,6 +98,18 @@ body {
 									name="todayswork" ng-model="ticketData.todayswork"></textarea>
 							</div>
 
+							<div class="col-lg-12"  ng-hide="methodology=='AGILE'">
+								<label for="todayswork">Tomorrow's Plan <span style="color:red">*</span>:</label></br>
+								<textarea class="form-control textarea" rows="3" cols="45" id="todayswork"
+									name="todayswork" ng-model="ticketData.todayswork"></textarea>
+							</div>
+							
+							<div class="col-lg-12">
+								<label for="impediments">Impediments :</label></br>
+								<textarea class=" form-control" rows="3" cols="45" id="impediments"
+									name="impediments" ng-model="ticketData.impediments"></textarea>
+							</div>
+							
 							<div class="col-sm-12">
 								<div class="col-lg-6">
 
@@ -138,11 +161,7 @@ body {
 								</div>
 							</div>
 
-							<div class="col-lg-12">
-								<label for="impediments">Impediments :</label></br>
-								<textarea class=" form-control" rows="3" cols="45" id="impediments"
-									name="impediments" ng-model="ticketData.impediments"></textarea>
-							</div>
+							
 
 							<div class="col-sm-12">
 								<div class="col-lg-6">

@@ -95,6 +95,24 @@
 								}).then(function(response) {
 											$scope.assigneeList=response.data											
 										})
+										
+										
+									//fetching methodology of project
+								$http({
+									method: "POST",
+								    url: "/StatusPortal/test/fetchMethodology",
+								    data: {projectId}
+								}).then(function(response) {
+											$scope.methodology=response.data
+										})	
+									
+									if ($scope.methodology == 'SCRUM') {
+										$scope.isHideCheck = !$scope.isHideCheck;
+					                    
+									} else{
+										$scope.isHideSave = !$scope.isHideSave;
+					                   
+										}	
 	
 							}
 									
