@@ -23,6 +23,19 @@ class TestController {
 		render methodologyList as JSON
 		
 	}
+	
+	//fetch methodology
+	@Secured('IS_AUTHENTICATED_FULLY')
+	def fetchMethodology(){
+		def data=JSON.parse(request)
+		def project=ProjectInfo.findWhere(project_id:data.projectId)
+		
+		def methodologyList=[]
+		methodologyList.add(project.methodology.methodology)
+		render methodologyList as JSON
+	}
+	
+	
 	@Secured('IS_AUTHENTICATED_FULLY')
 	def createProject(){
 	}
