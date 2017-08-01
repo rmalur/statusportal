@@ -379,27 +379,14 @@ class StatusPortalController {
 					def df = new SimpleDateFormat("dd/MM/yyyy");
 					def updateDate=df.format(value);
 					return updateDate
-				}
 
-				Map formatters =  [updateDate:dateFormat]
-
-				def result=[]
-				if(params.id!=null){
-					def ticketInfo=TicketSummary.findByTicket_id(params.id)
-					result=StatusUpdate.findAllWhere(ticket:ticketInfo)
-				}else{
 				
-					result=StatusUpdate.list()
-				}	
 
-				Map parameters =  ["column.widths":[0.05,0.15,0.2,0.13,0.13,0.3,0.12,0.12,0.07,0.3]]
-				try{
-					exportService . export (format , response . outputStream , result ,fields , labels , formatters , parameters )
-				}catch(Exception e){
-					println "exception="+e.message
-				}
-			}
+				
 
+  }
+      }
+    }
 		}
 	}
 
