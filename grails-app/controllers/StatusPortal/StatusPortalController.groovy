@@ -23,7 +23,7 @@ class StatusPortalController {
 	@Secured('IS_AUTHENTICATED_FULLY')
 	def assigneeList(){
 		def data=JSON.parse(request)
-		println "data projectId="+data.projectId
+	
 		
 		def assigneeList=[]
 		def q
@@ -94,7 +94,7 @@ class StatusPortalController {
 				continue
 			}
 		}
-		println "ticketIds="+ticketIds
+		
 		render ticketIds as JSON
 	}
 
@@ -157,7 +157,7 @@ class StatusPortalController {
 	def todaysTickets(){
 
 		try{
-       println "todaysTickets"
+      
 			def userLogedIn=User.get(springSecurityService.principal.id)
 			def df = new SimpleDateFormat("yyyy-MM-dd");
 			Date myDate = new Date();
@@ -183,7 +183,7 @@ class StatusPortalController {
 		try{
 
 			def userLogedIn=User.get(springSecurityService.principal.id)
-			println("userName="+userLogedIn.username)
+	
 			def ticketInfo=TicketSummary.findWhere(ticket_id:params.id)
 			if(ticketInfo){
 				[ticketInfo:ticketInfo]
@@ -260,7 +260,7 @@ class StatusPortalController {
 					
 					def userProjectMap
 					if(data.ticketData.project==null){
-						println data.ticketData.project
+				
 						userProjectMap=UserProjectMapping.findWhere(user_id:currentUser.employeeId)
 						newTicketSummary.project=ProjectInfo.findWhere(project_id:userProjectMap.project_id)
 						}else{
@@ -336,14 +336,14 @@ class StatusPortalController {
 	@Secured('IS_AUTHENTICATED_FULLY')
 	def exportData(){
 
+
+
 		if (! params . Max )  {
 
 			params . Max  =  10
 		}
 
 		if  ( params . extension!=null)  {
-
-			println ( params .get ( 'zest' ))
 
 			def format = params . extension
 
@@ -357,31 +357,50 @@ class StatusPortalController {
 
 				response.contentType = grailsApplication.config.grails.mime.types[params.format]
 				response.setHeader("Content-disposition", "attachment; filename=statusportal.${params.extension}")
-			
-							List fields =  [ "id" ,"ticket.ticket_id" , "ticket.summary","ticket.assignee","workdoneBy", "workDoneForToday","updateDate","updatedStatus","todaysWorkHrs","impediments"]
-			
-							Map labels =  [ "id" :  "ID" ,  "ticket.ticket_id" :  "Ticket ID" ,  "Ticket Summary":"Ticket Summary","ticket.assignee": "Assignee", "workdoneBy" :"Work Done By",
-											"workDoneForToday":"Work Done Discription","updateDate":"Date of Work Done","updatedStatus":"Ticket Status","todaysWorkHrs":"Work Hrs For Day" ,"impediments" : "Impediments"]
-			
-							
-							def dateFormat = { domain, value ->
-								def df = new SimpleDateFormat("dd/MM/yyyy");
-								 def updateDate=df.format(value);
-								return updateDate
-							}
-							
-							Map formatters =  [updateDate:dateFormat]
-							
-			
-							Map parameters =  new HashMap ()
-						try{			
-							exportService . export (format , response . outputStream , StatusUpdate . list ( params ) ,fields , labels , formatters , parameters )
-						}catch(Exception e){
-							println "exception="+e.message
-						}
-					}	
-			
+
+				List fields =  [
+					"id" ,
+					"ticket.ticket_id" ,
+					"ticket.summary",
+					"ticket.assignee",
+					"workdoneBy",
+					"workDoneForToday",
+					"updateDate",
+					"updatedStatus",
+					"todaysWorkHrs",
+					"impediments"
+				]
+
+				Map labels =  [ "id" :  "ID" ,  "ticket.ticket_id" :  "Ticket ID" ,  "Ticket Summary":"Ticket Summary","ticket.assignee": "Assignee", "workdoneBy" :"Work Done By",
+					"workDoneForToday":"Work Done Discription","updateDate":"Date of Work Done","updatedStatus":"Ticket Status","todaysWorkHrs":"Work Hrs For Day" ,"impediments" : "Impediments"]
+
+
+				def dateFormat = { domain, value ->
+					def df = new SimpleDateFormat("dd/MM/yyyy");
+					def updateDate=df.format(value);
+					return updateDate
 				}
+
+				Map formatters =  [updateDate:dateFormat]
+
+				def result=[]
+				if(params.id!=null){
+					def ticketInfo=TicketSummary.findByTicket_id(params.id)
+					result=StatusUpdate.findAllWhere(ticket:ticketInfo)
+				}else{
+				
+					result=StatusUpdate.list()
+				}	
+
+				Map parameters =  ["column.widths":[0.05,0.15,0.2,0.13,0.13,0.3,0.12,0.12,0.07,0.3]]
+				try{
+					exportService . export (format , response . outputStream , result ,fields , labels , formatters , parameters )
+				}catch(Exception e){
+					println "exception="+e.message
+				}
+			}
+
+		}
 	}
 
 }

@@ -59,7 +59,7 @@
 						Export Data <span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu">
-						<li><g:link controller="statusPortal" action="exportData"
+						<li><g:link controller="statusPortal" action="exportData" id="{{ticket_id}}"
 								params="[extension:'PDF']">PDF </g:link></li>
 						<li><g:link controller="statusPortal" action="exportData"
 								params="[extension:'xls']">XSL </g:link></li>
@@ -82,8 +82,10 @@
 					</div>
 				</sec:ifAnyGranted>
 			</div>
-
-
+	
+	 <div class="col-lg-12">
+		<input type="text" class="form-control" id="tickets" name="ticket_id" ng-model="ticket_id" required=""
+         placeholder="--TicketId Selector--" style="width:13%">
 
 			
 		<form>
@@ -122,6 +124,7 @@
 				ng-disabled="currentPage >= getData().length/pageSize - 1"
 				ng-click="currentPage=currentPage+1">Next</button>
 		</form>
+		</div>
 	</div>
 	</div>
 	
