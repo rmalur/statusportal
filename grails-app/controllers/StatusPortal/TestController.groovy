@@ -15,6 +15,27 @@ class TestController {
 	def testIndex(){
 	}
 
+	//developement methodology list
+	@Secured('IS_AUTHENTICATED_FULLY')
+	def getMethodologyList(){
+		
+		def methodologyList=DevelopementMethodology.findAll()
+		render methodologyList as JSON
+		
+	}
+	
+	//fetch methodology
+	@Secured('IS_AUTHENTICATED_FULLY')
+	def fetchMethodology(){
+		def data=JSON.parse(request)
+		def project=ProjectInfo.findWhere(project_id:data.projectId)
+		
+		def methodologyList=[]
+		methodologyList.add(project.methodology.methodology)
+		render methodologyList as JSON
+	}
+	
+	
 	@Secured('IS_AUTHENTICATED_FULLY')
 	def createProject(){
 	}
@@ -38,6 +59,7 @@ class TestController {
 	def addProjectInfo(){
 		def flag=[]
 		def data=JSON.parse(request)
+		println data
 		try{
 			def manager=User.findWhere(username:data.managerName)
 			def project=new ProjectInfo()
@@ -45,6 +67,8 @@ class TestController {
 			project.project_id=data.project_id
 			project.projectName=data.projectName
 			project.projectStartDate=data.projectStartDate
+			def methodology=DevelopementMethodology.findWhere(methodology:data.methodology.methodology)
+			project.methodology=methodology
 			project.save(flush:true,failOnError:true)
 			def message=1
 			flag.add(message)
@@ -137,9 +161,11 @@ class TestController {
 		allTicketsOfUser=StatusUpdate.findAllWhere(workdoneBy:currentUser.username)
 		}
 		def ticketList=[]
+		def listOfTicketIds=[]
 		for(ticketObject in allTicketsOfUser){
 			def ticket=[:]
 			ticket.put("ticket_id", ticketObject.ticket.ticket_id)
+			
 				ticket.put("summary",ticketObject.ticket.summary)
 				ticket.put("assignee",ticketObject.ticket.assignee)
 				ticket.put("workDoneBy",ticketObject.workdoneBy )
@@ -148,9 +174,14 @@ class TestController {
 				ticket.put("updateDate",ticketObject.updateDate )
 				ticket.put("updatedStatus",ticketObject.updatedStatus)
 				ticketList.add(ticket)
+				if(!listOfTicketIds.contains(ticketObject.ticket.ticket_id)){
+				listOfTicketIds.add(ticketObject.ticket.ticket_id)
+				}
 		}
-		
-		render ticketList as JSON
+		def result=[]
+		result.add(ticketList)
+		result.add(listOfTicketIds)
+		render result as JSON
 	}
 	
   //for loading the projectList of manager
@@ -186,59 +217,6 @@ class TestController {
 		}
 	}
 	
-	//for getting the all the ticketIds respective to user id
-	@Secured('IS_AUTHENTICATED_FULLY')
-	def ticketIds(){
-		def project
-		def ticket
-		def data=JSON.parse(request)
-		def user=User.get(springSecurityService.principal.id)
-		def ticketIds=[]
-		if(data.projectId){
-			project=ProjectInfo.findWhere(project_id:data.projectId)
-		}
-
-		
-		/*def results = StatusUpdate.withCriteria {
-			eq("user",user)
-			projections { distinct("ticket") }
-		}
-		*/
-		def results = StatusUpdate.withCriteria {
-		
-			ne("updatedStatus","Closed")
-			projections { distinct("ticket") }
-		}
-		
-		
-		
-		
-		for (var in results) {
-
-			if(project){
-				ticket=TicketSummary.findWhere(ticket_id:var.ticket_id,project:project)
-			}else {
-				ticket=TicketSummary.findWhere(ticket_id:var.ticket_id)
-			}
-
-			if(ticket){
-				def ticketInfo=StatusUpdate.findWhere(ticket:ticket,updatedStatus:"Closed")
-				if(ticketInfo){
-
-					println ticketInfo.ticket.ticket_id
-					continue
-				}else{
-
-					ticketIds.add(var.ticket_id)
-				}
-			}else{
-				continue
-			}
-		}
-		println "ticketIds="+ticketIds
-		render ticketIds as JSON
-	}
-
 	
 	//for loading the lead List
 	@Secured('permitAll')
@@ -456,8 +434,7 @@ class TestController {
 		}
 			render ticketList as JSON
 	}
+	
 
-	
-	
 }
 
