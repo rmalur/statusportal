@@ -12,6 +12,10 @@ body {
 	padding-top: 70px;
 	/* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
 }
+row{
+margin-left: -15px;
+margin-right: -15px;
+}
 </style>
 
 </head>
@@ -32,8 +36,8 @@ body {
 			<strong>Info!</strong>please fill the mandatory fields
 		</div>
 	
-		<div class="container">
-			<div class="row">
+		<div class="container" style="margin-left: 300px;">
+			<div class="row1">
 				<div class="col-md-10">
 
 					<form>
