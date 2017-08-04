@@ -12,9 +12,7 @@ app.controller('ticketController',function($scope,$http,$filter){
 		
 
 		 $scope.today = function() {
-			   /* $scope.dt = new Date();
-			    $scope.end= new Date();
-			  */};
+			   };
 			  $scope.today();
 
 			  $scope.clear = function() {
@@ -37,14 +35,14 @@ app.controller('ticketController',function($scope,$http,$filter){
 			  };
 			  $scope.setDate = function(year, month, day) {
 			    $scope.dt = new Date().format('dd/MM/yyyy');
-			    console.log($scope.dt);
+			    
 			   
 			  };
 
 			  $scope.formats = ['dd/MM/yyyy'];
 			  $scope.format = $scope.formats[0];
 			 
-			  /*$scope.altInputFormats = ['M!/d!/yyyy'];*/
+			
 
 			  $scope.popup1 = {
 			    opened: false
@@ -58,7 +56,7 @@ app.controller('ticketController',function($scope,$http,$filter){
 				  };
 				  $scope.setDate = function(year, month, day) {
 				    $scope.end = new Date().format('dd/MM/yyyy');
-				    console.log("EnD DAte="+$scope.end)
+				  
 				  };
 
 				  $scope.formats = ['dd/MM/yyyy'];
@@ -71,11 +69,11 @@ app.controller('ticketController',function($scope,$http,$filter){
 				  };
 			  
 			  $scope.select=function(){
-				  console.log("Datepicker date="+$scope.dt);
+				 
 				  var today = new Date($scope.dt);
-				  console.log(" date="+today);
+				 
 				  var end= new Date($scope.end);
-				  console.log("End date="+end);
+				 
 				
 				  var dd = today.getDate();
 				  var mm = today.getMonth()+1; //January is 0!
@@ -90,7 +88,7 @@ app.controller('ticketController',function($scope,$http,$filter){
 					} 
 					var today =dd+'/'+mm+'/'+yyyy;
 				  
-				  console.log(today);
+				  
 				
 				  var dd = end.getDate();
 				  var mm = end.getMonth()+1; //January is 0!
@@ -105,7 +103,7 @@ app.controller('ticketController',function($scope,$http,$filter){
 					} 
 					var end =dd+'/'+mm+'/'+yyyy;
 				  
-				  console.log(end);
+				  
 				  
 				  var projectName
 				  if($scope.projectName){
@@ -121,7 +119,7 @@ app.controller('ticketController',function($scope,$http,$filter){
 						data:{todaysDate:today,endDate:end,projectName:projectName}
 						
 					}).then(function(response){
-						//console.log("response="+response);
+						
 						$scope.ticketList=response.data
 					});	
 			  }
@@ -140,7 +138,7 @@ app.controller('ticketController',function($scope,$http,$filter){
 			var projectId
 			if($scope.project){
 			 projectId=$scope.project.project_id
-			 console.log("ProjectID="+$scope.projectId);
+			
 			}
 			// getting the ticktIds related to user and project
 				$http({
@@ -199,7 +197,7 @@ app.controller('ticketController',function($scope,$http,$filter){
 			var projectId
 			if($scope.project){
 			 projectId=$scope.project.project_id
-			 console.log("ProjectID="+$scope.projectId);
+			 
 			}
 			// getting the ticktIds related to user and project
 				$http({
