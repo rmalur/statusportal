@@ -28,8 +28,14 @@ class TestController {
 	@Secured('IS_AUTHENTICATED_FULLY')
 	def fetchMethodology(){
 		def data=JSON.parse(request)
-		def project=ProjectInfo.findWhere(project_id:data.projectId)
-		
+		def project
+		if(data.projectId){
+			project=ProjectInfo.findWhere(project_id:data.projectId)
+		}else{
+			def user=User.findWhere(id:springSecurityService.principal.id )
+			def userProject=UserProjectMapping.findWhere(user_id:user.employeeId)
+			project=ProjectInfo.findWhere(project_id:userProject.project_id)
+		}
 		def methodologyList=[]
 		methodologyList.add(project.methodology.methodology)
 		render methodologyList as JSON
@@ -59,7 +65,6 @@ class TestController {
 	def addProjectInfo(){
 		def flag=[]
 		def data=JSON.parse(request)
-		println data
 		try{
 			def manager=User.findWhere(username:data.managerName)
 			def project=new ProjectInfo()
@@ -74,11 +79,9 @@ class TestController {
 			flag.add(message)
 
 		}catch(Exception e){
-
 			e.printStackTrace()
 			def message=0
 			flag.add(message)
-
 		}
 		render flag as JSON
 	}
@@ -94,8 +97,9 @@ class TestController {
 	def saveUser(){
 		def normalUser = Role.findWhere(authority:'ROLE_NORMAL')
 		def data=JSON.parse(request)
-		def multipleroject= data.project
+		def multipleProject= data.project
 		def flagList=[]
+		def flag=1
 		try{
 			def newUser=new User()
 			newUser.username=data.employeeName
@@ -103,36 +107,40 @@ class TestController {
 			newUser.employeeId=data.employeeId
 			newUser.employeeEmailId=data.employeeEmailId
 			if(newUser.save(flush:true,failOnError:true))
-				{
-					UserRole.create newUser,normalUser,true
-					for (project in multipleroject) {
+			{
+				UserRole.create newUser,normalUser,true
+				if(multipleProject && data.managerName ){
+					for (project in multipleProject) {
 						def userProjectMap=new UserProjectMapping()
 						userProjectMap.user_id=data.employeeId
 						userProjectMap.project_id=project.project_id
 						userProjectMap.save(flush:true,failOnError:true)
 					}
-						def userManagerMapping=new UserManager()
-						def manager=User.findWhere(username:data.managerName)
-						userManagerMapping.manager_id=manager.employeeId
-						userManagerMapping.employee_id=data.employeeId
-					
-						if(data.lead!=null){
-							def lead_id=User.findWhere(username:data.lead)
-								userManagerMapping.lead_id=lead_id.employeeId
-							}else{
-							userManagerMapping.lead_id="NA"
-							}
-							
-						userManagerMapping.save(flush:true,failOnError:true)
+
+					def userManagerMapping=new UserManager()
+					def manager=User.findWhere(username:data.managerName)
+					userManagerMapping.manager_id=manager.employeeId
+					userManagerMapping.employee_id=data.employeeId
+
+					if(data.lead!=null){
+						def lead_id=User.findWhere(username:data.lead)
+						userManagerMapping.lead_id=lead_id.employeeId
+					}else{
+						userManagerMapping.lead_id="NA"
+					}
+
+					userManagerMapping.save(flush:true,failOnError:true)
+					flag=1;
+				}else{
+
+					flag=0;
 				}
-			
-				
-			def flag=1
+			}
 			flagList.add(flag)
 			render flagList as JSON
 		}catch(Exception e){
 			e.printStackTrace()
-			def flag=0
+			flag=0
 			flagList.add(flag)
 			render flagList as JSON
 		}
@@ -199,19 +207,19 @@ class TestController {
 		try{
 			def user=User.get(springSecurityService.principal.id)
 			def role=springSecurityService.principal.authorities
-			def projects	
+			def projects
 			if(role.toString().contains("ROLE_MANAGER")){
 				projects=ProjectInfo.findAllWhere(user:user)
 			}else{
 
 				projects=UserProjectMapping.findAllByUser_id(user.employeeId)
-					}
-					for (project in projects) {
-						def projectInfo=ProjectInfo.findWhere(project_id:project.project_id)
-								projectListOfUser.add(projectInfo)
-					}
-		render projectListOfUser as JSON
-		
+			}
+			for (project in projects) {
+				def projectInfo=ProjectInfo.findWhere(project_id:project.project_id)
+				projectListOfUser.add(projectInfo)
+			}
+			render projectListOfUser as JSON
+
 		}catch(Exception e){
 			e.printStackTrace()
 		}
@@ -273,7 +281,6 @@ class TestController {
 	//for loading the resources regarding the project
 	@Secured('IS_AUTHENTICATED_FULLY')
 	def getResourcesList(){
-		println "getResourcesList project id="+ params.id
 		def project=ProjectInfo.findWhere(projectName:params.id)
 		def currentUser=User.get(springSecurityService.principal.id)
 		String role=springSecurityService.principal.authorities
@@ -291,13 +298,9 @@ class TestController {
 		}
 		
 		if(role.contains('ROLE_MANAGER')){
-				
-			//def resourceUnderManager=UserManager.findAllWhere(manager_id:currentUser.employeeId)
 			def resourceUnderProject=UserProjectMapping.findAllWhere(project_id:project.project_id)
 			for (var in resourceUnderProject) {
-				println var.user_id
 				def user=User.findWhere(employeeId:var.user_id)
-				println user.username
 				resourceList.add(user.username)
 			}
 		
@@ -310,12 +313,7 @@ class TestController {
 	def getTicktetsOnBasisOfResources(){
 		
 		def data=JSON.parse(request)
-		//def project=ProjectInfo.findWhere(projectName:data.projectName)
-		//def ticketSummaryList=TicketSummary.findAllWhere(project:project)
 		def ticketList=[]
-		//for (var in ticketSummaryList) {
-		
-			//def ticketSummary=TicketSummary.findWhere(ticket_id:var.ticket_id)
 			def StatusUpdateTicket=StatusUpdate.findAllWhere(workdoneBy:data.resourceName)
 			for (ticketObject in StatusUpdateTicket) {
 				def ticket=[:]
@@ -329,7 +327,6 @@ class TestController {
 				ticket.put("updatedStatus",ticketObject.updatedStatus)
 				ticketList.add(ticket)
 			}
-		//}
 			render ticketList as JSON
 	}
 	
@@ -339,85 +336,68 @@ class TestController {
 		
 		def data=JSON.parse(request)
 		def df = new SimpleDateFormat("dd/MM/yyyy");
-		
-		
 		def user=User.get(springSecurityService.principal.id)
 		def role=springSecurityService.principal.authorities
-		println "role="+role
 		def ticketList=[]
 		
-		
-		
-		
-		if(data.todaysDate){
 			Date creationDate=df.parse(data.todaysDate)
 			def formatedDate=df.format(creationDate)
 			Date today=df.parse(formatedDate)
-					
-			if(data.endDate){
+
+		
 				Date endDate=df.parse(data.endDate)
 				def formatDate=df.format(endDate)
 				Date end=df.parse(formatDate)
-		
-		
-		if(role.toString().contains("ROLE_LEAD")){
+
+
+				if(role.toString().contains("ROLE_LEAD")){
+
+					def c= StatusUpdate.createCriteria()
+					def allTicketsOfUser=c.list{
+						between("updateDate",today,end)
+						'in'('user', user)
+					}
+					for (var in allTicketsOfUser) {
+						if(allTicketsOfUser){
+							println"Workdone=" +var.workdoneBy
+							def ticket=[:]
+							ticket.put("ticket_id",var.ticket.ticket_id)
+							ticket.put("summary", var.ticket.summary)
+							ticket.put("assignee", var.ticket.assignee)
+							ticket.put("workDoneBy",var.workdoneBy)
+							ticket.put("impediments", var.impediments)
+							ticket.put("todaysWorkHrs", var.todaysWorkHrs)
+							ticket.put("updateDate", var.updateDate)
+							ticket.put("updatedStatus", var.updatedStatus)
+
+							ticketList.add(ticket)
+						}
+					}
+				}
+
+				if(ticketList){
+
+					render ticketList as JSON
+				}else{
+					// flash.message="No records found"
+					render ticketList as JSON
+				}
 			
-			def c= StatusUpdate.createCriteria()
-				def allTicketsOfUser=c.list{
-					between("updateDate",today,end)
-					'in'('user', user)
-				}
-				for (var in allTicketsOfUser) {
-				if(allTicketsOfUser){
-					println"Workdone=" +var.workdoneBy
-					def ticket=[:]
-					ticket.put("ticket_id",var.ticket.ticket_id)
-					ticket.put("summary", var.ticket.summary)
-					ticket.put("assignee", var.ticket.assignee)
-					ticket.put("workDoneBy",var.workdoneBy)
-					ticket.put("impediments", var.impediments)
-					ticket.put("todaysWorkHrs", var.todaysWorkHrs)
-					ticket.put("updateDate", var.updateDate)
-					ticket.put("updatedStatus", var.updatedStatus)
-				  
-				ticketList.add(ticket)
-				}
-				}
-			}
-			
-	if(ticketList){
-	
-	 render ticketList as JSON
-	 }else{
-	 // flash.message="No records found"
-	render ticketList as JSON
-	 }
-	}
-}
 	}
 	
 	
 	//for getting ticket info respective with ticketId
 	@Secured('IS_AUTHENTICATED_FULLY')
-	def getTicketSelector(){
+	def showTicketData(){
 		
 		def user=User.get(springSecurityService.principal.id)
 		def ticketList=[]
 		def ticketInfo=TicketSummary.findWhere(ticket_id:params.id) //(,user:user)fetching the data on basis of ticket id and user from ticketSummary table
 		def allTicketsOfUser=StatusUpdate.findAllWhere(ticket:ticketInfo)  //(,,user:user)fetching the data on basis of ticket id and user from StatusUpdate table
 		def c = StatusUpdate.createCriteria()
-		def results = c.list {
-			
-				eq("ticket", ticketInfo)
-				and {
-					eq("user",user)
-				}
-			
-			//order("updateDate", "desc")
-		}
+		
 			for (var in allTicketsOfUser) {
 			if(allTicketsOfUser){
-				println"Workdone=" +var.workdoneBy
 				def ticket=[:]
 				ticket.put("ticket_id",var.ticket.ticket_id)
 				ticket.put("summary", var.ticket.summary)

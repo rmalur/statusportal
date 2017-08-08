@@ -5,21 +5,23 @@ import grails.plugin.springsecurity.annotation.Secured
 
 import org.apache.commons.lang.RandomStringUtils
 import org.apache.commons.lang.math.RandomUtils
+import org.apache.commons.logging.LogFactory 
 
 import SecureApp.User
 
 
 class ForgetPasswordController {
+	private static final log = LogFactory.getLog(this)
 	MailService mailService
 	def springSecurityService
+	
 	@Secured('permitAll')
 	def forgetPassword(){
-		def data=JSON.parse(request)
-		def user=User.findWhere(employeeEmailId:data.emailId)
-		def flag=[]
-		def flag1=false
+			def data = JSON.parse(request)
+			def user = User.findWhere(employeeEmailId:data.emailId)
+			def forgetPasswordFlag = []
+			def sentMailFlag = false
 		try{
-
 			String charset = (('A'..'Z') + ('0'..'9')).join()
 			Integer length = 9
 			String randomString = RandomStringUtils.random(length, charset.toCharArray())
@@ -29,26 +31,33 @@ class ForgetPasswordController {
 				mailService.sendMail {
 					from "statusportal@evolvingsols.com"
 					to  user.employeeEmailId
-					subject "Password  Change"
+					subject "Password Change"
 					body 'Your New password is '+randomString
 				}
-				flag1=true
-				flag.add(flag1)
-				render flag as JSON
+				sentMailFlag = true
+				forgetPasswordFlag.add(sentMailFlag)
+				
+			}else{
+			sentMailFlag=false
+			forgetPasswordFlag.add(flag1)
+			println data.emailId
+			log.info("user not found with enail id="+data.emailId);
 			}
 		}catch(Exception e){
-			flag1=false
-			flag.add(flag1)
-			e.printStackTrace()
-			render flag as JSON
+			sentMailFlag=false
+			forgetPasswordFlag.add(sentMailFlag)
+			log.error(e.message) 
+			
 		}
+		render forgetPasswordFlag as JSON
 	}
 	
 	@Secured('permitAll')
 	def changePassword(){
-		def flag=[]
+		def passwordChangedFlag=[]
 		def saveFlag=false;
 		def data=JSON.parse(request)
+		try{
 		def user=User.get(springSecurityService.principal.id)
 		user.password=data.password.newPassword
 		if(user.save(flush:true,failOnError:true)){
@@ -60,13 +69,18 @@ class ForgetPasswordController {
 			}
 
 			saveFlag=1;
-			flag.add(saveFlag)
+			passwordChangedFlag.add(saveFlag)
 		}else{
-			saveFlag=2;
-			flag.add(saveFlag)
+			saveFlag=0;
+			passwordChangedFlag.add(saveFlag)
 		}
-		render flag as JSON
-
+		
+		}catch(Exception e){
+		saveFlag=0;
+		passwordChangedFlag.add(saveFlag)
+		log.error(e.message)
+		}
+		render passwordChangedFlag as JSON
 	}
 	
 	
