@@ -24,7 +24,7 @@
 				<div class="col-md-3" style="padding-right: 40px" style="margin-left:-60px">
 					<p class="input-group" style="display: inline-flex;">
 						<label style="padding-top: 7px;">From:</label> <input type="text"
-							ng-change="select(projectName)" class="form-control"
+							 class="form-control"
 							uib-datepicker-popup="{{format}}" ng-model="dt"
 							is-open="popup1.opened" datepicker-options="dateOptions"
 							ng-required="true" close-text="Close"

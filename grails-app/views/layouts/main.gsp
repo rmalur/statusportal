@@ -168,7 +168,7 @@ body {
 <body >
 	
 	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-		<div class="navbar-header">
+		<div class="navbar-header" style="height: 70px;">
 			<button type="button" class="navbar-toggle" data-toggle="collapse"
 				data-target="#bs-example-navbar-collapse-1">
 				<span class="sr-only">Toggle navigation</span> <span

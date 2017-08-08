@@ -113,6 +113,8 @@ app
 							projectName = null
 						}
 						if (today != null && end != null) {
+							console.log("Today="+today)
+							console.log("end="+end)
 							$http({
 								method : "POST",
 								url : "/StatusPortal/Test/getAllTicketsOfDate",
