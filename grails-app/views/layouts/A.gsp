@@ -11,9 +11,8 @@
 
 <title>Status Portal</title>
 
-
+ <link	href="${request.contextPath}/startbootstrap-bare-gh-pages/css/bootstrap.min.css"	rel="stylesheet">
 <!-- Bootstrap Core CSS -->
-<link	href="${request.contextPath}/startbootstrap-bare-gh-pages/css/bootstrap.min.css"	rel="stylesheet">
 <link	href="${request.contextPath}/startbootstrap-bare-gh-pages/css/datepicker.css" rel="stylesheet">
 
 
@@ -25,7 +24,7 @@
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-sanitize.js"></script>
     <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
   
-     <link	href="${request.contextPath}/startbootstrap-bare-gh-pages/css/bootstrap1.min.css"	rel="stylesheet">
+    
 
 
 
@@ -71,7 +70,7 @@ body {
       class="icon-bar"></span> <span class="icon-bar"></span> <span
       class="icon-bar"></span>
     </button>
-    	<a class="navbar-brand"  href="${createLink(controller:'logout')}">Status Update</a>
+    	<a class="navbar-brand" style="height: 70px;" href="${createLink(controller:'logout')}">Status Update</a>
    </div>
    <div class="collapse navbar-collapse" id="b-menu-1">
     <ul class="nav navbar-nav navbar-left">

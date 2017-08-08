@@ -12,6 +12,10 @@ body {
 	padding-top: 70px;
 	/* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
 }
+row{
+margin-left: -15px;
+margin-right: -15px;
+}
 </style>
 
 </head>
@@ -42,10 +46,11 @@ body {
 			<a href="" class="close" data-dismiss="alert" ng-click="reload()" aria-label="close">X</a>
 			<strong>Please fill the mandatory fields</strong>
 		</div>
-	
+
 		<div class="container" style="margin-left: 10.67em">
-			<div class="row">
-				<div class="col-md-7">
+			<div class="row1">
+				<div class="col-md-10">
+
 
 					<form>
 							<div class="col-lg-6">
