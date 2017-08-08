@@ -13,6 +13,7 @@ app
 					$scope.projectList = []
 					$scope.resourceList = []
 					$scope.projectListHidden = true
+					$scope.showMessageForResource=false
 
 					$scope.today = function() {
 						/*
@@ -125,6 +126,9 @@ app
 							}).then(function(response) {
 								// console.log("response="+response);
 								$scope.ticketList = response.data
+								if($scope.ticketList.length==0){
+									$scope.showMessageForResource=true
+								}
 							});
 						}
 					}
@@ -142,6 +146,9 @@ app
 										function(response) {
 
 											$scope.ticketList = response.data[0]
+											if($scope.ticketList.length==0){
+												$scope.showMessageForResource=true
+											}
 											$scope.$apply
 											$("#tickets").autocomplete({
 																source : response.data[1],
@@ -187,7 +194,7 @@ app
 					$scope.showTicketInfo = function(ticket_ID) {
 
 						$http.get(
-								"/StatusPortal/test/getTicketSelector/"
+								"/StatusPortal/test/showTicketData/"
 										+ ticket_ID).then(function(response) {
 							$scope.ticketList = response.data;
 							$scope.$apply
@@ -246,6 +253,10 @@ app
 								}).then(function(response) {
 
 							$scope.ticketList = response.data
+					
+							if($scope.ticketList.length==0){
+								$scope.showMessageForResource=true
+							}
 
 						});
 					}

@@ -24,7 +24,7 @@
 				<div class="col-md-3" style="padding-right: 40px" style="margin-left:-60px">
 					<p class="input-group" style="display: inline-flex;">
 						<label style="padding-top: 7px;">From:</label> <input type="text"
-							ng-change="select(projectName)" class="form-control"
+							 class="form-control"
 							uib-datepicker-popup="{{format}}" ng-model="dt"
 							is-open="popup1.opened" datepicker-options="dateOptions"
 							ng-required="true" close-text="Close"
@@ -87,7 +87,10 @@
 		<input type="text" class="form-control" id="tickets" name="ticket_id" ng-model="ticket_id" required=""
          placeholder="--TicketId Selector--" style="width:13%">
 
-			
+			<div class="alert alert-danger alert-dismissable" ng-show="showMessageForResource">
+			<a href="" class="close" data-dismiss="alert" ng-click="reload()" aria-label="close">X</a>
+			<strong>Data not found</strong>
+		</div>
 		<form>
 
 			<table id="tblMain" class="table table-striped table-condensed">
