@@ -118,7 +118,7 @@ app
 							console.log("end="+end)
 							$http({
 								method : "POST",
-								url : "/StatusPortal/Test/getAllTicketsOfDate",
+								url : "/StatusPortal/ticketData/getAllTicketsOfDate",
 								data : {
 									todaysDate : today,
 									endDate : end,
@@ -143,7 +143,7 @@ app
 						}
 
 						// fetching all tickets of realted to user
-						$http.get("/StatusPortal/test/loadAllTicketsOfuser/")
+						$http.get("/StatusPortal/ticketData/loadAllTicketsOfuser/")
 								.then(
 										function(response) {
 
@@ -163,7 +163,7 @@ app
 										});
 
 						// fetching the list of projects
-						$http.get("/StatusPortal/test/getProjectListOfUser")
+						$http.get("/StatusPortal/ticketData/getProjectListOfUser")
 								.then(
 										function(response) {
 											$scope.projectList = response.data
@@ -177,7 +177,7 @@ app
 
 						// fetching all resources reealted to user(manager
 						// /lead)
-						$http.get("/StatusPortal/test/getResourcesList/").then(
+						$http.get("/StatusPortal/ticketData/getResourcesList/").then(
 								function(response) {
 									$scope.resourceList = response.data
 									$scope.$apply
@@ -196,7 +196,7 @@ app
 					$scope.showTicketInfo = function(ticket_ID) {
 
 						$http.get(
-								"/StatusPortal/test/showTicketData/"
+								"/StatusPortal/ticketData/showTicketData/"
 										+ ticket_ID).then(function(response) {
 							$scope.ticketList = response.data;
 							$scope.$apply
@@ -214,7 +214,7 @@ app
 						}
 
 						$http.get(
-								"/StatusPortal/test/getTicketListOfProject/"
+								"/StatusPortal/ticketData/getTicketListOfProject/"
 										+ projectName).then(function(response) {
 							$scope.ticketList = response.data
 							$scope.$apply
@@ -232,7 +232,7 @@ app
 					// load the resources realted to project
 					$scope.loadResources = function(projectName) {
 						$http.get(
-								"/StatusPortal/test/getResourcesList/"
+								"/StatusPortal/ticketData/getResourcesList/"
 										+ projectName).then(function(response) {
 							$scope.resourceList = response.data
 							$scope.$apply
@@ -247,7 +247,7 @@ app
 						$http(
 								{
 									method : "POST",
-									url : "/StatusPortal/test/getTicktetsOnBasisOfResources",
+									url : "/StatusPortal/ticketData/getTicktetsOnBasisOfResources",
 									data : {
 										resourceName : $scope.resourceName
 									}

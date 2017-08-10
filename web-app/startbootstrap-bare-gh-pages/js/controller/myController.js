@@ -28,7 +28,7 @@
 							$scope.SummaryDisabled=false
 							$scope.creationDate=$filter('date')(new Date(), "dd/MM/yyyy");    
 							
-							$http.get("/StatusPortal/test/getProjectListOfUser/").then(
+							$http.get("/StatusPortal/ticketData/getProjectListOfUser/").then(
 									function(response) {										
 										if(response.data.length>1){
 											$scope.projectListHidden=false
@@ -79,7 +79,7 @@
 									//fetching methodology of project
 								$http({
 									method: "POST",
-								    url: "/StatusPortal/test/fetchMethodology",
+								    url: "/StatusPortal/ticketData/fetchMethodology",
 								    data: {projectId}
 								}).then(function(response) {
 											$scope.methodology=response.data

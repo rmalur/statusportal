@@ -77,8 +77,7 @@
                             <div ng-show="requestSucceeded">
                                 <p>
                                     <span >
-                                        We have sent you a new password.<br/>
-                                        Please check your email account and login again with new password <a href="/StatusPortal/login/auth">Sign in</a>
+                                      {{message}} <a href="/StatusPortal/login/auth">Sign in</a>
                                     </span>
                                     
                                 </p>
@@ -100,8 +99,8 @@
 
         $scope.showPasswordView = false;
         $scope.email = "";
-        $scope.supportMessage = ""
-        $scope.errorMessage = "";
+        $scope.message = ""
+        
         $scope.requestSucceeded = false;
         
 
@@ -122,8 +121,13 @@
 				    url: "/StatusPortal/ForgetPassword/forgetPassword",
 				    data: {emailId}
 				}).then(function (response) {
-			       
-			        $scope.requestSucceeded = true
+					   $scope.requestSucceeded = true
+				       if(response.data[0]==true){
+			     
+			        $scope.message=" We have sent you a new password.<br/> Please check your email account and login again with new password "
+				       }else{
+				    	   $scope.message=" Sorry we are unable to find user with this mail id Please check your mail "
+					       }
 
 				    },function(response){
 			    	
