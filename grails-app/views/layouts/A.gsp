@@ -24,14 +24,11 @@
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-sanitize.js"></script>
     <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
   
-    
-
-
 
 <script	src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-<script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.3.3.js"></script>
-<script type="text/javascript"	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/controller/myController.js"></script>
-<script type="text/javascript"	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/controller/testController.js"></script>
+<%--<script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.3.3.js"></script> **************duplicate******************
+--%><script type="text/javascript"	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/controller/myController.js"></script>
+<script type="text/javascript"	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/controller/newEntityCreationController.js"></script>
 <script type="text/javascript"	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/controller/changePasswordController.js"></script>
 <script type="text/javascript"	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/controller/changePasswordResultController.js"></script>
 <script type="text/javascript"	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/controller/ticketController.js"></script>
@@ -41,14 +38,12 @@
 <script	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/bootstrap-datepicker.js"></script>
 <script	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/moment.min.js"></script>
 <link rel="stylesheet"	href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css" />
-<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+<%--<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script> **************duplicate******************
+--%>
 <script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
  
 <link rel="stylesheet"	href="https://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css" />
-<%--<script type="text/javascript"	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/datatables.js"></script>
-<script type="text/javascript"	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/datatables.min.js"></script>
-
---%><style>
+<style>
 body {
 	padding-top: 70px;
 	/* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
@@ -64,19 +59,13 @@ body {
 <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
   <div class="container">
    <div class="navbar-header">
-    <button type="button" class="navbar-toggle" data-toggle="collapse"
-     data-target="#b-menu-1">
-     <span class="sr-only">Toggle navigation</span> <span
-      class="icon-bar"></span> <span class="icon-bar"></span> <span
-      class="icon-bar"></span>
-    </button>
-    	<a class="navbar-brand" style="height: 70px;" href="${createLink(controller:'logout')}">Status Update</a>
+    	<a class="navbar-brand" href="${createLink(controller:'logout')}">Status Update</a>
    </div>
    <div class="collapse navbar-collapse" id="b-menu-1">
     <ul class="nav navbar-nav navbar-left">
      <li><g:link controller="StatusPortal" action="todaysTickets">Status Update</g:link></li>
      <li><g:link controller="StatusPortal" action="getAllTicketsOfUser">Status History</g:link></li>
-     <li><g:link controller="StatusPortal" action="getAllTicketHistory">Status Download</g:link></li>
+     
      
       <li class="dropdown"><a data-toggle="dropdown" href="#">
         <sec:ifLoggedIn>

@@ -162,7 +162,6 @@ body {
 <link	href="${request.contextPath}/startbootstrap-bare-gh-pages/css/bootstrap.min.css"	rel="stylesheet">
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 <script	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/jquery-1.11.2.min.js"></script>
-<script type="text/javascript" src="${request.contextPath}/startbootstrap-bare-gh-pages/js/controller/loginController.js" ></script>
 </head>
 
 <body >
