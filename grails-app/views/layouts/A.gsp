@@ -74,11 +74,11 @@ body {
       </a>
        <ul class="dropdown-menu" ng-controller="myController" >
         <sec:ifAnyGranted roles="ROLE_MANAGER">
-        	<li><g:link controller="Test" action="createProject">
+        	<li><g:link controller="ticketData" action="createProject">
            <i class="fa fa-picture-o"></i>Create Project</g:link></li>
         </sec:ifAnyGranted>
         <sec:ifAnyGranted roles="ROLE_LEAD,ROLE_MANAGER">
-         <li><g:link controller="Test" action="addEmployee">
+         <li><g:link  controller="ticketData"	action="createUser">
            <i class="fa fa-picture-o"></i>Add Resource</g:link></li>
         </sec:ifAnyGranted>
         <li><a href="#" ng-click="changePassword()">Change
