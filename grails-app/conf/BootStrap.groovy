@@ -5,6 +5,7 @@ import SecureApp.UserRole
 class BootStrap {
 
     def init = { servletContext ->
+		def adminRole=new Role(authority: 'ROLE_ADMIN').save(flush: true)
 		def leadRole = new Role(authority: 'ROLE_LEAD').save(flush: true)
 		def managerRole = new Role(authority: 'ROLE_MANAGER').save(flush: true)
 		def normalUser = new Role(authority: 'ROLE_NORMAL').save(flush: true)

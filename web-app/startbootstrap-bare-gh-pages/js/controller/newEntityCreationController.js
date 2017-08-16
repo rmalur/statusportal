@@ -1,4 +1,4 @@
-app.controller('testController',function($scope,$http){
+app.controller('newEntityCreationController',function($scope,$http){
 	$scope.project={}
 	$scope.startDate=undefined
 	$scope.managerName
@@ -13,24 +13,24 @@ app.controller('testController',function($scope,$http){
 		$scope.projectName=undefined
 		
 		//loading managers List
-		$http.get("/StatusPortal/test/getManagerList")
+		$http.get("/StatusPortal/ticketData/getManagerList")
 		.then(function(response) {
 			$scope.managerList=response.data
 		});
 		
 		//load lead list of
-			$http.get("/StatusPortal/test/getLeadList")
+			$http.get("/StatusPortal/ticketData/getLeadList")
 		.then(function(response) {
 			$scope.leadList=response.data
 		});
 		
 		//load project list of user
-		$http.get("/StatusPortal/test/getProjectListOfUser/").then(
+		$http.get("/StatusPortal/ticketData/getProjectListOfUser/").then(
 				function(response) {
 					$scope.projectListOfUser=response.data
 				});
 		//load methodology list for project
-		$http.get("/StatusPortal/test/getMethodologyList/").then(
+		$http.get("/StatusPortal/ticketData/getMethodologyList/").then(
 				function(response) {
 					$scope.methodologyList=response.data
 				});
@@ -43,7 +43,7 @@ app.controller('testController',function($scope,$http){
 		$scope.project.projectStartDate=$scope.creationDate
 		$http({
 			method: "POST",
-		    url: "/StatusPortal/test/addProjectInfo",
+		    url: "/StatusPortal/ticketData/addProjectInfo",
 		    data: $scope.project
 		}).then(function (response) {
 	        if(response.data==1){
@@ -60,7 +60,7 @@ app.controller('testController',function($scope,$http){
 	//loading the projectList for manager
 	$scope.loadProjectList=function(managerName){
 		var managerName=$scope.managerName
-		$http.get("/StatusPortal/test/getProjectList/"+managerName).then(
+		$http.get("/StatusPortal/ticketData/getProjectList/"+managerName).then(
 				function(response) {
 					$scope.projectList=response.data
 				});
@@ -77,7 +77,7 @@ app.controller('testController',function($scope,$http){
 		$scope.employee.lead=$scope.leadName
 		$http({
 			method: "POST",
-		    url: "/StatusPortal/test/saveUser",
+		    url: "/StatusPortal/ticketData/saveUser",
 		    data: $scope.employee
 		}).then(function (response) {	        
 	        if(response.data==1){

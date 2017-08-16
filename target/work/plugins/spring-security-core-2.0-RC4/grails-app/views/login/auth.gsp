@@ -51,9 +51,6 @@
 
                             <div class="col-sm-offset-2">
                                 <button type="submit" class="btn btn-primary">Login</button>
-                                <g:link  controller="test"	action="createUser">
-										<input type="button" class="btn btn-primary" value="New User" >
-								</g:link>
                             </div>
                              
                         </div>
