@@ -10,6 +10,7 @@
 <style>
 body {
 	padding-top: 70px;
+	margin-top: 130px;
 	/* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
 }
 row{
@@ -20,37 +21,25 @@ margin-right: -15px;
 
 </head>
 <body >
-
+	
 	<div ng-controller="myController">
-		<g:if test="${message}">
-
-			<div class="alert alert-danger alert-dismissable" ng-show="success">
-				<a href="" class="close" data-dismiss="alert" ng-click="reload()"
-					aria-label="close">X</a> <strong>
-					${message}!
-				</strong>
-			</div>
-		</g:if>
-
 		<div class="alert alert-info alert-dismissable" ng-show="success">
 			<a href="" class="close" data-dismiss="alert" ng-click="reload()" aria-label="close">X</a>
-			<strong>Data is saved successFully!</strong>
+			<strong>Info!</strong>Data is saved successFully!
+		</div>
+		<div class="alert alert-error alert-dismissable" ng-show="failure">
+			<a href="" class="close" data-dismiss="alert" ng-click="reload()" aria-label="close">X</a>
+			<strong>Info!</strong>Data is not saved successFully!
 		</div>
 		
-		<div class="alert alert-danger alert-dismissable" ng-show="failure">
+		<div class="alert alert-error alert-dismissable" ng-show="showError">
 			<a href="" class="close" data-dismiss="alert" ng-click="reload()" aria-label="close">X</a>
-			<strong>Data is not saved successFully!</strong>
+			<strong>Info!</strong>please fill the mandatory fields
 		</div>
-		
-		<div class="alert alert-danger alert-dismissable" ng-show="showError">
-			<a href="" class="close" data-dismiss="alert" ng-click="reload()" aria-label="close">X</a>
-			<strong>Please fill the mandatory fields</strong>
-		</div>
-
-		<div class="container" style="margin-left: 10.67em">
+	
+		<div class="container" style="margin-left: 18.67em;">
 			<div class="row1">
-				<div class="col-md-10">
-
+				<div class="col-md-10" style="margin-bottom: 12%;">
 
 					<form>
 							<div class="col-lg-6">
@@ -62,8 +51,22 @@ margin-right: -15px;
 										ng-change="loadAllData()"
 										ng-options='project.projectName for project in projectListOfUser'
 										title="projectName"></select>
+										
+									
+							</div><%--
+
+						<div class="col-xs-12" id="cash"
+							ng-if="project.methodology == 'SCRUM'">
+							<div class="col-lg-12">
+								<label for="todayswork">Tomorrow's Plan <span
+									style="color: red">*</span>:
+								</label></br>
+								<textarea class="form-control textarea" rows="3" cols="45"
+									id="todayswork" name="todayswork"
+									ng-model="ticketData.todayswork"></textarea>
 							</div>
-							<div class="col-lg-5">
+						</div>
+						--%><div class="col-lg-5">
 
 								<label for="ticket_ID" class="control-label">TicketID<span style="color:red">*</span>:</label></br>
 								<input type="text" class="form-control" id="tickets" name="ticket_id" ng-model="ticketData.ticket_id" required=""
@@ -84,7 +87,7 @@ margin-right: -15px;
 										ng-options='assignee for assignee in assigneeList'
 										title="Assignee"></select>
 								</div>
-								<div  class="col-lg-6">
+								<div style="float: left;">
 									<label for="workdoneBy" class="controle-label">Work done
 										by:</label> <select
 										ng-model='workDoneBy' class="form-control"

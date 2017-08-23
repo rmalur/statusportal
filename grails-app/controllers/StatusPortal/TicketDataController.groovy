@@ -296,6 +296,27 @@ class TicketDataController {
 			render ticketList as JSON
 	}
 	
+	//for loading the list of all resources on the basis of manager
+	@Secured('IS_AUTHENTICATED_FULLY')
+	def getResourceListforManager(){
+		def currentUser=User.get(springSecurityService.principal.id)
+		String role=springSecurityService.principal.authorities
+		def resourceList=[]
+		if(role.contains('ROLE_MANAGER')){
+			def resourceUnderProject=UserManager.findAllWhere(manager_id:currentUser.employeeId)
+			//def resourceUnderProject=UserProjectMapping.findAllWhere(project_id:project.project_id)
+			for (var in resourceUnderProject) {
+				
+				def user=User.findWhere(employeeId:var.employee_id)
+				
+				resourceList.add(user.username)
+				
+			}
+		}else{}
+		render resourceList as JSON
+		
+	}
+	
 	//for loading the resources regarding the project
 	@Secured('IS_AUTHENTICATED_FULLY')
 	def getResourcesList(){
@@ -441,4 +462,3 @@ class TicketDataController {
 	
 
 }
-

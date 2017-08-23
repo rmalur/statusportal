@@ -322,12 +322,16 @@ class StatusPortalController {
 	@Secured('IS_AUTHENTICATED_FULLY')
 	def exportData(){
 
+
+
 		if (! params . Max )  {
 
 			params . Max  =  10
 		}
 
 		if  ( params . extension!=null)  {
+
+			println ( params .get ( 'zest' ))
 
 			def format = params . extension
 
@@ -355,44 +359,33 @@ class StatusPortalController {
 					"impediments"
 				]
 
-				Map labels =  [ "id" :  "ID" ,  "ticket.ticket_id" :  "Ticket ID" ,  "Ticket Summary":"Ticket Summary","ticket.assignee": "Assignee", "workdoneBy" :"Work Done By",
-					"workDoneForToday":"Work Done Discription","updateDate":"Date of Work Done","updatedStatus":"Ticket Status","todaysWorkHrs":"Work Hrs For Day" ,"impediments" : "Impediments"]
+				Map labels =  [ "id" :  " " ,  "ticket.ticket_id" :  "Ticket ID" ,  "ticket.summary":" Summary","ticket.assignee": "Assignee", "workdoneBy" :"Work Done By",
+					"workDoneForToday":"Work Done Description","updateDate":"Work Done on","updatedStatus":"Ticket Status","todaysWorkHrs":"Work Hrs" ,"impediments" : "Impediments"]
 
 
 				def dateFormat = { domain, value ->
 					def df = new SimpleDateFormat("dd/MM/yyyy");
-					def updateDate = df.format(value);
+					def updateDate=df.format(value);
 					return updateDate
 				}
 
 				Map formatters =  [updateDate:dateFormat]
 
-				def result = []
+				def result=[]
 				if(params.id!=null){
 					println "params list"
-					def ticketInfo = TicketSummary.findByTicket_id(params.id)
-					result = StatusUpdate.findAllWhere(ticket:ticketInfo)
+					def ticketInfo=TicketSummary.findByTicket_id(params.id)
+					result=StatusUpdate.findAllWhere(ticket:ticketInfo)
 				}else{
-					println "statusUpdate list"
-					result = StatusUpdate.list()
-				}
+				println "statusUpdate list"
+					result=StatusUpdate.list()
+				}	
 
-				Map parameters =  ["column.widths":[
-						0.05,
-						0.15,
-						0.2,
-						0.13,
-						0.13,
-						0.3,
-						0.12,
-						0.12,
-						0.07,
-						0.3
-					]]
+				Map parameters =  ["column.widths":[0.05,0.15,0.2,0.13,0.13,0.3,0.12,0.12,0.07,0.3]]
 				try{
 					exportService . export (format , response . outputStream , result ,fields , labels , formatters , parameters )
 				}catch(Exception e){
-					println "exception = "+e.message
+					println "exception="+e.message
 				}
 			}
 

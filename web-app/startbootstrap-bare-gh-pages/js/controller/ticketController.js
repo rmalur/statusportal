@@ -16,9 +16,9 @@ app
 					$scope.showMessageForResource=false
 
 					$scope.today = function() {
-						/*
-						 * $scope.dt = new Date(); $scope.end= new Date();
-						 */};
+						
+						 $scope.dt = new Date(); $scope.end= new Date();
+						 };
 					$scope.today();
 
 					$scope.clear = function() {
@@ -47,7 +47,24 @@ app
 					$scope.format = $scope.formats[0];
 
 					/* $scope.altInputFormats = ['M!/d!/yyyy']; */
-
+					$scope.options = {
+					          
+					          maxDate: new Date(),
+					          showWeeks: true
+					        };
+					     
+					     $scope.maxDateOptions={
+					       
+					       maxDate:new Date(),
+					       showWeeks:true
+					       
+					       
+					     }
+					     $scope.setMaxDateOptions=function(){
+					       
+					       $scope.maxDateOptions.maxDate=new Date($scope.dt.getFullYear(),$scope.dt.getMonth()+3,$scope.dt.getDate())
+					       
+					     }
 					$scope.popup1 = {
 						opened : false
 					};
@@ -151,6 +168,7 @@ app
 											if($scope.ticketList.length==0){
 												$scope.showMessageForResource=true
 											}
+											
 											$scope.$apply
 											$("#tickets").autocomplete({
 																source : response.data[1],
@@ -178,6 +196,13 @@ app
 						// fetching all resources reealted to user(manager
 						// /lead)
 						$http.get("/StatusPortal/ticketData/getResourcesList/").then(
+								function(response) {
+									$scope.resourceList = response.data
+									$scope.$apply
+								});
+						// fetching all resources related to manager
+						
+						$http.get("/StatusPortal/ticketData/getResourceListforManager/").then(
 								function(response) {
 									$scope.resourceList = response.data
 									$scope.$apply
