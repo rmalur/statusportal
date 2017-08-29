@@ -12,6 +12,12 @@
 					<input type="button" value="Add" class="btn btn-primary">
 				</g:link>
 			</div>
+			
+			<div class="small-6 text-right columns">
+				<g:link class="navbar-brand" controller="ticketData" action="sendDSR">
+					<input type="button" value="Publish" class="btn btn-primary">
+				</g:link>
+			</div>
 			</br>	
 		<table id="tblMain" border="0" class="table table-hover">
 			<tr class="bg-info">
@@ -42,7 +48,7 @@
 					</td>
 					<td>
 							<g:link id="${res.ticket_id}" controller="StatusPortal"	action="updateTicketStatus"  >
-								<input type="button" value="Expand" class="btn btn-primary">
+								<input type="button" value="Edit" class="btn btn-primary">
 							</g:link>
 								
 						</button></td>

@@ -207,6 +207,27 @@ app
 									$scope.resourceList = response.data
 									$scope.$apply
 								});
+						
+						
+						$http.get("/StatusPortal/ticketData/showMailNotification/").then(
+								function(response) {
+									$scope.resourceListforMail = response.data
+									$scope.$apply
+								});
+						
+						$http({
+							method: "POST",
+						    url: "/StatusPortal/ticketData/sendDSR",
+						    data: {resourceListforMail}
+						}).then(function (response) {
+							if(response.data == 'true'){
+								$scope.success = response.data;
+							}
+						},function(response){
+					    	$scope.failure=true;
+					    });
+						
+					
 
 					}
 					// for loading all data related to selected project

@@ -1,15 +1,21 @@
 package StatusPortal
 
 import grails.converters.JSON
+import grails.plugin.mail.MailService
 import grails.plugin.springsecurity.annotation.Secured
 
 import java.text.SimpleDateFormat
+
+import org.apache.commons.logging.LogFactory
 
 import SecureApp.Role
 import SecureApp.User
 import SecureApp.UserRole
 
 class TicketDataController {
+	private static final log  =  LogFactory.getLog(this)
+	MailService mailService
+	def resourceListforMail = []
 	def springSecurityService
 	@Secured('IS_AUTHENTICATED_FULLY')
 	def testIndex(){
@@ -340,7 +346,7 @@ class TicketDataController {
 			try{
 			def resourceUnderProject = UserProjectMapping.findAllWhere(project_id:project.project_id)
 			
-			
+			println("Resouruce under project="+resourceUnderProject)
 			for (var in resourceUnderProject) {
 				def user = User.findWhere(employeeId:var.user_id)
 				resourceList.add(user.username)
@@ -429,6 +435,86 @@ class TicketDataController {
 				}
 			
 	}
+	
+	//for sending mail notification to user
+	@Secured('IS_AUTHENTICATED_FULLY')
+	def showMailNotification(){
+		
+		def currentUser = User.get(springSecurityService.principal.id)
+		String role = springSecurityService.principal.authorities
+		
+		
+		def emailNotification = UserManager.findAllWhere(employee_id:currentUser.employeeId)
+	
+		def employeeEmailId = User.findWhere(employeeId:currentUser.employeeId)
+		
+			for (var in emailNotification) {
+				
+					if(var.lead_id.equals("NA")){
+					println"Dont Send mail"
+				}
+				else{
+					def lead = User.findWhere(employeeId:var.lead_id)
+					
+				
+				def manager=User.findWhere(employeeId:var.manager_id)
+			
+				resourceListforMail.add(employeeEmailId.employeeEmailId)
+				resourceListforMail.add(lead.employeeEmailId)
+				resourceListforMail.add(manager.employeeEmailId)
+				
+			
+				}
+				render resourceListforMail as JSON
+				
+		
+				}
+			
+	}
+	
+	// for sending mail to user, lead and manager
+	@Secured('permitAll')
+	def sendDSR(){
+		showMailNotification()
+			def data  =  JSON.parse(request)
+			
+			def sendMailFlag  =  []
+			def sentMailFlag  =  false
+		try{
+			def user  =  User.findWhere(employeeEmailId:data.emailId)
+			
+			
+			def userLogedIn = User.get(springSecurityService.principal.id)
+			def df = new SimpleDateFormat("yyyy-MM-dd");
+			Date myDate = new Date();
+			def todaysDate = df.format(myDate);
+			Date todaysdate = df.parse(todaysDate)
+			def results = TicketSummary.findAllWhere(creationDate:todaysdate,user:userLogedIn)
+			
+			for(var in resourceListforMail){
+				
+			mailService.sendMail {
+					from "statusportal@evolvingsols.com"
+					if(var){
+					to  var
+					}
+					subject "Daily Status Report"
+					html g.render(template:'/statusPortal/DSR', model:[results:results])
+				}
+			}
+			
+				sentMailFlag  =  true
+				sendMailFlag.add(sentMailFlag)
+				
+		}catch(Exception e){
+			sentMailFlag  =  false
+			sendMailFlag.add(sentMailFlag)
+			log.error(e.message)
+			
+		}
+		render sendMailFlag as JSON
+	}
+	
 	
 	
 	//for getting ticket info respective with ticketId

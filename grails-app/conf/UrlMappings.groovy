@@ -8,7 +8,7 @@ class UrlMappings {
         }
 
         
-		"/"(controller:"StatusPortal", action:"index")
+		"/"(controller:"StatusPortal", action:"changeView")
 		"/index" (controller:"StatusPortal", action:"index")
 		"500"(view:'/error')
 		

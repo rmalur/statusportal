@@ -17,7 +17,11 @@ class StatusPortalController {
 	
 	@Secured('IS_AUTHENTICATED_FULLY')
 	def index() {
-
+ // render( view: 'todaysTickets')
+	}
+	@Secured('IS_AUTHENTICATED_FULLY')
+	def changeView(){
+		render( view: 'todaysTickets')
 	}
 	//loading all user list as assignee
 	@Secured('IS_AUTHENTICATED_FULLY')
