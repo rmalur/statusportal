@@ -1,11 +1,21 @@
 app
 		.controller(
 				'ticketController',
-				function($scope, $http, $filter) {
+				function($scope, $http, $filter, $window, $uibModal) {
 					app.config([ '$qProvider', function($qProvider) {
 						$qProvider.errorOnUnhandledRejections(false);
 					} ]);
-
+app.config(['$provide', function ($provide) {
+    $provide.decorator("$exceptionHandler", ['$delegate', '$injector', function ($delegate, $injector) {
+        return function (exception, cause) {
+            var exceptionsToIgnore = ['Possibly unhandled rejection: backdrop click', 'Possibly unhandled rejection: cancel', 'Possibly unhandled rejection: escape key press']
+            if (exceptionsToIgnore.indexOf(exception) >= 0) {
+                return;
+            }
+            $delegate(exception, cause);                    
+        };
+    }]);
+}]);
 					$scope.projectName
 					$scope.ticket_id
 					$scope.projectNameForOneProject
@@ -208,28 +218,21 @@ app
 									$scope.$apply
 								});
 						
-						
-						$http.get("/StatusPortal/ticketData/showMailNotification/").then(
-								function(response) {
-									$scope.resourceListforMail = response.data
-									$scope.$apply
-								});
-						
-						$http({
-							method: "POST",
-						    url: "/StatusPortal/ticketData/sendDSR",
-						    data: {resourceListforMail}
-						}).then(function (response) {
-							if(response.data == 'true'){
-								$scope.success = response.data;
-							}
-						},function(response){
-					    	$scope.failure=true;
-					    });
-						
-					
-
 					}
+					
+					//for sending the mail
+					$scope.sendMail=function(){
+						
+						var modalInstance=$uibModal.open({
+							animation:true,
+							templateUrl:'mail.html',
+							controller:'mailController',
+							size:'md'
+						})
+						
+					};
+				
+					
 					// for loading all data related to selected project
 					$scope.loadAllData = function() {
 						var projectId
@@ -267,13 +270,7 @@ app
 						});
 
 						$scope.loadResources(projectName)
-						// fetching all tickets of related to user
-						/*
-						 * $http.get("/StatusPortal/test/loadAllTicketsOfuser/").then(
-						 * function(response) { $scope.ticketList=response.data
-						 * $scope.$apply });
-						 */
-
+						
 					}
 					// load the resources realted to project
 					$scope.loadResources = function(projectName) {
@@ -344,6 +341,63 @@ app
 
 				});
 
+	
+app.controller("mailController",function($scope,$http,$uibModal,$uibModalInstance){
+	
+	 $scope.ok = function() {
+			$http({
+					method: "POST",
+				    url: "/StatusPortal/ticketData/sendDSR",
+				   
+				}).then(function (response) {
+			        var modalInstance=$uibModal.open({
+						animation:true,
+						templateUrl:'mailResult.html',
+						controller:'mailResultController',
+						size:'md',
+						resolve : {
+							params : function() {
+								return {
+									flag :response.data
+								}
+							}
+						}
+					});
+			        $uibModalInstance.dismiss('cancel');
+			        	
+				});
+
+	       
+};
+	
+	 $scope.cancel = function() {
+		 $uibModalInstance.dismiss('cancel');
+     };
+});
+
+app.controller('mailResultController',function($scope, $uibModalInstance,params){
+	
+	
+	$scope.message=undefined
+	$scope.init=function(){
+		
+		if(params.flag[0]==1){
+			 $scope.message="Mail Sent Successfully"
+			 
+		 }else{
+				 $scope.message="Unable to sent mail "
+				 
+			 }
+	}
+	
+	$scope.ok = function() {
+            
+		 
+		 $uibModalInstance.dismiss('cancel');
+        };
+
+        
+});
 app.filter('startFrom', function() {
 	return function(input, start) {
 		start = +start; //parse to int

@@ -13,7 +13,9 @@
 
  <link	href="${request.contextPath}/startbootstrap-bare-gh-pages/css/bootstrap.min.css"	rel="stylesheet">
 <!-- Bootstrap Core CSS -->
-<link	href="${request.contextPath}/startbootstrap-bare-gh-pages/css/datepicker.css" rel="stylesheet">
+<link	href="${request.contextPath}/startbootstrap-bare-gh-pages/css/datepicker.css" rel="stylesheet"><%--
+
+for loading border in DSR--%>
 
 
 
@@ -159,6 +161,7 @@ body {
       </div>
     </script>
     
+  
 <div class="wrapper" >
 		<footer class="footer">
 		
