@@ -41,20 +41,20 @@ border: 0px #000;
 					<td>
 						${i+1}.
 					</td>
-					<td>
-						${res.ticket_id}
+					<td >
+						${res.ticket.ticket_id}
 					</td>
 					<td>
-						${res.summary}
+						${res.ticket.summary}
 					</td>
 					<td>
-						${res.assignee}
+						${res.ticket.assignee}
 					</td>
 					<td>
-						${res.status}
+						${res.ticket.status}
 					</td>
 					<td>
-							<g:link id="${res.ticket_id}" controller="StatusPortal"	action="updateTicketStatus"  >
+							<g:link id="${res.ticket.ticket_id}" controller="StatusPortal"	action="updateTicketStatus"  >
 								<input type="button" value="Edit" class="btn btn-primary">
 							</g:link>
 								

@@ -19,10 +19,7 @@ class StatusPortalController {
 	def index() {
  // render( view: 'todaysTickets')
 	}
-	@Secured('IS_AUTHENTICATED_FULLY')
-	def changeView(){
-		render( view: 'todaysTickets')
-	}
+	
 	//loading all user list as assignee
 	@Secured('IS_AUTHENTICATED_FULLY')
 	def assigneeList(){
@@ -147,13 +144,14 @@ class StatusPortalController {
 			Date myDate = new Date();
 			def todaysDate = df.format(myDate);
 			Date todaysdate = df.parse(todaysDate)
-			def results = TicketSummary.findAllWhere(creationDate:todaysdate,user:userLogedIn)
-			if(results){
-				[results:results]
-			}else{
-				 def message = "No record found for todays date"
-				redirect controller:'StatusPortal',action:'index'
+			def results = StatusUpdate.findAllWhere(updateDate:todaysdate,user:userLogedIn)
+			[results:results]
+			/*if(results){
+				
 			}
+				 def message = "No record found for todays date"
+				redirect controller:'StatusPortal',action:'index'*/
+			
 		}catch(Exception e){
 
 			flash.message = "Some Error is occured"
