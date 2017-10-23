@@ -16,7 +16,7 @@ body {
 <body >
 
 			
-	<div ng-controller="testController">
+	<div ng-controller="newEntityCreationController">
 	
 		<div ng-show="success">
 			<div class="alert alert-info">
@@ -35,10 +35,10 @@ body {
 	
 		<div class="container" ng-init="init()">
 			<div class="row">
-				<div class="col-md-6">
+				<div class="col-lg-10">
 
 					<form>
-						<div class="col-lg-5">
+						<div class="col-lg-7">
 							<label for="project_id">Project ID</label> <input type="text"
 								class="form-control" id="project_id"
 								ng-model="project.project_id" name="project_id" required="">
@@ -54,12 +54,22 @@ body {
 							<label for="methodology">Project Developement Methodology</label> <select
 								class="form-control" ng-model='project.methodology'
 								ng-options='methodology.methodology for methodology in methodologyList'></select>
-							
-							<label for="projectStartDate">Project Start Date</label> <input
-								type="text" class="form-control" ng-model="creationDate"
-								jqdatepicker />
-					
+
+							<p class="input-group"  style="padding-top:15px;display: inline-flex;">
+									<label style="padding-top: 7px;">From:</label> <input
+										type="text" class="form-control" style="width: fit-content;"
+										uib-datepicker-popup="{{format}}" ng-model="dt"
+										is-open="popup1.opened" datepicker-options="options"
+										ng-required="true" close-text="Close"
+										alt-input-formats="altInputFormats"
+										ng-change="select()" />
+									<button type="button" class="btn btn-default"
+										ng-click="open1()">
+										<i class="glyphicon glyphicon-calendar"></i>
+									</button>
+									</span></p>
 							<button class="btn btn-primary" style="margin-top: 10px" ng-click="saveProject(startDate)">Save</button>
+							
 						</div>
 					</form>
 				</div>
