@@ -106,7 +106,7 @@ margin-right: -15px;
 							<div class="col-lg-12"  ng-hide="methodology=='AGILE'">
 								<label for="todayswork">Tomorrow's Plan <span style="color:red">*</span>:</label></br>
 								<textarea class="form-control textarea" rows="3" cols="45" id="todayswork"
-									name="todayswork" ng-model="ticketData.todayswork"></textarea>
+									name="todayswork" ng-model="ticketData.tomorrowsPlan"></textarea>
 							</div>
 							
 							<div class="col-lg-12">
@@ -120,10 +120,6 @@ margin-right: -15px;
 
 									<label for="todaysWorkHrs">Todays Work Hrs<span style="color:red">*</span>:</label></br> 
 										
-										<%--<input
-										type="time" style="width: 87%" class="form-control "
-										id="todaysWorkHrs" name="todaysWorkHrs"
-										ng-model="ticketData.todaysWorkHrs">--%>
 										<div class="col-lg-6 ">
 											<select  class="form-control" ng-model="ticketData.workingHrs">
 												<option value="" disabled selected style="display: none;">Hrs</option>
