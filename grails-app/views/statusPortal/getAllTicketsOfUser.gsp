@@ -7,7 +7,9 @@
 	
 </head>
 <body>
-
+	<style>
+ #tbody{height:600px;overflow-y:auto;
+</style>
 	<div ng-controller="ticketController" ng-init="allTicketsOfUser()">
 		<div class="col-lg-11" style="width:96%">
 			<div class="col-lg-11">
@@ -21,12 +23,19 @@
 					</select>
 				</div>
 
-				<div class="col-md-3" style="padding-right: 40px" style="margin-left:-60px">
+				<div class="col-md-3" style="padding-right: 40px"
+					style="margin-left:-60px">
 					<p class="input-group" style="display: inline-flex;">
-						<label style="padding-top: 7px;">From:</label> <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dt" is-open="popup1.opened" datepicker-options="options" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" ng-change="setMaxDateOptions()" />
-							<button type="button" class="btn btn-default" ng-click="open1()">
-								<i class="glyphicon glyphicon-calendar"></i>
-							</button>
+						<label style="padding-top: 7px;">From:</label> <input type="text"
+							class="form-control" uib-datepicker-popup="{{format}}"
+							ng-model="dt" is-open="popup1.opened"
+							datepicker-options="options" ng-required="true"
+							close-text="Close" alt-input-formats="altInputFormats"
+							ng-change="setMaxDateOptions()" /><span
+							class="input-group-btn">
+						<button type="button" class="btn btn-default" ng-click="open1()">
+							<i class="glyphicon glyphicon-calendar"></i>
+						</button>
 						</span>
 					</p>
 				</div>
@@ -76,12 +85,13 @@
 			</div>
 	
 	 <div class="col-lg-12">
-		<input type="text" class="form-control" id="tickets" name="ticket_id" ng-model="ticket_id" required=""
+		<input type="text" class="form-control" id="ticketIds" name="ticket_id" ng-model="ticket_id" required=""
          placeholder="--TicketId Selector--" style="width:13%">
-
+		<div class="panel panel-default" style="width: 96%;margin-top: 10px">
+					<div class="panel panel-body">
 			
 		<form>
-
+			<div id="tbody">
 			<table id="tblMain" class="table table-striped table-condensed">
 				<tr class="bg-info">
 					<th>Id</th>
@@ -106,20 +116,60 @@
 					<td>{{ticket.todaysWorkHrs}}</td>
 					<td>{{ticket.updateDate|date:'dd/MM/yyyy' }}</td>
 					<td>{{ticket.updatedStatus}}</td>
+					<td><sec:ifAnyGranted roles="ROLE_LEAD,ROLE_MANAGER">
+												<div>
+													<input type="button" value="Delete" class="btn btn-primary"
+														ng-click="deleteTicket(ticket.id)">
+												</div>
+											</sec:ifAnyGranted></td>
 
-				</tr>
-			</table>
-			<button class="btn btn-primary" ng-disabled="currentPage == 0"
-				ng-click="currentPage=currentPage-1">Previous</button>
-			{{currentPage+1}}/{{numberOfPages()}}
-			<button class="btn btn-primary"
-				ng-disabled="currentPage >= getData().length/pageSize - 1"
-				ng-click="currentPage=currentPage+1">Next</button>
-		</form>
+									</tr>
+								</table>
+							</div>
+							<button class="btn btn-primary" ng-disabled="currentPage == 0"
+								ng-click="currentPage=currentPage-1">Previous</button>
+							{{currentPage+1}}/{{numberOfPages()}}
+							<button class="btn btn-primary"
+								ng-disabled="currentPage >= getData().length/pageSize - 1"
+								ng-click="currentPage=currentPage+1">Next</button>
+						</form>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
-	</div>
-	
+	<script type="text/ng-template" id="delete.html">
+<b>
+<p> Please Confirm!!!</p></b>
+
+      <div class="modal-footer">
+<b><p><i> Do You want to Delete? </i></p></b> 
+        <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+ 
+       <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+      </div>
+    </script>
+	<script type="text/ng-template" id="deleteResult.html">
+
+
+      <div class="modal-header" ng-init="init()">
+        <h3 class="modal-title">Info</h3>
+      </div>
+      <div class="modal-body">
+        <form ng-submit="ok()">
+          <div class="input-group animated fadeOut">
+			<label class="control-label">Info:</label>
+        		{{message}}
+          </div>
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+  
+      </div>
+    </script>
+
 
 </body>
 </html>

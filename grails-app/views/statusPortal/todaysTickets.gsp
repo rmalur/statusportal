@@ -51,10 +51,10 @@ border: 0px #000;
 						${res.ticket.assignee}
 					</td>
 					<td>
-						${res.ticket.status}
+						${res.updatedStatus}
 					</td>
 					<td>
-							<g:link id="${res.ticket.ticket_id}" controller="StatusPortal"	action="updateTicketStatus"  >
+							<g:link id="${res.id}" controller="StatusPortal"	action="updateTicketStatus"  >
 								<input type="button" value="Edit" class="btn btn-primary">
 							</g:link>
 								

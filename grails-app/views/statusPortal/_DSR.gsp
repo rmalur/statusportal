@@ -27,31 +27,38 @@ border: 0px solid black;
 				<th>Work Done Today</th>
 				<th>Status</th>
 				<th>Impediments</th>
+				<th>TimeSpent</th>
+				<th>Total WorkHrs </th>
 				
 
 			</tr>
-			<g:each in="${results}" var="res" status="i">
+			<g:each in="${result}" var="res" status="i">
 				<tr>
 					
 					<td >
-						${res.ticket.ticket_id}
+						${res.ticket_id}
 					</td>
 					<td>
-						${res.ticket.summary}
+						${res.summary}
 					</td>
 					<td>
-						${res.ticket.assignee}
+						${res.assignee}
 					</td>
 					<td>
 					${res.workDoneForToday }
 					</td>
 					<td>
-						${res.ticket.status}
+						${res.status}
 					</td>
 					<td>
 					${res.impediments }
-					
-					
+					</td>
+					<td>
+					${res.todaysWorkHrs }
+					</td>
+					<td>
+					${res.totalHrs }
+					</td>
 				</tr>
 				</tbody>
 			</g:each>

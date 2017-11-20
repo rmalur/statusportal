@@ -2,73 +2,131 @@
 <html>
 <head>
 <meta name="layout" content="A" />
-<title>Status Update Portal</title>
+
+<title>History</title>
+	
 </head>
-<body >
+<body>
 
-	<div>
-		<%--<button class="btn btn-info btn-lg" ng-click="allRecords()">Load
-			All Records</button>
+	<div ng-controller="ticketController" ng-init="allTicketsOfUser()">
+		<div class="col-lg-11" style="width:96%">
+			<div class="col-lg-11">
+				<div class="col-sm-3" style="padding-right: 70px" style="margin-left: 100px">
+					<select ng-model='projectName' placeholder="select your beverage"
+						ng-disabled="projectListHidden" ng-change="loadTicketsOfProject()"
+						class="form-control"
+						ng-options='project.projectName for project in projectList'>
+						<option value="" label="-- Select Project --" disabled
+							selected="selected"></option>
+					</select>
+				</div>
 
-		--%><g:if test="${flash.message}">
-			<div class="alert alert-info alert-dismissable">
-				<a href="" class="close" data-dismiss="alert" aria-label="close">×</a>
-				<strong>Info!</strong>
-				${flash.message}
+				<div class="col-md-3" style="padding-right: 40px"
+					style="margin-left:-60px">
+					<p class="input-group" style="display: inline-flex;">
+						<label style="padding-top: 7px;">From:</label> <input type="text"
+							class="form-control" uib-datepicker-popup="{{format}}"
+							ng-model="dt" is-open="popup1.opened"
+							datepicker-options="options" ng-required="true"
+							close-text="Close" alt-input-formats="altInputFormats"
+							ng-change="setMaxDateOptions()" /><span
+							class="input-group-btn">
+						<button type="button" class="btn btn-default" ng-click="open1()">
+							<i class="glyphicon glyphicon-calendar"></i>
+						</button>
+						</span>
+					</p>
+				</div>
+
+				<div class="col-md-3" style="padding-left: 60px" style="margin-left: 100px">
+					<p class="input-group" style="display: inline-flex;">
+						<label style="padding-top: 7px;">To:</label> <input type="text"
+							ng-change="select(projectName)" class="form-control"
+							uib-datepicker-popup="{{format}}" ng-model="end"
+							is-open="popup2.opened" datepicker-options="maxDateOptions"
+							ng-required="true" close-text="Close"
+							alt-input-formats="altInputFormats" /> <span
+							class="input-group-btn">
+							<button type="button" class="btn btn-default" ng-click="open2()">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</button>
+						</span>
+					</p>
+				</div>
+				<div class="col-md-2" style="padding-left: 20px">
+				<div class="dropdown" style="margin-left: 40px">
+					<button class="btn btn-primary dropdown-toggle" type="button"
+						data-toggle="dropdown">
+						Export Data <span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li><g:link controller="statusPortal" action="exportData" id="{{ticket_id}}"
+								params="[extension:'PDF']">PDF </g:link></li>
+						<li><g:link controller="statusPortal" action="exportData"
+								params="[extension:'xls']">Excel </g:link></li>
+					</ul>
+				</div>
 
 			</div>
-		</g:if>
-		
-
 	
-			<table id="tblMain" border="0" class= "table table-hover table-responsive" >
-			<tr class="bg-info">
-				<th>No.</th>
-				<th>Ticket Id</th>
-				<th>Work done by</th>
-				<th>Issue</th>
-				<th>Work Hours for day</th>
-				<th>Updated_Date</th>
-				<th>Status</th>
-				<th>Project Name</th>
-			</tr>
-			<g:each in="${allTickets}" var="res" status="i">
-					<tr >
-						<td>
-							${i+1 }
-						</td>	
-						<td>
-							${res.ticket.ticket_id }
-						
-						</td>	
-						<td>
-							${res.user.username}
-						</td>
-						<td>
-							${res.impediments}
-						</td>
-					
-						<td>
-							${res.todaysWorkHrs}
-						</td>
-						
-						<td>
-							${res.updateDate}
-						</td>
-						<td>
-							${res.updatedStatus}
-						</td>
-						<td>
-							${res.ticket.project.projectName}
-						
-						</td>
-					</tr>
-			</tbody>
-			</g:each>
+
+				<sec:ifAnyGranted roles="ROLE_LEAD,ROLE_MANAGER">
+					<div class="col-md-3" style="padding-left: 80px;">
+						<select ng-model='resourceName'
+							ng-change="filterOnBasisOfResource()" class="form-control"
+							ng-options='resource for resource in resourceList'>
+							<option value="" label=" Select Resource " disabled
+								selected="selected"></option>
+						</select>
+					</div>
+				</sec:ifAnyGranted>
+			</div>
+	
+	 <div class="col-lg-12">
+		<input type="text" class="form-control" id="tickets" name="ticket_id" ng-model="ticket_id" required=""
+         placeholder="--TicketId Selector--" style="width:13%">
+
+			
+		<form>
+
+			<table id="tblMain" class="table table-striped table-condensed">
+				<tr class="bg-info">
+					<th>Id</th>
+					<th>Ticket-id</th>
+					<th>Summary</th>
+					<th>Assignee</th>
+					<th>Work_done by</th>
+					<th>Impediments</th>
+					<th>Work Hours for day</th>
+					<th>Updated_Date</th>
+					<th>Status</th>
+				</tr>
+
+				<tr
+					ng-repeat="ticket in ticketList|  filter:q | startFrom:currentPage*pageSize | limitTo:pageSize">
+					<td>{{$index+1}}</td>
+					<td>{{ticket.ticket_id}}</td>
+					<td>{{ticket.summary}}</td>
+					<td>{{ticket.assignee}}</td>
+					<td>{{ticket.workDoneBy}}</td>
+					<td>{{ticket.impediments}}</td>
+					<td>{{ticket.todaysWorkHrs}}</td>
+					<td>{{ticket.updateDate|date:'dd/MM/yyyy' }}</td>
+					<td>{{ticket.updatedStatus}}</td>
+
+				</tr>
 			</table>
-
-	
-		<button class="btn btn-info btn-lg"  ng-click="exportToExcel('#tblMain')">Export Record In Excel Format</button>
+			<button class="btn btn-primary" ng-disabled="currentPage == 0"
+				ng-click="currentPage=currentPage-1">Previous</button>
+			{{currentPage+1}}/{{numberOfPages()}}
+			<button class="btn btn-primary"
+				ng-disabled="currentPage >= getData().length/pageSize - 1"
+				ng-click="currentPage=currentPage+1">Next</button>
+		</form>
+		</div>
 	</div>
+	</div>
+	
+
 </body>
 </html>

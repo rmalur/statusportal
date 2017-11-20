@@ -98,11 +98,11 @@ app.config(['$provide', function ($provide) {
 					};
 
 					$scope.select = function() {
-						console.log("Datepicker date=" + $scope.dt);
+					
 						var today = new Date($scope.dt);
-						console.log(" date=" + today);
+					
 						var end = new Date($scope.end);
-						console.log("End date=" + end);
+					
 
 						var dd = today.getDate();
 						var mm = today.getMonth() + 1; // January is 0!
@@ -117,7 +117,7 @@ app.config(['$provide', function ($provide) {
 						}
 						var today = dd + '/' + mm + '/' + yyyy;
 
-						console.log(today);
+					
 
 						var dd = end.getDate();
 						var mm = end.getMonth() + 1; // January is 0!
@@ -132,7 +132,7 @@ app.config(['$provide', function ($provide) {
 						}
 						var end = dd + '/' + mm + '/' + yyyy;
 
-						console.log(end);
+					
 
 						var projectName
 						if ($scope.projectName) {
@@ -153,7 +153,7 @@ app.config(['$provide', function ($provide) {
 								}
 
 							}).then(function(response) {
-								// console.log("response="+response);
+					
 								$scope.ticketList = response.data
 								if($scope.ticketList.length==0){
 									$scope.showMessageForResource=true
@@ -180,11 +180,11 @@ app.config(['$provide', function ($provide) {
 											}
 											
 											$scope.$apply
-											$("#tickets").autocomplete({
+											$("#ticketIds").autocomplete({
 																source : response.data[1],
 																select : function(
 																		event,ui) {
-																	$scope.showTicketInfo(ui.item.value)
+																	$scope.showTicketHistory(ui.item.value)
 																}
 															})
 
@@ -210,15 +210,36 @@ app.config(['$provide', function ($provide) {
 									$scope.resourceList = response.data
 									$scope.$apply
 								});
-						// fetching all resources related to manager
+						/*// fetching all resources related to manager
 						
 						$http.get("/StatusPortal/ticketData/getResourceListforManager/").then(
 								function(response) {
 									$scope.resourceList = response.data
 									$scope.$apply
-								});
+								});*/
 						
 					}
+					
+						// for deleting the ticket
+					$scope.deleteTicket=function(rowid){
+						
+						var modalInstance=$uibModal.open({
+						
+							animation:true,
+							templateUrl:'delete.html',
+							controller:'deleteDataController',
+							size:'md',
+							resolve : {
+								params : function() {
+									return {
+										row :rowid
+									}
+								}
+							}
+						})
+						
+					};
+					
 					
 					//for sending the mail
 					$scope.sendMail=function(){
@@ -238,16 +259,17 @@ app.config(['$provide', function ($provide) {
 						var projectId
 						if ($scope.project) {
 							projectId = $scope.project.project_id
-							console.log("ProjectID=" + $scope.projectId);
+							
 						}
 					}
 					// for loading the table entries
-					$scope.showTicketInfo = function(ticket_ID) {
-
+					$scope.showTicketHistory = function(ticket_ID) {
+								console.log(ticket_ID)
 						$http.get(
 								"/StatusPortal/ticketData/showTicketData/"
 										+ ticket_ID).then(function(response) {
 							$scope.ticketList = response.data;
+							
 							$scope.$apply
 						});
 					};
@@ -296,8 +318,13 @@ app.config(['$provide', function ($provide) {
 									}
 
 								}).then(function(response) {
-
-							$scope.ticketList = response.data
+									if($scope.resourceName == "All"){
+										$scope.ticketList=response.data[0]
+										
+									}else{
+										$scope.ticketList = response.data
+									}
+							
 					
 							if($scope.ticketList.length==0){
 								$scope.showMessageForResource=true
@@ -309,7 +336,7 @@ app.config(['$provide', function ($provide) {
 					// ============================= For
 					// pegination======================================
 					$scope.currentPage = 0;
-					$scope.pageSize = 3;
+					$scope.pageSize = 15;
 					$scope.q = '';
 
 					$scope.getData = function() {
@@ -404,3 +431,67 @@ app.filter('startFrom', function() {
 		return input.slice(start);
 	}
 });
+
+app.controller("deleteDataController",function($scope,$http,$uibModal,$uibModalInstance,params){
+	 var row = params.row;	
+	 console.log("rowid="+params.row)
+	
+	 $scope.ok = function() {
+		
+		
+			$http({
+					method: "POST",
+				    url: "/StatusPortal/StatusPortal/deleteTicket",
+				    data:{row}
+				}).then(function (response) {
+			        var modalInstance=$uibModal.open({
+						animation:true,
+						templateUrl:'deleteResult.html',
+						controller:'deleteDataResultController',
+						size:'md',
+						
+						resolve : {
+							params : function() {
+								return {
+									flag :response.data
+								}
+							}
+						}
+					});
+			        $uibModalInstance.dismiss('cancel');
+			        	
+				});
+
+	       
+};
+	
+	 $scope.cancel = function() {
+		 $uibModalInstance.dismiss('cancel');
+    };
+});
+
+app.controller('deleteDataResultController',function($scope, $window, $uibModalInstance,params){
+	
+	
+	$scope.message=undefined
+	$scope.init=function(){
+	
+		if(params.flag[0]==1){
+			 $scope.message="Data Deleted Successfully"
+			 
+		 }else{
+				 $scope.message="Unable to delete data "
+				 
+			 }
+	}
+	
+	$scope.ok = function() {
+    
+		 $window.location.reload();
+		 
+       };
+
+       
+});
+
+

@@ -34,6 +34,7 @@ for loading border in DSR--%>
 <script type="text/javascript"	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/controller/changePasswordController.js"></script>
 <script type="text/javascript"	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/controller/changePasswordResultController.js"></script>
 <script type="text/javascript"	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/controller/ticketController.js"></script>
+<script type="text/javascript"	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/controller/editTicketController.js"></script>
 
 <script	src="${request.contextPath}/startbootstrap-bare-gh-pages/js/jquery-1.11.2.min.js"></script>
 <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
@@ -61,7 +62,7 @@ body {
 <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
   <div class="container">
    <div class="navbar-header">
-    	<a class="navbar-brand" href="${createLink(controller:'logout')}">Status Update</a>
+    	<a class="navbar-brand" href="${createLink(controller:'StatusPortal' , action: 'todaysTickets')}">Status Update</a>
    </div>
    <div class="collapse navbar-collapse" id="b-menu-1">
     <ul class="nav navbar-nav navbar-left">
