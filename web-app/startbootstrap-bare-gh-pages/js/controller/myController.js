@@ -1,33 +1,30 @@
 		var app = angular.module('myApp', ['ui.bootstrap']);
 		
-		app.directive('jqdatepicker', function () {
-		    return {
-		        restrict: 'A',
-		        require: '^?ng-model',
-		         link: function (scope, element, attrs, ngModelCtrl) {
-		            $(element).datepicker({
-		            	changeYear:true,
-		                changeMonth:true,
-		                dateFormat: 'dd/mm/yy',
-		                maxDate: new Date(),
-		                onSelect: function (creationDate) {
-		                    scope.creationDate = creationDate;
-		                  
-		                    scope.$apply();
-		                }
-		            });
-		        }
-		    };
-		});
+		
 		app.controller('myController',function($scope, $http, $timeout,$window,$uibModal,$filter) {
 							$scope.assigneeList=[];
+						
 							$scope.alltickets=undefined;
 							$scope.ticketData={}
 							$scope.projectName=undefined
 							$scope.projectListHidden=true
 							$scope.SummaryDisabled=false
-							$scope.creationDate=$filter('date')(new Date(), "dd/MM/yyyy");    
+							$scope.showReasons=true
+							$scope.editEta=false
+							$scope.button=true
+							$scope.reason=null
+						
 							
+							//for fetching reasonList
+							$http({
+								method:"GET",
+								url:"/StatusPortal/statusPortal/fetchReasonList"
+							}).then(function(response){
+								$scope.reasonList=response.data
+								
+							})
+							
+							//Getting ProjectList related to user
 							$http.get("/StatusPortal/ticketData/getProjectListOfUser/").then(
 									function(response) {										
 										if(response.data.length>1){
@@ -40,13 +37,16 @@
 										
 									});
 							
-							
+						    
 							//for loading all data related to selected project
 							$scope.loadAllData=function(){
+								
+								
 								var projectId
 								if($scope.project){
 								 projectId=$scope.project.project_id
 								}
+								
 								// getting the ticktIds related to user and project
 									$http({
 									method: "POST",
@@ -65,6 +65,8 @@
 											
 									})
 										
+									
+								
 									// getting the assigneeList related to project	
 										
 								$http({
@@ -91,20 +93,29 @@
 									} else{
 										$scope.isHideSave = !$scope.isHideSave;
 					                   
-										}	
+										}
+									
+								
 	
 							}
 									
 							// for loading the table entries
 							$scope.showTicketInfo = function(ticket_ID) {
 								$scope.SummaryDisabled=true
+								$scope.editEta=true;
+								$scope.button=false
 								$http.get("/StatusPortal/StatusPortal/getTicketInfo/"+ ticket_ID).then(
 										function(response) {
 											$scope.ticketData = response.data[0];
 											$scope.ticketData.status=response.data[1]
 											$scope.assignee=$scope.ticketData.assignee;
+											
 											$scope.totalWorkHrs=response.data[2];
+											$scope.eta=response.data[3]
+										
+											
 										});
+								
 							};
 
 							
@@ -115,6 +126,7 @@
 								$scope.showData=true
 								$scope.showTicket_id=false
 								$scope.showSummary=false
+								$scope.showeta=false
 								$scope.showAssignee=false
 								$scope.showworkdoneBy=false
 								$scope.showImpediments=false
@@ -124,19 +136,27 @@
 								
 								
 								if($scope.ticketData.ticket_id==null){
+									
 									$scope.showTicket_id=true
 									$scope.showData=false;
 								}
+								
+								
 								
 								if($scope.ticketData.summary==null){
 									$scope.showSummary=true
 									$scope.showData=false
 								}
 								
+								
+								
+								
+								
 								if($scope.assignee==null){
 									$scope.showAssignee=true
 									$scope.showData=false
 								}
+								
 								
 								if($scope.workDoneBy==null){
 									$scope.showworkdoneBy=true
@@ -159,11 +179,29 @@
 									$scope.showCreationDate=true
 									$scope.showData=false
 								}
+								
+								
 								if($scope.ticketData.status==null){
 									$scope.showStatus=true
 									$scope.showData=false
 								}
 								
+								
+								if($scope.eta==null){
+									$scope.eta="0.00"
+									
+								}
+								
+								
+								
+							if($scope.button){
+									if($scope.reason==null){
+										console.log($scope.reason)
+									$scope.showData=false
+									}else{
+									$scope.showData=true
+									}
+								}
 								
 								
 								if($scope.showData){
@@ -172,17 +210,22 @@
 								$scope.ticketData.assignee=$scope.assignee;
 								$scope.ticketData.workDoneBy=$scope.workDoneBy
 								$scope.ticketData.project=$scope.project
+								$scope.ticketData.eta=$scope.eta
+								$scope.ticketData.reason=$scope.reason
+								
 								var ticketData=$scope.ticketData;
 								
 								$http({
 									method: "POST",
-								    url: "/StatusPortal/StatusPortal/updateTodaysTicket",
+								    url: "/StatusPortal/StatusPortal/saveTicketEntry",
 								    data: {ticketData}
 								}).then(function (response) {
 									if(response.data == 'true'){
 										$scope.success = response.data;
+									}else{
+										$scope.failure=true;
 									}
-							       
+							
 							    },function(response){
 							    	$scope.failure=true;
 							    });
@@ -191,6 +234,7 @@
 									$scope.showError=true;
 								}		
 							};
+							
 							
 							
 							$scope.searchRecords=function(startDate,endDate){
@@ -205,6 +249,7 @@
 								});
 										
 							};
+							
 							
 							
 							//for getting all records from db
@@ -244,13 +289,112 @@
 								})
 								
 							};
-
+							
+							//for displaying reasons
+							$scope.toggle=function(){
+								
+								$scope.editEta=false;
+								$scope.showReasons=false;
+								$scope.button=true
+								
+							}
 						
 							//reloading the page
 							$scope.reload=function(){
 								location.reload();
 							}
-							
-						});
+					
+		app.config(['$provide', function ($provide) {
+		    $provide.decorator("$exceptionHandler", ['$delegate', '$injector', function ($delegate, $injector) {
+		        return function (exception, cause) {
+		            var exceptionsToIgnore = ['Possibly unhandled rejection: backdrop click', 'Possibly unhandled rejection: cancel', 'Possibly unhandled rejection: escape key press']
+		            if (exceptionsToIgnore.indexOf(exception) >= 0) {
+		                return;
+		            }
+		            $delegate(exception, cause);                    
+		        };
+		    }]);
+		}]);
+		
+		$scope.today = function() {
+			
+			 $scope.dt= new Date(); 
+			 var today = new Date($scope.dt);
+			console.log(" date=" + today);
+		
+			var dd = today.getDate();
+			var mm = today.getMonth() + 1; // January is 0!
+
+			var yyyy = today.getFullYear();
+
+			if (dd < 10) {
+				dd = '0' + dd;
+			}
+			if (mm < 10) {
+				mm = '0' + mm;
+			}
+			var today = dd + '/' + mm + '/' + yyyy;
+			console.log(today)
+			$scope.creationDate=today
+			 };
+		$scope.today();
+
+		$scope.clear = function() {
+			$scope.dt = null;
+			$scope.end = null;
+		};
+
+		// Disable weekend selection
+		function disabled(data) {
+			var date = data.date, mode = data.mode;
+			return mode === 'day'
+					&& (date.getDay() === 0 || date.getDay() === 6);
+		}
+
+		$scope.open1 = function() {
+
+			$scope.popup1.opened = true;
+		};
+		$scope.setDate = function(year, month, day) {
+			$scope.dt = new Date().format('dd/MM/yyyy');
+			console.log($scope.dt);
+
+		};
+
+		$scope.options = {
+		          
+		          maxDate: new Date(),
+		          showWeeks: true
+		        };
+		$scope.formats = [ 'dd/MM/yyyy' ];
+		$scope.format = $scope.formats[0];
+
+			$scope.popup1 = {
+			opened : false
+		};
+
 		
 		
+		$scope.select = function() {
+			console.log("Datepicker date=" + $scope.dt);
+			var today = new Date($scope.dt);
+			console.log(" date=" + today);
+		
+			var dd = today.getDate();
+			var mm = today.getMonth() + 1; // January is 0!
+
+			var yyyy = today.getFullYear();
+
+			if (dd < 10) {
+				dd = '0' + dd;
+			}
+			if (mm < 10) {
+				mm = '0' + mm;
+			}
+			var today = dd + '/' + mm + '/' + yyyy;
+			console.log(today)
+			$scope.creationDate=today
+		}
+		
+		
+		});

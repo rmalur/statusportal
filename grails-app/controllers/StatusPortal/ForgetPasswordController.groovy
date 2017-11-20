@@ -4,7 +4,7 @@ import grails.plugin.mail.MailService
 import grails.plugin.springsecurity.annotation.Secured
 
 import org.apache.commons.lang.RandomStringUtils
-import org.apache.commons.lang.math.RandomUtils
+
 import org.apache.commons.logging.LogFactory 
 
 import SecureApp.User
@@ -41,7 +41,7 @@ class ForgetPasswordController {
 			}else{
 			sentMailFlag  =  false
 			forgetPasswordFlag.add(sentMailFlag)
-			println data.emailId
+			//println data.emailId
 			log.info("user not found with enail id = "+data.emailId);
 			}
 		}catch(Exception e){
