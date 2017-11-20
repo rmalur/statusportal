@@ -1,13 +1,18 @@
 package StatusPortal
 
-class DevelopementMethodology {
+class ReasonTicketMapping {
 
-	String methodology
+	int reason_id
+	String ticket_id
+	Date creationDate
+	
     static constraints = {
 		
     }
 	
 	static mapping = {
+		
 		version false
+		
 	}
 }
