@@ -5,6 +5,99 @@ app.controller('newEntityCreationController',function($scope,$http){
 	$scope.success=false
 	$scope.failure=false
 	
+	
+	
+	/*++++++++++++++======================================*/
+	
+	$scope.today = function() {
+						
+						 $scope.dt = new Date(); $scope.end= new Date();
+						 };
+					$scope.today();
+
+					$scope.clear = function() {
+						$scope.dt = null;
+						$scope.end = null;
+					};
+
+					// Disable weekend selection
+					function disabled(data) {
+						var date = data.date, mode = data.mode;
+						return mode === 'day'
+								&& (date.getDay() === 0 || date.getDay() === 6);
+					}
+
+					$scope.open1 = function() {
+
+						$scope.popup1.opened = true;
+					};
+					$scope.setDate = function(year, month, day) {
+						$scope.dt = new Date().format('dd/MM/yyyy');
+						console.log($scope.dt);
+
+					};
+
+					$scope.formats = [ 'dd/MM/yyyy' ];
+					$scope.format = $scope.formats[0];
+
+					/* $scope.altInputFormats = ['M!/d!/yyyy']; */
+					$scope.options = {
+					          
+					          maxDate: new Date(),
+					          showWeeks: true
+					        };
+					     
+					    
+					$scope.popup1 = {
+						opened : false
+					};
+
+					
+					
+					$scope.select = function() {
+						console.log("Datepicker date=" + $scope.dt);
+						var today = new Date($scope.dt);
+						console.log(" date=" + today);
+						var dd = today.getDate();
+						var mm = today.getMonth() + 1; // January is 0!
+
+						var yyyy = today.getFullYear();
+
+						if (dd < 10) {
+							dd = '0' + dd;
+						}
+						if (mm < 10) {
+							mm = '0' + mm;
+						}
+						var today = dd + '/' + mm + '/' + yyyy;
+						$scope.projectCreationDate=today
+						console.log(today);	
+					}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*=====================================================*/
 	$scope.init=function(){
 		$scope.managerList=[]
 		$scope.leadList=[]
@@ -40,7 +133,7 @@ app.controller('newEntityCreationController',function($scope,$http){
 	
 	//function for saving new project
 	$scope.saveProject=function(){
-		$scope.project.projectStartDate=$scope.creationDate
+		$scope.project.projectStartDate=$scope.projectCreationDate
 		$http({
 			method: "POST",
 		    url: "/StatusPortal/ticketData/addProjectInfo",
