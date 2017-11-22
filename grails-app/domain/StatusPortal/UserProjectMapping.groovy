@@ -2,7 +2,7 @@ package StatusPortal
 
 class UserProjectMapping {
 
-	String user_id
+	String employee_id
 	String project_id
 	
 	static mapping = {
