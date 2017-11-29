@@ -202,20 +202,30 @@ class StatusPortalController {
 	@Secured('IS_AUTHENTICATED_FULLY')
 	def saveUpdate(){
 
-		//def userLogedIn = User.get(springSecurityService.principal.id)
+		
 		def data = JSON.parse(request)
-		//println "data="+data
 		def updateEntryFlag=true;
 		try{
 			def statusUpdateObject=StatusUpdate.get(data.ticketData.idInStatusUpdateDb)
-			//println statusUpdateObject.ticket.ticket_id
+			
 
 			statusUpdateObject.workDoneForToday=data.ticketData.workDone
+			if(data.ticketData.impediments){
+			statusUpdateObject.impediments=data.ticketData.impediments
+			}else{
+			statusUpdateObject.impediments="NA"
+			}
 			def hrs=data.ticketData.workingHrs
 			def mints=data.ticketData.workingMinutes
 			if(!(hrs.equals(null) && mints.equals(null))){
 				statusUpdateObject.todaysWorkHrs=hrs+"."+mints
 			}
+			def df  =  new SimpleDateFormat("dd/MM/yyyy");
+			Date updatedDate = df.parse(data.ticketData.creationDate)
+			def formatedDate = df.format(updatedDate)
+			Date updatedDate1 = df.parse(formatedDate)
+			
+			statusUpdateObject.updateDate=updatedDate1
 
 
 			if(statusUpdateObject.save(flush:true,failOnError:true)){

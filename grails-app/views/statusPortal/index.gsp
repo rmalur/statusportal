@@ -197,7 +197,7 @@ row {
 						<div class="col-sm-12">
 							<div class="col-lg-6">
         
-         <label style="padding-top: 2px;">Date of Work done:</label> 
+         <label style="padding-top: 2px;">Date of Work done<span style="color: red">*</span>:</label> 
          <p class="input-group" style="display: inline-flex; padding-right:78px;">
          <input type="text" class="form-control" padding-top: 10px;
           uib-datepicker-popup="{{format}}" ng-model="dt"

@@ -90,7 +90,7 @@
 							for="updateDate">Updated Date</label>
 						<p class="input-group" style="display: inline-flex;">
 							<input type="text" id="updateDate" class="form-control"
-								uib-datepicker-popup="{{format}}" ng-model="dt"
+								uib-datepicker-popup="{{format}}" ng-model="updateDate"
 								is-open="popup1.opened" datepicker-options="options"
 								ng-required="true" close-text="Close"
 								alt-input-formats="altInputFormats" ng-change="select()" />
