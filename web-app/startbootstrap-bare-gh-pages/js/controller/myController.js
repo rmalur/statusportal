@@ -194,14 +194,14 @@
 								
 								
 								
-							if($scope.button){
+							/*if($scope.button){
 									if($scope.reason==null){
 										console.log($scope.reason)
 									$scope.showData=false
 									}else{
 									$scope.showData=true
 									}
-								}
+								}*/
 								
 								
 								if($scope.showData){
@@ -318,9 +318,9 @@
 		
 		$scope.today = function() {
 			
-			 $scope.dt= new Date(); 
-			 var today = new Date($scope.dt);
-			console.log(" date=" + today);
+			 //$scope.dt= new Date(); 
+			 /*var today = new Date($scope.dt);
+		
 		
 			var dd = today.getDate();
 			var mm = today.getMonth() + 1; // January is 0!
@@ -334,8 +334,8 @@
 				mm = '0' + mm;
 			}
 			var today = dd + '/' + mm + '/' + yyyy;
-			console.log(today)
-			$scope.creationDate=today
+			
+			$scope.creationDate=today*/
 			 };
 		$scope.today();
 
@@ -357,7 +357,7 @@
 		};
 		$scope.setDate = function(year, month, day) {
 			$scope.dt = new Date().format('dd/MM/yyyy');
-			console.log($scope.dt);
+		
 
 		};
 
@@ -376,9 +376,9 @@
 		
 		
 		$scope.select = function() {
-			console.log("Datepicker date=" + $scope.dt);
+			
 			var today = new Date($scope.dt);
-			console.log(" date=" + today);
+			
 		
 			var dd = today.getDate();
 			var mm = today.getMonth() + 1; // January is 0!
@@ -392,7 +392,7 @@
 				mm = '0' + mm;
 			}
 			var today = dd + '/' + mm + '/' + yyyy;
-			console.log(today)
+			
 			$scope.creationDate=today
 		}
 		

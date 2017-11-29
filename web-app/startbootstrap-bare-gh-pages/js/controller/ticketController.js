@@ -27,7 +27,7 @@ app.config(['$provide', function ($provide) {
 
 					$scope.today = function() {
 						
-						 $scope.dt = new Date(); $scope.end= new Date();
+						 //$scope.dt = new Date(); $scope.end= new Date();
 						 };
 					$scope.today();
 

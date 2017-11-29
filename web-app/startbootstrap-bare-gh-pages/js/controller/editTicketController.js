@@ -1,14 +1,30 @@
 app.controller('editTicketController', function($scope, $http, $filter,$window) {
-
+	$scope.selectedDate=undefined
 	$scope.today = function() {
+			
+			 $scope.updateDate= new Date(); 
+			 var today = new Date($scope.updateDate);
+			
 		
-		 $scope.dt= new Date(); 
-		
-		 };
+			var dd = today.getDate();
+			var mm = today.getMonth() + 1; // January is 0!
+
+			var yyyy = today.getFullYear();
+
+			if (dd < 10) {
+				dd = '0' + dd;
+			}
+			if (mm < 10) {
+				mm = '0' + mm;
+			}
+			var today = dd + '/' + mm + '/' + yyyy;
+			
+			$scope.selectedDate=today
+			 };
 	$scope.today();
 
 	$scope.clear = function() {
-		$scope.dt = null;
+		$scope.updateDate = null;
 		
 	};
 
@@ -24,9 +40,7 @@ app.controller('editTicketController', function($scope, $http, $filter,$window) 
 		$scope.popup1.opened = true;
 	};
 	$scope.setDate = function(year, month, day) {
-		$scope.dt = new Date().format('dd/MM/yyyy');
-		console.log($scope.dt);
-
+		$scope.updateDate = new Date().format('dd/MM/yyyy');
 	};
 
 	$scope.options = {
@@ -44,20 +58,20 @@ app.controller('editTicketController', function($scope, $http, $filter,$window) 
 	
 	
 	$scope.select = function(updateDate) {
-		var today;
+		var selectedDate;
 		if(updateDate){
-			today= new Date(updateDate);
+			selectedDate=updateDate
 			
-		}else{
-		 today= new Date($scope.dt);
 		}
 		
-		console.log(" date=" + today);
+		if($scope.updateDate){
+		 selectedDate= new Date($scope.updateDate);
+		 	console.log("selected Date="+selectedDate)
 	
-		var dd = today.getDate();
-		var mm = today.getMonth() + 1; // January is 0!
+		var dd = selectedDate.getDate();
+		var mm = selectedDate.getMonth() + 1; // January is 0!
 
-		var yyyy = today.getFullYear();
+		var yyyy = selectedDate.getFullYear();
 
 		if (dd < 10) {
 			dd = '0' + dd;
@@ -65,9 +79,12 @@ app.controller('editTicketController', function($scope, $http, $filter,$window) 
 		if (mm < 10) {
 			mm = '0' + mm;
 		}
-		var today = dd + '/' + mm + '/' + yyyy;
-		console.log(today)
-		$scope.selectedDate=today
+		 selectedDate = dd + '/' + mm + '/' + yyyy;
+		}
+		
+		
+		//console.log(today)
+		$scope.selectedDate=selectedDate
 	}
 		
 	
@@ -81,15 +98,15 @@ app.controller('editTicketController', function($scope, $http, $filter,$window) 
 		$scope.ticketData.summary = summary
 		$scope.ticketData.assignee = assignee
 		$scope.ticketData.workDone=workDoneForToday
-		console.log(todaysWorkHrs)
+		
 		var hrsAndMinutes=todaysWorkHrs.split(".")
 		$scope.ticketData.workingHrs=hrsAndMinutes[0]
 		$scope.ticketData.workingMinutes=hrsAndMinutes[1]
-		console.log("hrs="+$scope.ticketData.workingHrs)
-		console.log("mnts="+$scope.ticketData.workingMinutes)
+		
 		
 		
 		$scope.ticketData.impediments=impediments
+		console.log("updateDate in init function="+updateDate)
 		$scope.select(updateDate)
 		$scope.$apply
 
@@ -97,7 +114,9 @@ app.controller('editTicketController', function($scope, $http, $filter,$window) 
 
 
 	$scope.updateTicketInfo = function(id) {
-		console.log("ticketId="+id)
+		
+		
+		console.log("selected date="+$scope.selectedDate)
 		$scope.ticketData.creationDate=$scope.selectedDate;
 		$scope.ticketData.idInStatusUpdateDb=id
 		var ticketData=$scope.ticketData;
