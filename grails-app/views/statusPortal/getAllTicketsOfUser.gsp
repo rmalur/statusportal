@@ -4,16 +4,20 @@
 <meta name="layout" content="A" />
 
 <title>History</title>
-	
+
 </head>
 <body>
 	<style>
- #tbody{height:600px;overflow-y:auto;
+#tbody {
+	height: 600px;
+	overflow-y: auto;
+}
 </style>
 	<div ng-controller="ticketController" ng-init="allTicketsOfUser()">
-		<div class="col-lg-11" style="width:96%">
+		<div class="col-lg-11" style="width: 96%">
 			<div class="col-lg-11">
-				<div class="col-sm-3" style="padding-right: 70px" style="margin-left: 100px">
+				<div class="col-sm-3" style="padding-right: 70px"
+					style="margin-left: 100px">
 					<select ng-model='projectName' placeholder="select your beverage"
 						ng-disabled="projectListHidden" ng-change="loadTicketsOfProject()"
 						class="form-control"
@@ -31,16 +35,16 @@
 							ng-model="dt" is-open="popup1.opened"
 							datepicker-options="options" ng-required="true"
 							close-text="Close" alt-input-formats="altInputFormats"
-							ng-change="setMaxDateOptions()" /><span
-							class="input-group-btn">
-						<button type="button" class="btn btn-default" ng-click="open1()">
-							<i class="glyphicon glyphicon-calendar"></i>
-						</button>
+							ng-change="setMaxDateOptions()" /><span class="input-group-btn">
+							<button type="button" class="btn btn-default" ng-click="open1()">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</button>
 						</span>
 					</p>
 				</div>
 
-				<div class="col-md-3" style="padding-left: 60px" style="margin-left: 100px">
+				<div class="col-md-3" style="padding-left: 60px"
+					style="margin-left: 100px">
 					<p class="input-group" style="display: inline-flex;">
 						<label style="padding-top: 7px;">To:</label> <input type="text"
 							ng-change="select(projectName)" class="form-control"
@@ -56,21 +60,21 @@
 					</p>
 				</div>
 				<div class="col-md-2" style="padding-left: 20px">
-				<div class="dropdown" style="margin-left: 40px">
-					<button class="btn btn-primary dropdown-toggle" type="button"
-						data-toggle="dropdown">
-						Export Data <span class="caret"></span>
-					</button>
-					<ul class="dropdown-menu">
-						<li><g:link controller="statusPortal" action="exportData" id="{{ticket_id}}"
-								params="[extension:'PDF']">PDF </g:link></li>
-						<li><g:link controller="statusPortal" action="exportData"
-								params="[extension:'xls']">Excel </g:link></li>
-					</ul>
+					<div class="dropdown" style="margin-left: 40px">
+						<button class="btn btn-primary dropdown-toggle" type="button"
+							data-toggle="dropdown">
+							Export Data <span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu">
+							<li><g:link controller="statusPortal" action="exportData"
+									id="{{ticket_id}}" params="[extension:'PDF']">PDF </g:link></li>
+							<li><g:link controller="statusPortal" action="exportData"
+									params="[extension:'xls']">Excel </g:link></li>
+						</ul>
+					</div>
+
 				</div>
 
-			</div>
-	
 
 				<sec:ifAnyGranted roles="ROLE_LEAD,ROLE_MANAGER">
 					<div class="col-md-3" style="padding-left: 80px;">
@@ -83,40 +87,47 @@
 					</div>
 				</sec:ifAnyGranted>
 			</div>
-	
-	 <div class="col-lg-12">
-		<input type="text" class="form-control" id="ticketIds" name="ticket_id" ng-model="ticket_id" required=""
-         placeholder="--TicketId Selector--" style="width:13%">
-		<div class="panel panel-default" style="width: 96%;margin-top: 10px">
-					<div class="panel panel-body">
-			
-		<form>
-			<div id="tbody">
-			<table id="tblMain" class="table table-striped table-condensed">
-				<tr class="bg-info">
-					<th>Id</th>
-					<th>Ticket-id</th>
-					<th>Summary</th>
-					<th>Assignee</th>
-					<th>Work_done by</th>
-					<th>Impediments</th>
-					<th>Work Hours for day</th>
-					<th>Updated_Date</th>
-					<th>Status</th>
-				</tr>
+			<div>
+				<button class="btn btn-primary dropdown-toggle" type="button"
+					data-toggle="dropdown" ng-click="select(projectName)">
+					Search</button>
+			</div>
 
-				<tr
-					ng-repeat="ticket in ticketList|  filter:q | startFrom:currentPage*pageSize | limitTo:pageSize">
-					<td>{{$index+1}}</td>
-					<td>{{ticket.ticket_id}}</td>
-					<td>{{ticket.summary}}</td>
-					<td>{{ticket.assignee}}</td>
-					<td>{{ticket.workDoneBy}}</td>
-					<td>{{ticket.impediments}}</td>
-					<td>{{ticket.todaysWorkHrs}}</td>
-					<td>{{ticket.updateDate|date:'dd/MM/yyyy' }}</td>
-					<td>{{ticket.updatedStatus}}</td>
-					<td><sec:ifAnyGranted roles="ROLE_LEAD,ROLE_MANAGER">
+			<div class="col-lg-12">
+				<input type="text" class="form-control" id="ticketIds"
+					name="ticket_id" ng-model="ticket_id" required=""
+					placeholder="--TicketId Selector--" style="width: 13%">
+				<div class="panel panel-default"
+					style="width: 96%; margin-top: 10px">
+					<div class="panel panel-body">
+
+						<form>
+							<div id="tbody">
+								<table id="tblMain" class="table table-striped table-condensed">
+									<tr class="bg-info">
+										<th>Id</th>
+										<th>Ticket-id</th>
+										<th>Summary</th>
+										<th>Assignee</th>
+										<th>Work_done by</th>
+										<th>Impediments</th>
+										<th>Work Hours for day</th>
+										<th>Updated_Date</th>
+										<th>Status</th>
+									</tr>
+
+									<tr
+										ng-repeat="ticket in ticketList|  filter:q | startFrom:currentPage*pageSize | limitTo:pageSize">
+										<td>{{$index+1}}</td>
+										<td>{{ticket.ticket_id}}</td>
+										<td>{{ticket.summary}}</td>
+										<td>{{ticket.assignee}}</td>
+										<td>{{ticket.workDoneBy}}</td>
+										<td>{{ticket.impediments}}</td>
+										<td>{{ticket.todaysWorkHrs}}</td>
+										<td>{{ticket.updateDate|date:'dd/MM/yyyy' }}</td>
+										<td>{{ticket.updatedStatus}}</td>
+										<td><sec:ifAnyGranted roles="ROLE_LEAD,ROLE_MANAGER">
 												<div>
 													<input type="button" value="Delete" class="btn btn-primary"
 														ng-click="deleteTicket(ticket.id)">
